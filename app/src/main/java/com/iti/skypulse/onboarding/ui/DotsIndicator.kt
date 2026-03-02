@@ -1,4 +1,4 @@
-package com.iti.skypulse.onboarding
+package com.iti.skypulse.onboarding.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState

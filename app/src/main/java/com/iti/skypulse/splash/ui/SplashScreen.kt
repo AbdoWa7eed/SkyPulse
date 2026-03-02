@@ -1,4 +1,4 @@
-package com.iti.skypulse.splash
+package com.iti.skypulse.splash.ui
 
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
@@ -29,16 +29,27 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
+import com.iti.skypulse.navigation.NavRoutes
+import com.iti.skypulse.splash.ui.animation.SplashAnimationController
+import com.iti.skypulse.splash.ui.animation.SplashConstants
+import com.iti.skypulse.splash.viewmodel.SplashViewModel
+import com.iti.skypulse.splash.viewmodel.SplashViewModelFactory
 
 
 @Composable
-fun AnimatedSplashScreen(modifier: Modifier = Modifier, onFinished: () -> Unit) {
+fun AnimatedSplashScreen(modifier: Modifier = Modifier, onFinished: (NavRoutes) -> Unit) {
+    val viewModel: SplashViewModel = viewModel(factory = SplashViewModelFactory())
     val scope = rememberCoroutineScope()
     val controller = remember { SplashAnimationController(scope) }
 
     LaunchedEffect(Unit) {
-        controller.startAnimations(onFinished)
+        viewModel.navigationEvent.collect { destination ->
+            controller.startAnimations {
+                onFinished(destination)
+            }
+        }
     }
 
     Box(

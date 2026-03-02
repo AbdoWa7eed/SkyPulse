@@ -1,4 +1,4 @@
-package com.iti.skypulse.splash
+package com.iti.skypulse.splash.ui.animation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
