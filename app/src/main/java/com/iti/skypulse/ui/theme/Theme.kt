@@ -20,11 +20,11 @@ val DarkColorScheme = darkColorScheme(
     tertiary = PrimaryDark,
     background = DarkBackground,
     surface = DarkCard,
-    onPrimary = TextPrimaryDark,
+    onPrimary = TextPrimary,
     onSecondary = TextSecondaryDark,
-    onTertiary = TextPrimaryDark,
-    onBackground = TextPrimaryDark,
-    onSurface = TextPrimaryDark
+    onTertiary = TextPrimary,
+    onBackground = TextPrimary,
+    onSurface = TextPrimary
 )
 
 val LightColorScheme = lightColorScheme(
@@ -33,7 +33,7 @@ val LightColorScheme = lightColorScheme(
     tertiary = PrimaryDark,
     background = LightBackground,
     surface = LightCard,
-    onPrimary = TextPrimaryLight,
+    onPrimary = TextPrimary,
     onSecondary = TextSecondaryLight,
     onTertiary = TextPrimaryLight,
     onBackground = TextPrimaryLight,

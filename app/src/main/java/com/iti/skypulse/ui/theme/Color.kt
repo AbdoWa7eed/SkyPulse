@@ -13,7 +13,7 @@ val TextSecondaryLight = Color(0xFF64748B)
 
 val DarkBackground = Color(0xFF121C33)
 val DarkCard = Color(0xFF1E293B)
-val TextPrimaryDark = Color(0xFFF1F5F9)
+val TextPrimary = Color(0xFFF1F5F9)
 val TextSecondaryDark = Color(0xFF94A3B8)
 
 val Success = Color(0xFF22C55E)
