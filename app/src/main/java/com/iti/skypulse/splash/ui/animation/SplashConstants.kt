@@ -1,4 +1,4 @@
-package com.iti.skypulse.splash
+package com.iti.skypulse.splash.ui.animation
 
 object SplashConstants {
     const val LOGO_ANIM_DURATION    = 500
