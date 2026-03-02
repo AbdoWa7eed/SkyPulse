@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">SkyPulse</string>
     <string name="app_title">SkyPulse</string>
+
+    <!-- Screen 1 — Welcome -->
+    <string name="onboarding_title_1">Welcome to SkyPulse</string>
+    <string name="onboarding_subtitle_1">Get weather updates anytime and stay prepared wherever you are.</string>
+
+    <!-- Screen 2 — Location Access -->
+    <string name="onboarding_title_2">Choose Your Location</string>
+    <string name="onboarding_subtitle_2">Use GPS or select a city to get accurate forecasts instantly.</string>
+
+    <!-- Screen 3 — Weather Alerts -->
+    <string name="onboarding_title_3">Never Miss Changes</string>
+    <string name="onboarding_subtitle_3">Get alerts for rain, wind, and extreme temperatures to stay informed.</string>
+
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
 </resources>
