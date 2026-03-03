@@ -4,18 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.iti.skypulse.home.HomeScreen
+import com.iti.skypulse.main.ui.MainScreen
 import com.iti.skypulse.onboarding.ui.OnboardingScreen
 import com.iti.skypulse.splash.ui.AnimatedSplashScreen
 
 @Composable
 fun AppNavigation() {
+
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashRoute
     ) {
+
         composable<NavRoutes.SplashRoute>(
             exitTransition = { slideOutLeft },
             popExitTransition = { slideOutLeft }
@@ -32,16 +34,17 @@ fun AppNavigation() {
             exitTransition = { slideOutLeft }
         ) {
             OnboardingScreen {
-                navController.navigate(NavRoutes.HomeRoute) {
+                navController.navigate(NavRoutes.MainRoute) {
                     popUpTo(NavRoutes.OnboardingRoute) { inclusive = true }
                 }
             }
         }
 
-
-
-        composable<NavRoutes.HomeRoute> {
-            HomeScreen()
+        composable<NavRoutes.MainRoute>(
+            enterTransition = { slideInRight },
+            exitTransition = { slideOutLeft }
+        ) {
+            MainScreen()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.iti.skypulse.onboarding.ui
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -7,13 +8,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
 import com.iti.skypulse.common.ElevatedPrimaryButton
 import com.iti.skypulse.common.PrimaryTextButton
-import com.iti.skypulse.onboarding.model.OnboardingModel
 import com.iti.skypulse.onboarding.viewmodel.OnboardingViewModel
 import com.iti.skypulse.onboarding.viewmodel.OnboardingViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
@@ -46,13 +47,10 @@ private fun OnboardingContent(
     viewModel: OnboardingViewModel
 ) {
     val currentPage by viewModel.currentPage.collectAsState()
-    val pages = remember {
-        listOf(
-            OnboardingModel.FirstPage,
-            OnboardingModel.SecondPage,
-            OnboardingModel.ThirdPage
-        )
-    }
+    val showSkip by viewModel.showSkip.collectAsState()
+    val pages = viewModel.pages
+    val skipAlpha by animateFloatAsState(targetValue = if (showSkip) 1f else 0f)
+
 
     val pagerState = rememberPagerState(
         initialPage = currentPage,
@@ -67,10 +65,17 @@ private fun OnboardingContent(
             }
     }
 
+    LaunchedEffect(currentPage) {
+        if (pagerState.currentPage != currentPage)
+            pagerState.animateScrollToPage(currentPage)
+    }
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,8 +83,10 @@ private fun OnboardingContent(
             horizontalArrangement = Arrangement.End
         ) {
             PrimaryTextButton(
+                enabled = showSkip,
                 text = stringResource(R.string.skip),
-                onClick = { viewModel.finishOnboarding() }
+                onClick = { viewModel.finishOnboarding() },
+                modifier = Modifier.alpha(skipAlpha)
             )
         }
 
@@ -95,6 +102,7 @@ private fun OnboardingContent(
             selectedIndex = currentPage,
             modifier = Modifier.padding(vertical = 16.dp)
         )
+
 
         ElevatedPrimaryButton(
             text = if (currentPage == pages.lastIndex)

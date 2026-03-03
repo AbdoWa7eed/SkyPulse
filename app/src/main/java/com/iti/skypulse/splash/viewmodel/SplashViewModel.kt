@@ -17,7 +17,7 @@ class SplashViewModel(private val appPreferences: AppPreferences) : ViewModel() 
     init {
         viewModelScope.launch {
             val isCompleted = appPreferences.isOnboardingCompleted.first()
-            val destination = if (isCompleted) NavRoutes.HomeRoute else NavRoutes.OnboardingRoute
+            val destination = if (isCompleted) NavRoutes.MainRoute else NavRoutes.OnboardingRoute
             _navigationEvent.emit(destination)
         }
     }
