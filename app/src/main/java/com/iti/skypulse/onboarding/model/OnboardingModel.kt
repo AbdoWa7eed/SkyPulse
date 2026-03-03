@@ -28,4 +28,6 @@ sealed class OnboardingModel(
         subtitle = R.string.onboarding_subtitle_3
     )
 
+
+
 }

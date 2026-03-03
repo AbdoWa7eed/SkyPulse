@@ -17,4 +17,14 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
+
+    <string name="home">Home</string>
+
+    <string name="forecast">Forecast</string>
+
+    <string name="favorite_locations">Favorites</string>
+
+    <string name="alarms">Alarms</string>
+
+    <string name="settings">Settings</string>
 </resources>
