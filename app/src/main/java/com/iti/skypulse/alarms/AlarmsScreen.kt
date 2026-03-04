@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.ui.theme.SkyPulseTheme
+import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable
 fun AlarmsScreen() {
@@ -26,7 +27,7 @@ fun AlarmsScreen() {
             text = "Weather Alarms Screen",
             modifier = Modifier.padding(20.dp),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
+            style = AppTypography.semiBold24,
             color = MaterialTheme.colorScheme.onBackground
         )
     }

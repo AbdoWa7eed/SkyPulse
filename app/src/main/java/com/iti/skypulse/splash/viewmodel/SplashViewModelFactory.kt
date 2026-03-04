@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.iti.skypulse.di.ServiceLocator
 
 class SplashViewModelFactory : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+
     override fun <T : ViewModel>  create(modelClass: Class<T>): T {
         return SplashViewModel(ServiceLocator.appPreferences) as T
     }

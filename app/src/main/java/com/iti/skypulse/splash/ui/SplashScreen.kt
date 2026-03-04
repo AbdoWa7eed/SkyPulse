@@ -36,6 +36,7 @@ import com.iti.skypulse.splash.ui.animation.SplashAnimationController
 import com.iti.skypulse.splash.ui.animation.SplashConstants
 import com.iti.skypulse.splash.viewmodel.SplashViewModel
 import com.iti.skypulse.splash.viewmodel.SplashViewModelFactory
+import com.iti.skypulse.ui.theme.AppTypography
 
 
 @Composable
@@ -110,7 +111,7 @@ fun AnimatedSplashText(
     alpha: Float,
     offsetY: Float,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.headlineMedium,
+    style: TextStyle = AppTypography.semiBold28,
     color: Color = MaterialTheme.colorScheme.onBackground,
 ) {
     Text(

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable
 fun ElevatedPrimaryButton(
@@ -38,7 +39,7 @@ fun ElevatedPrimaryButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.titleMedium,
+            style = AppTypography.medium16,
             color = MaterialTheme.colorScheme.onPrimary
         )
     }
