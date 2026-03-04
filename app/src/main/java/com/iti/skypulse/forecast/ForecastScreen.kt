@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
@@ -26,7 +27,7 @@ fun ForecastScreen() {
             text = "Forecast Screen",
             modifier = Modifier.padding(20.dp),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
+            style = AppTypography.semiBold24,
             color = MaterialTheme.colorScheme.onBackground
         )
     }

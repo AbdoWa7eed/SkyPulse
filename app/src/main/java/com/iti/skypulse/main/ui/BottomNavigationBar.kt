@@ -17,6 +17,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.iti.skypulse.main.model.BottomNavigationItem
+import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -60,7 +61,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                 label = {
                     Text(
                         text = stringResource(item.title),
-                        style = MaterialTheme.typography.labelSmall
+                        style = AppTypography.medium12
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(

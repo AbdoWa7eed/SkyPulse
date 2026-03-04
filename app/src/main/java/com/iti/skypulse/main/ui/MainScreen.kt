@@ -19,10 +19,6 @@ import com.iti.skypulse.settings.SettingsScreen
 fun MainScreen() {
 
     val navController = rememberNavController()
-
-    BackHandler(enabled = true) {
-    }
-
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController)

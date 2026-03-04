@@ -1,6 +1,5 @@
 package com.iti.skypulse.ui.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -16,96 +15,27 @@ val Poppins = FontFamily(
     Font(R.font.poppins_bold, FontWeight.Bold),
 )
 
-val Typography = Typography(
-    displayLarge = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Bold,
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        letterSpacing = (-0.25).sp
-    ),
-    displayMedium = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Bold,
-        fontSize = 45.sp,
-        lineHeight = 52.sp
-    ),
-    displaySmall = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Bold,
-        fontSize = 36.sp,
-        lineHeight = 44.sp
-    ),
-    headlineLarge = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 32.sp,
-        lineHeight = 40.sp
-    ),
-    headlineMedium = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 36.sp
-    ),
-    headlineSmall = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
-        lineHeight = 28.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    ),
-    titleSmall = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    bodySmall = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
-    ),
-    labelLarge = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp
-    )
-)
+object AppTypography {
+    val bold72 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 72.sp)
+    val bold56 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 56.sp)
+    val bold45 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 45.sp)
+    val bold36 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 36.sp)
+    val bold20 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+    val bold14 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+    val bold10 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+
+    val semiBold32 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 32.sp)
+    val semiBold28 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 28.sp)
+    val semiBold24 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 24.sp)
+    val semiBold22 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
+    val semiBold18 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+
+    val medium16 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+    val medium14 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 14.sp)
+    val medium12 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 12.sp)
+    val medium10 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 10.sp)
+
+    val regular16 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+    val regular14 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Normal, fontSize = 14.sp)
+    val regular12 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Normal, fontSize = 12.sp)
+}

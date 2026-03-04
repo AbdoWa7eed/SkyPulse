@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.onboarding.model.OnboardingModel
+import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 
@@ -43,7 +44,7 @@ fun OnboardingPage(
             text = stringResource(onboardingModel.title),
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             textAlign = TextAlign.Center,
-            style=  MaterialTheme.typography.headlineSmall,
+            style = AppTypography.semiBold24,
             color = MaterialTheme.colorScheme.onBackground
         )
 
@@ -51,7 +52,7 @@ fun OnboardingPage(
             text = stringResource(onboardingModel.subtitle),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style=  MaterialTheme.typography.bodyMedium,
+            style = AppTypography.regular14,
             color = MaterialTheme.colorScheme.onSecondary
         )
 

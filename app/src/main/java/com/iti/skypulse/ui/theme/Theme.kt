@@ -21,7 +21,7 @@ val DarkColorScheme = darkColorScheme(
     background = DarkBackground,
     surface = DarkCard,
     onPrimary = TextPrimary,
-    onSecondary = TextSecondaryDark,
+    onSecondary = TextSecondary,
     onTertiary = TextPrimary,
     onBackground = TextPrimary,
     onSurface = TextPrimary
@@ -34,7 +34,7 @@ val LightColorScheme = lightColorScheme(
     background = LightBackground,
     surface = LightCard,
     onPrimary = TextPrimary,
-    onSecondary = TextSecondaryLight,
+    onSecondary = TextSecondary,
     onTertiary = TextPrimaryLight,
     onBackground = TextPrimaryLight,
     onSurface = TextPrimaryLight
@@ -69,7 +69,7 @@ fun SkyPulseTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
         content = content
     )
+
 }
