@@ -1,15 +1,32 @@
-package com.iti.skypulse.home
+package com.iti.skypulse.home.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,10 +67,13 @@ fun HourlyForecast(
             style = AppTypography.semiBold18,
             color = MaterialTheme.colorScheme.onBackground
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             itemsIndexed(items) { index, item ->
                 HourlyForecastItem(
                     data = item,
@@ -71,7 +91,16 @@ fun HourlyForecastItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val bgColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Unspecified
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isSelected) 1.05f else 1f,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "scale"
+    )
+    val bgColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Unspecified,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "bg"
+    )
     val textColorTime = if (isSelected) Color.White.copy(alpha = 0.7f)
     else MaterialTheme.colorScheme.onSecondary
     val textColorTemp = if (isSelected) Color.White
@@ -80,8 +109,11 @@ fun HourlyForecastItem(
     PrimaryCard(
         modifier = Modifier
             .width(76.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick() },
+            .scale(animatedScale)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() },
         containerColor = bgColor
     ) {
         Column(

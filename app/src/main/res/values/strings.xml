@@ -30,4 +30,5 @@
     <string name="location_icon">Location icon</string>
     <string name="hourly_forecast">Hourly Forecast</string>
     <string name="weather_details">Weather Details</string>
+    <string name="upcoming_forecast">Upcoming Forecast</string>
 </resources>

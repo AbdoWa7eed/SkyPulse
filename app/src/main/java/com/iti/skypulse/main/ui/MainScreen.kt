@@ -10,8 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.iti.skypulse.alarms.AlarmsScreen
 import com.iti.skypulse.favorites.FavoriteLocationsScreen
-import com.iti.skypulse.forecast.ForecastScreen
-import com.iti.skypulse.home.HomeScreen
+import com.iti.skypulse.forecast.ui.ForecastScreen
+import com.iti.skypulse.home.ui.HomeScreen
 import com.iti.skypulse.navigation.NavRoutes
 import com.iti.skypulse.settings.SettingsScreen
 

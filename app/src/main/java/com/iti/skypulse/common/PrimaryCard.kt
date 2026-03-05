@@ -1,5 +1,7 @@
 package com.iti.skypulse.common
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -11,25 +13,37 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 fun PrimaryCard(
     modifier: Modifier = Modifier,
     containerColor: Color = Color.Unspecified,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val finalColor = if (containerColor == Color.Unspecified) MaterialTheme.colorScheme.surface else containerColor
+    val defaultGlass = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+    val finalColor = if (containerColor == Color.Unspecified) defaultGlass else containerColor
+    val shape = RoundedCornerShape(18.dp)
+
     Card(
         modifier = modifier
             .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(18.dp),
-                ambientColor = MaterialTheme.colorScheme.primary.copy(0.1f)
+                elevation = 4.dp,
+                shape = shape,
+                ambientColor = Color.Black.copy(alpha = 0.08f),
+                spotColor = Color.Black.copy(alpha = 0.12f)
+            )
+            .background(
+                color = finalColor,
+                shape = shape
             ),
-        shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        shape = shape,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(
+            width = 0.5.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+        ),
         colors = CardDefaults.cardColors(
-            containerColor = finalColor
+            containerColor = Color.Transparent,
+            contentColor = Color.Unspecified
         ),
         content = content
     )
