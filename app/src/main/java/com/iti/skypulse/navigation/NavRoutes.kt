@@ -5,15 +5,25 @@ import kotlinx.serialization.Serializable
 sealed class NavRoutes {
 
     @Serializable
-    object SplashRoute : NavRoutes()
+    data object SplashGraph : NavRoutes()
 
     @Serializable
-    object OnboardingRoute : NavRoutes()
+    data object LocationGraph : NavRoutes()
 
     @Serializable
-    object MainRoute : NavRoutes()
+    data object MainGraph : NavRoutes()
+
     @Serializable
-    object HomeRoute : NavRoutes()
+    data object OnboardingRoute : NavRoutes()
+
+    @Serializable
+    data object LocationPickerRoute : NavRoutes()
+
+    @Serializable
+    data object MapPickerRoute : NavRoutes()
+
+    @Serializable
+    data object HomeRoute : NavRoutes()
 
     @Serializable
     data object ForecastRoute : NavRoutes()

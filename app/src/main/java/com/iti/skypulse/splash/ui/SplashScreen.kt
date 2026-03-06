@@ -29,27 +29,22 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
-import com.iti.skypulse.navigation.NavRoutes
 import com.iti.skypulse.splash.ui.animation.SplashAnimationController
 import com.iti.skypulse.splash.ui.animation.SplashConstants
-import com.iti.skypulse.splash.viewmodel.SplashViewModel
-import com.iti.skypulse.splash.viewmodel.SplashViewModelFactory
 import com.iti.skypulse.ui.theme.AppTypography
 
-
 @Composable
-fun AnimatedSplashScreen(modifier: Modifier = Modifier, onFinished: (NavRoutes) -> Unit) {
-    val viewModel: SplashViewModel = viewModel(factory = SplashViewModelFactory())
+fun AnimatedSplashScreen(
+    modifier: Modifier = Modifier,
+    onFinished: () -> Unit
+) {
     val scope = rememberCoroutineScope()
     val controller = remember { SplashAnimationController(scope) }
 
     LaunchedEffect(Unit) {
-        viewModel.navigationEvent.collect { destination ->
-            controller.startAnimations {
-                onFinished(destination)
-            }
+        controller.startAnimations {
+            onFinished()
         }
     }
 
@@ -68,9 +63,7 @@ fun AnimatedSplashScreen(modifier: Modifier = Modifier, onFinished: (NavRoutes) 
                 alpha = controller.logoAlpha.value,
                 offsetY = controller.logoOffsetY.value
             )
-
             Spacer(modifier = Modifier.height(12.dp))
-
             AnimatedSplashText(
                 text = stringResource(R.string.app_title),
                 alpha = controller.textAlpha.value,

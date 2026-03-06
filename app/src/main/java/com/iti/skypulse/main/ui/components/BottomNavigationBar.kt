@@ -1,4 +1,4 @@
-package com.iti.skypulse.main.ui
+package com.iti.skypulse.main.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
