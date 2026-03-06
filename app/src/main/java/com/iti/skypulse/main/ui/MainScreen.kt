@@ -12,45 +12,38 @@ import com.iti.skypulse.alarms.AlarmsScreen
 import com.iti.skypulse.favorites.FavoriteLocationsScreen
 import com.iti.skypulse.forecast.ui.ForecastScreen
 import com.iti.skypulse.home.ui.HomeScreen
+import com.iti.skypulse.main.ui.components.BottomNavigationBar
 import com.iti.skypulse.navigation.NavRoutes
 import com.iti.skypulse.settings.SettingsScreen
 
 @Composable
 fun MainScreen() {
-
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController)
-        }
-    ) { padding ->
 
+    Scaffold(
+        bottomBar = { BottomNavigationBar(navController) }
+    ) { padding ->
         NavHost(
             navController = navController,
             startDestination = NavRoutes.HomeRoute,
             modifier = Modifier.padding(padding)
         ) {
-
             composable<NavRoutes.HomeRoute> {
                 BackHandler(enabled = true) {}
                 HomeScreen()
             }
-
             composable<NavRoutes.ForecastRoute> {
                 BackHandler(enabled = true) {}
                 ForecastScreen()
             }
-
             composable<NavRoutes.FavoriteLocationsRoute> {
                 BackHandler(enabled = true) {}
                 FavoriteLocationsScreen()
             }
-
             composable<NavRoutes.AlarmsRoute> {
                 BackHandler(enabled = true) {}
                 AlarmsScreen()
             }
-
             composable<NavRoutes.SettingsRoute> {
                 BackHandler(enabled = true) {}
                 SettingsScreen()

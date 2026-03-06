@@ -31,4 +31,24 @@
     <string name="hourly_forecast">Hourly Forecast</string>
     <string name="weather_details">Weather Details</string>
     <string name="upcoming_forecast">Upcoming Forecast</string>
+    <string name="location_picker_title">Choose Your Location</string>
+    <string name="location_picker_subtitle">SkyPulse needs your location to show accurate weather for your area</string>
+    <string name="location_picker_gps">Use GPS</string>
+    <string name="location_picker_map">Pick from Map</string>
+    <string name="error_location_fetch">Unable to determine location</string>
+    <string name="permission_required_title">Location Permission Required</string>
+    <string name="permission_required_message">Location permission was denied. Please enable it from app settings to use GPS.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="use_map_instead">Use Map Instead</string>
+    <string name="location_fetching">Fetching location…</string>
+    <string name="location_found">Location Found</string>
+    <string name="location_coordinates">%.4f°, %.4f°</string>
+    <string name="location_provider_gps">Updating via GPS</string>
+    <string name="location_provider_map">Set via Map</string>
+    <string name="location_fetching_subtitle">Getting your current position…</string>
+    <string name="location_confirm">Use This Location</string>
+    <string name="location_refresh">Refresh GPS</string>
+    <string name="location_cancel">Cancel</string>
+    <string name="location_disabled_title">Location Is Disabled</string>
+    <string name="location_disabled_message">Please enable location services in your device settings to use GPS.</string>
 </resources>
