@@ -21,7 +21,9 @@ class AppPreferences(private val context: Context) {
         private val LOCATION_LAT_KEY = doublePreferencesKey("location_lat")
         private val LOCATION_LNG_KEY = doublePreferencesKey("location_lng")
         private val LOCATION_PROVIDER_KEY = stringPreferencesKey("location_provider")
-
+        private val LANGUAGE_KEY = stringPreferencesKey("language")
+        const val LANG_ENGLISH = "en"
+        const val LANG_ARABIC = "ar"
     }
 
     val isOnboardingCompleted: Flow<Boolean> = context.dataStore.data
@@ -48,5 +50,14 @@ class AppPreferences(private val context: Context) {
         val provider = prefs[LOCATION_PROVIDER_KEY]
             ?.let { runCatching { LocationProvider.valueOf(it) }.getOrNull() }
         return if (lat != null && lng != null && provider != null) SavedLocation(lat, lng, provider) else null
+    }
+
+    val language: Flow<String> = context.dataStore.data
+        .map { prefs -> prefs[LANGUAGE_KEY] ?: LANG_ENGLISH }
+
+    suspend fun saveLanguage(langCode: String) {
+        context.dataStore.edit { prefs ->
+            prefs[LANGUAGE_KEY] = langCode
+        }
     }
 }
