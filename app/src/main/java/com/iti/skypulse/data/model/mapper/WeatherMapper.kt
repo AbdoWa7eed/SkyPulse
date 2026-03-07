@@ -1,5 +1,7 @@
 package com.iti.skypulse.data.model.mapper
 
+import com.iti.skypulse.data.local.room.entity.ForecastEntity
+import com.iti.skypulse.data.local.room.entity.WeatherEntity
 import com.iti.skypulse.data.model.DailyForecastModel
 import com.iti.skypulse.data.model.ForecastModel
 import com.iti.skypulse.data.model.HourlyForecastModel
@@ -50,6 +52,54 @@ fun ForecastResponseDto.toForecastModel(): ForecastModel {
     )
 }
 
+fun WeatherModel.toWeatherEntity(cacheKey: String) = WeatherEntity(
+    cacheKey = cacheKey,
+    cityName = cityName,
+    countryCode = countryCode,
+    temperature = temperature,
+    feelsLikeTemperature = feelsLikeTemperature,
+    minimumTemperature = minimumTemperature,
+    maximumTemperature = maximumTemperature,
+    weatherDescription = weatherDescription,
+    weatherIconCode = weatherIconCode,
+    windSpeed = windSpeed,
+    windDirectionDegrees = windDirectionDegrees,
+    humidityPercentage = humidityPercentage,
+    visibilityInMeters = visibilityInMeters,
+    atmosphericPressure = atmosphericPressure,
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun WeatherEntity.toWeatherModel() = WeatherModel(
+    cityName = cityName,
+    countryCode = countryCode,
+    temperature = temperature,
+    feelsLikeTemperature = feelsLikeTemperature,
+    minimumTemperature = minimumTemperature,
+    maximumTemperature = maximumTemperature,
+    weatherDescription = weatherDescription,
+    weatherIconCode = weatherIconCode,
+    windSpeed = windSpeed,
+    windDirectionDegrees = windDirectionDegrees,
+    humidityPercentage = humidityPercentage,
+    visibilityInMeters = visibilityInMeters,
+    atmosphericPressure = atmosphericPressure
+)
+
+fun ForecastModel.toForecastEntity(cacheKey: String) = ForecastEntity(
+    cacheKey = cacheKey,
+    cityName = cityName,
+    countryCode = countryCode,
+    dailyForecasts = dailyForecasts,
+    lastUpdated = System.currentTimeMillis()
+)
+
+fun ForecastEntity.toForecastModel() = ForecastModel(
+    cityName = cityName,
+    countryCode = countryCode,
+    dailyForecasts = dailyForecasts
+)
+
 private fun ForecastItemDto.toHourlyForecastModel() = HourlyForecastModel(
     time = dateTimeText.substring(11, 16),
     weatherIconCode = weatherConditions.firstOrNull()?.iconCode ?: "",
@@ -60,16 +110,12 @@ private fun String.toDayName(): String {
     return try {
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
         SimpleDateFormat("EEEE", Locale.getDefault()).format(date ?: Date())
-    } catch (e: Exception) {
-        this
-    }
+    } catch (_: Exception) { this }
 }
 
 private fun String.toFormattedDate(): String {
     return try {
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
         SimpleDateFormat("MMM dd", Locale.getDefault()).format(date ?: Date())
-    } catch (e: Exception) {
-        this
-    }
+    } catch (_: Exception) { this }
 }
