@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.iti.skypulse.location.model.LocationProvider
-import com.iti.skypulse.location.model.SavedLocation
+import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.data.model.SavedLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
