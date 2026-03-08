@@ -32,6 +32,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
+import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.UnitConverter
+import com.iti.skypulse.data.model.HourlyForecastModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography
@@ -43,19 +46,15 @@ data class HourlyForecastData(
     val temperature: String
 )
 
-val sampleHourlyData = listOf(
-    HourlyForecastData("Now",  "01d", "72°"),
-    HourlyForecastData("2 PM", "02d", "72°"),
-    HourlyForecastData("3 PM", "03d", "71°"),
-    HourlyForecastData("4 PM", "10d", "69°"),
-    HourlyForecastData("5 PM", "10n", "68°")
-)
 
 @Composable
 fun HourlyForecast(
-    items: List<HourlyForecastData> = sampleHourlyData
+    items: List<HourlyForecastModel>,
+    tempUnit: TempUnit
+
 ) {
     var selectedIndex by remember { mutableIntStateOf(0) }
+
 
     Column(
         modifier = Modifier
@@ -76,7 +75,12 @@ fun HourlyForecast(
         ) {
             itemsIndexed(items) { index, item ->
                 HourlyForecastItem(
-                    data = item,
+                    data = HourlyForecastData(
+                        time = item.time,
+                        iconCode = item.weatherIconCode,
+                        temperature = UnitConverter
+                            .formatTemp(item.temperature, tempUnit).display()
+                    ),
                     isSelected = index == selectedIndex,
                     onClick = { selectedIndex = index }
                 )
@@ -102,6 +106,7 @@ fun HourlyForecastItem(
         label = "bg"
     )
     val textColorTime = if (isSelected) Color.White.copy(alpha = 0.7f)
+
     else MaterialTheme.colorScheme.onSecondary
     val textColorTemp = if (isSelected) Color.White
     else MaterialTheme.colorScheme.onBackground
@@ -150,6 +155,15 @@ fun HourlyForecastItem(
 @Composable
 fun HourlyForecastPreview() {
     SkyPulseTheme {
-        HourlyForecast()
+        HourlyForecast(
+            tempUnit = TempUnit.CELSIUS,
+            items = listOf(
+                HourlyForecastModel(time = "Now",   weatherIconCode = "01d", temperature = 22.0),
+                HourlyForecastModel(time = "14:00", weatherIconCode = "02d", temperature = 21.0),
+                HourlyForecastModel(time = "15:00", weatherIconCode = "03d", temperature = 20.0),
+                HourlyForecastModel(time = "16:00", weatherIconCode = "10d", temperature = 19.0),
+                HourlyForecastModel(time = "17:00", weatherIconCode = "10n", temperature = 18.0),
+            )
+        )
     }
 }

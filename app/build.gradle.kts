@@ -1,13 +1,23 @@
+import java.util.Properties
+
+val properties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    properties.load(localPropertiesFile.inputStream())
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-
 }
 
 android {
+
     namespace = "com.iti.skypulse"
+
     compileSdk {
         version = release(36)
     }
@@ -23,25 +33,11 @@ android {
 
         buildFeatures { buildConfig = true }
 
-        buildConfigField("String", "WEATHER_API_KEY",
-            "\"${properties["WEATHER_API_KEY"]}\"")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        compose = true
+        buildConfigField(
+            "String",
+            "WEATHER_API_KEY",
+            "\"${properties["WEATHER_API_KEY"]}\""
+        )
     }
 }
 
@@ -79,6 +75,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.okhttp.logging)
+    implementation(libs.shimmer)
 
 
 

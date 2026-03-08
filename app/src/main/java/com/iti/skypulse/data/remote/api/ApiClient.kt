@@ -19,7 +19,7 @@ object ApiClient {
 
     private var language: String? = null
 
-    private val apiKeyInterceptor = Interceptor { chain ->
+    private val queryParamsInterceptor = Interceptor { chain ->
         val newUrl = chain.request().url.newBuilder()
             .addQueryParameter(LANGUAGE_FIELD, language)
             .addQueryParameter(API_KEY_FIELD, BuildConfig.WEATHER_API_KEY)
@@ -38,7 +38,7 @@ object ApiClient {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(apiKeyInterceptor)
+        .addInterceptor(queryParamsInterceptor)
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)

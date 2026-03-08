@@ -6,6 +6,9 @@ import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.iti.skypulse.core.utils.PressureUnit
+import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +25,9 @@ class AppPreferences(private val context: Context) {
         private val LOCATION_LNG_KEY = doublePreferencesKey("location_lng")
         private val LOCATION_PROVIDER_KEY = stringPreferencesKey("location_provider")
         private val LANGUAGE_KEY = stringPreferencesKey("language")
+        private val TEMP_UNIT_KEY = stringPreferencesKey("temp_unit")
+        private val WIND_UNIT_KEY = stringPreferencesKey("wind_unit")
+        private val PRESSURE_UNIT_KEY = stringPreferencesKey("pressure_unit")
         const val LANG_ENGLISH = "en"
         const val LANG_ARABIC = "ar"
     }
@@ -60,4 +66,44 @@ class AppPreferences(private val context: Context) {
             prefs[LANGUAGE_KEY] = langCode
         }
     }
+
+    val tempUnit: Flow<TempUnit> = context.dataStore.data
+        .map { prefs ->
+            prefs[TEMP_UNIT_KEY]
+                ?.let { runCatching { TempUnit.valueOf(it) }.getOrNull() }
+                ?: TempUnit.CELSIUS
+        }
+
+    suspend fun saveTempUnit(unit: TempUnit) {
+        context.dataStore.edit { prefs ->
+            prefs[TEMP_UNIT_KEY] = unit.name
+        }
+    }
+
+    val windUnit: Flow<WindUnit> = context.dataStore.data
+        .map { prefs ->
+            prefs[WIND_UNIT_KEY]
+                ?.let { runCatching { WindUnit.valueOf(it) }.getOrNull() }
+                ?: WindUnit.METERS_PER_SECOND
+        }
+
+    suspend fun saveWindUnit(unit: WindUnit) {
+        context.dataStore.edit { prefs ->
+            prefs[WIND_UNIT_KEY] = unit.name
+        }
+    }
+
+    val pressureUnit: Flow<PressureUnit> = context.dataStore.data
+        .map { prefs ->
+            prefs[PRESSURE_UNIT_KEY]
+                ?.let { runCatching { PressureUnit.valueOf(it) }.getOrNull() }
+                ?: PressureUnit.HPA
+        }
+
+    suspend fun savePressureUnit(unit: PressureUnit) {
+        context.dataStore.edit { prefs ->
+            prefs[PRESSURE_UNIT_KEY] = unit.name
+        }
+    }
+
 }
