@@ -9,21 +9,21 @@ import com.iti.skypulse.data.local.room.entity.WeatherEntity
 
 @Dao
 interface WeatherDao {
-    @Query("SELECT * FROM weather WHERE cityName = :cityName")
-    suspend fun getWeather(cityName: String): WeatherEntity?
+    @Query("SELECT * FROM weather WHERE cacheKey = :cacheKey")
+    suspend fun getWeather(cacheKey: String): WeatherEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveWeather(weather: WeatherEntity)
 
-    @Query("DELETE FROM weather WHERE cityName = :cityName")
-    suspend fun deleteWeather(cityName: String)
+    @Query("DELETE FROM weather WHERE cacheKey = :cacheKey")
+    suspend fun deleteWeather(cacheKey: String)
 
-    @Query("SELECT * FROM forecast WHERE cityName = :cityName")
-    suspend fun getForecast(cityName: String): ForecastEntity?
+    @Query("SELECT * FROM forecast WHERE cacheKey = :cacheKey")
+    suspend fun getForecast(cacheKey: String): ForecastEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveForecast(forecast: ForecastEntity)
 
-    @Query("DELETE FROM forecast WHERE cityName = :cityName")
-    suspend fun deleteForecast(cityName: String)
+    @Query("DELETE FROM forecast WHERE cacheKey = :cacheKey")
+    suspend fun deleteForecast(cacheKey: String)
 }
