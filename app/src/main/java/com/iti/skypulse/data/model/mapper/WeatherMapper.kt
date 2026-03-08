@@ -33,17 +33,20 @@ fun ForecastResponseDto.toForecastModel(): ForecastModel {
     val dailyGroups = forecastItems
         .groupBy { it.dateTimeText.substring(0, 10) }
 
-    val dailyForecasts = dailyGroups.map { (date, items) ->
-        DailyForecastModel(
-            dayName = date.toDayName(),
-            date = date.toFormattedDate(),
-            highTemperature = items.maxOf { it.mainMetrics.maximumTemperature },
-            lowTemperature = items.minOf { it.mainMetrics.minimumTemperature },
-            weatherDescription = items.first().weatherConditions.firstOrNull()?.conditionDescription ?: "",
-            weatherIconCode = items.first().weatherConditions.firstOrNull()?.iconCode ?: "",
-            hourlyForecasts = items.map { it.toHourlyForecastModel() }
-        )
-    }
+    val dailyForecasts = dailyGroups
+        .entries
+        .sortedBy { it.key }
+        .map { (date, items) ->
+            DailyForecastModel(
+                dayName = date.toDayName(),
+                date = date.toFormattedDate(),
+                highTemperature = items.maxOf { it.mainMetrics.maximumTemperature },
+                lowTemperature = items.minOf { it.mainMetrics.minimumTemperature },
+                weatherDescription = items.first().weatherConditions.firstOrNull()?.conditionDescription ?: "",
+                weatherIconCode = items.first().weatherConditions.firstOrNull()?.iconCode ?: "",
+                hourlyForecasts = items.map { it.toHourlyForecastModel() }
+            )
+        }
 
     return ForecastModel(
         cityName = city.cityName,

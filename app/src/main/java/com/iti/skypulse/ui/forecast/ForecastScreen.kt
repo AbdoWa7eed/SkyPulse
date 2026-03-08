@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -20,24 +21,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
+import com.iti.skypulse.core.utils.UnitConverter
+import com.iti.skypulse.ui.components.ErrorScreen
 import com.iti.skypulse.ui.components.PrimaryAppBar
-import com.iti.skypulse.ui.forecast.components.DailyForecastData
 import com.iti.skypulse.ui.forecast.components.DayForecastCard
-import com.iti.skypulse.ui.forecast.components.sampleDailyForecast
+import com.iti.skypulse.ui.forecast.components.ForecastShimmer
+import com.iti.skypulse.ui.preferences.LocalPreferencesViewModel
 import com.iti.skypulse.ui.theme.SkyPulseTheme
+
 
 @Composable
 fun ForecastScreen(
-    days: List<DailyForecastData> = sampleDailyForecast
+    viewModel: ForecastViewModel = viewModel(factory = ForecastViewModelFactory())
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val unitTemp by LocalPreferencesViewModel.current.tempUnit.collectAsState()
 
     var expandedIndex by remember { mutableIntStateOf(0) }
 
-    CompositionLocalProvider(
-        LocalOverscrollFactory provides null
-    ) {
-
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -48,18 +52,36 @@ fun ForecastScreen(
             item {
                 PrimaryAppBar(
                     title = stringResource(R.string.upcoming_forecast),
-                    location = "Awsim, Giza"
+                    location = when (val s = uiState) {
+                        is ForecastUiState.Success -> s.forecast.cityName else -> ""
+                    }
                 )
             }
 
-            itemsIndexed(days) { index, day ->
-                DayForecastCard(
-                    data = day,
-                    isExpanded = index == expandedIndex,
-                    onToggle = { expandedIndex = if (expandedIndex == index) -1 else index },
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp, vertical = 4.dp)
-                )
+            when (val state = uiState) {
+                is ForecastUiState.Loading -> item { ForecastShimmer() }
+
+                is ForecastUiState.Error -> {
+                    item {
+                        ErrorScreen(
+                            title = stringResource(state.messageRes),
+                            onRetry = {viewModel.loadForecast()}
+                        )
+
+                    }
+                }
+
+                is ForecastUiState.Success -> {
+                    itemsIndexed(state.forecast.dailyForecasts) { index, day ->
+                        DayForecastCard(
+                            data = day,
+                            isExpanded = index == expandedIndex,
+                            onToggle = { expandedIndex = if (expandedIndex == index) -1 else index },
+                            formatTemp = { UnitConverter.formatTemp(it, unitTemp) },
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
+                        )
+                    }
+                }
             }
 
             item {

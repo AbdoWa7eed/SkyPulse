@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.R
 import com.iti.skypulse.core.error.toMessageRes
-import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.local.prefs.AppPreferences
+import com.iti.skypulse.data.model.ForecastModel
 import com.iti.skypulse.data.model.HourlyForecastModel
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
@@ -27,17 +27,12 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState
 
-    private val _tempUnit = MutableStateFlow(TempUnit.CELSIUS)
-    val tempUnit: StateFlow<TempUnit> = _tempUnit
 
     init {
-        viewModelScope.launch {
-            appPreferences.tempUnit.collect { _tempUnit.value = it }
-        }
         loadWeather()
     }
 
-    private fun loadWeather() {
+    fun loadWeather() {
         viewModelScope.launch {
             _uiState.value = HomeUiState.Loading
 
@@ -72,35 +67,44 @@ class HomeViewModel(
     }
 
     private suspend fun fetchWeather(latitude: Double, longitude: Double) {
-        val address = locationHelper.getAddressFromLocation(latitude, longitude)
-
-        val weatherDeferred = viewModelScope.async {
-            weatherRepository.getCurrentWeather(latitude, longitude)
-        }
-        val forecastDeferred = viewModelScope.async {
-            weatherRepository.getFiveDayForecast(latitude, longitude)
-        }
-
-        val weatherResult = weatherDeferred.await()
-        val forecastResult = forecastDeferred.await()
+        val address = getAddress(latitude, longitude)
+        val (weatherResult, forecastResult) = fetchWeatherAndForecast(latitude, longitude)
 
         if (weatherResult.isFailure) {
             _uiState.value = HomeUiState.Error(weatherResult.exceptionOrNull().toMessageRes())
             return
         }
 
-        val weather = weatherResult.getOrThrow()
-        val hourlyForecasts = forecastResult.getOrNull()
+        _uiState.value = HomeUiState.Success(
+            weather = weatherResult.getOrThrow(),
+            hourlyForecasts = extractTodayHourly(forecastResult),
+            address = address
+        )
+    }
+
+    private suspend fun getAddress(latitude: Double, longitude: Double): String? {
+        return locationHelper.getAddressFromLocation(latitude, longitude)
+    }
+
+    private suspend fun fetchWeatherAndForecast(
+        latitude: Double,
+        longitude: Double
+    ): Pair<Result<WeatherModel>, Result<ForecastModel>> {
+        val weatherDeferred = viewModelScope.async {
+            weatherRepository.getCurrentWeather(latitude, longitude)
+        }
+        val forecastDeferred = viewModelScope.async {
+            weatherRepository.getFiveDayForecast(latitude, longitude)
+        }
+        return Pair(weatherDeferred.await(), forecastDeferred.await())
+    }
+
+    private fun extractTodayHourly(forecastResult: Result<ForecastModel>): List<HourlyForecastModel> {
+        return forecastResult.getOrNull()
             ?.dailyForecasts
             ?.firstOrNull()
             ?.hourlyForecasts
             ?: emptyList()
-
-        _uiState.value = HomeUiState.Success(
-            weather = weather,
-            hourlyForecasts = hourlyForecasts,
-            address = address
-        )
     }
 }
 

@@ -11,6 +11,8 @@ import com.iti.skypulse.data.model.mapper.toWeatherEntity
 import com.iti.skypulse.data.model.mapper.toWeatherModel
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSource
 
+private const val CACHE_EXPIRY_MS = 30 * 60 * 1000L
+
 class WeatherRepositoryImpl(
     private val remoteDataSource: WeatherRemoteDataSource,
     private val localDataSource: WeatherLocalDataSource,
@@ -24,7 +26,10 @@ class WeatherRepositoryImpl(
         return runCatching {
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getWeather(cacheKey)
-            if (connectivityHelper.isOnline()) {
+
+            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
+                cached.toWeatherModel()
+            } else if (connectivityHelper.isOnline()) {
                 val fresh = remoteDataSource.getCurrentWeather(latitude, longitude).toWeatherModel()
                 localDataSource.saveWeather(fresh.toWeatherEntity(cacheKey))
                 fresh
@@ -39,12 +44,19 @@ class WeatherRepositoryImpl(
         return runCatching {
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getForecast(cacheKey)
-            if (connectivityHelper.isOnline()) {
+
+            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
+                cached.toForecastModel()
+            } else if (connectivityHelper.isOnline()) {
                 val fresh = remoteDataSource.getFiveDayForecast(latitude, longitude).toForecastModel()
                 localDataSource.saveForecast(fresh.toForecastEntity(cacheKey))
                 fresh
             } else cached?.toForecastModel() ?: throw AppException.NoCacheException()
         }
+    }
+
+    private fun isCacheExpired(lastUpdated: Long): Boolean {
+        return System.currentTimeMillis() - lastUpdated > CACHE_EXPIRY_MS
     }
 
     private fun buildCacheKey(latitude: Double, longitude: Double): String {

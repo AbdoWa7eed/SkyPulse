@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.ui.home.animation.rememberHomeAnimationStep
 import com.iti.skypulse.R
+import com.iti.skypulse.ui.components.ErrorScreen
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.home.components.CurrentWeatherCard
 import com.iti.skypulse.ui.home.components.HomeShimmer
@@ -61,16 +62,11 @@ fun HomeScreen(
                 is HomeUiState.Loading -> HomeShimmer()
 
                 is HomeUiState.Error -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(state.messageRes),
-                            style = AppTypography.medium16,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
+                    ErrorScreen(
+                        title = stringResource(id = R.string.error_message_title),
+                        message = stringResource(id = R.string.error_message_description),
+                        onRetry = { viewModel.loadWeather() }
+                    )
                 }
 
                 is HomeUiState.Success -> {

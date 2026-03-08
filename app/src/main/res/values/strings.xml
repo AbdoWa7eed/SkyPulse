@@ -55,6 +55,9 @@
     <string name="error_no_cache">No cached data available</string>
     <string name="error_no_location">Unable to determine location</string>
     <string name="error_generic">Something went wrong, please try again</string>
+    <string name="error_message_title">Something went wrong</string>
+    <string name="error_message_description">We couldn\'t retrieve the latest weather data. Please check your connection and try again.</string>
+    <string name="try_again">Try Again</string>
     <string name="feels_like">Feels like %1$d°</string>
     <string name="wind">Wind</string>
     <string name="wind_direction">Direction: %1$d°</string>
