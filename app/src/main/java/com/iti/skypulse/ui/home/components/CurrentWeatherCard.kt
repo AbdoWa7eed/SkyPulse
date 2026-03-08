@@ -12,22 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
-
+import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.UnitConverter
 
 
 @Composable
 fun CurrentWeatherCard(
+    weather: WeatherModel,
     modifier: Modifier = Modifier,
-    temperature: String = "72°F",
-    condition: String = "Partly Cloudy",
-    feelsLike: String = "Feels like 75°F",
-    high: String = "78°",
-    low: String = "64°",
-    weatherIconCode: String = "02d"
+    tempUnit: TempUnit
 ) {
     PrimaryCard(
         modifier = modifier
@@ -41,27 +39,25 @@ fun CurrentWeatherCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             WeatherIcon(
-                iconCode = weatherIconCode,
-                contentDescription = condition,
+                iconCode = weather.weatherIconCode,
+                contentDescription = weather.weatherDescription,
                 modifier = Modifier.size(96.dp).padding(bottom = 8.dp)
             )
 
             Text(
-                text = temperature,
-                style = AppTypography.bold56.copy(
-                    letterSpacing = (-2).sp
-                ),
+                text = UnitConverter.formatTemp(weather.temperature, tempUnit).display(),
+                style = AppTypography.bold56.copy(letterSpacing = (-2).sp),
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text(
-                text = condition,
+                text = weather.weatherDescription,
                 style = AppTypography.medium16,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
             )
 
             Text(
-                text = feelsLike,
+                text = UnitConverter.formatTemp(weather.feelsLikeTemperature, tempUnit).display(),
                 style = AppTypography.regular12,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -72,13 +68,18 @@ fun CurrentWeatherCard(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TempPill(label = high, isHigh = true)
-                TempPill(label = low, isHigh = false)
+                TempPill(
+                    label = UnitConverter.formatTemp(weather.maximumTemperature, tempUnit).display(),
+                    isHigh = true
+                )
+                TempPill(
+                    label = UnitConverter.formatTemp(weather.minimumTemperature, tempUnit).display(),
+                    isHigh = false
+                )
             }
         }
     }
 }
-
 @Composable
 fun TempPill(label: String, isHigh: Boolean) {
     val icon = if (isHigh) Icons.Filled.ArrowUpward else Icons.Filled.ArrowDownward
@@ -113,6 +114,23 @@ fun TempPill(label: String, isHigh: Boolean) {
 @Composable
 fun CardPreview() {
     SkyPulseTheme {
-        CurrentWeatherCard()
+        CurrentWeatherCard(
+            tempUnit = TempUnit.CELSIUS,
+            weather = WeatherModel(
+                temperature = 295.0,
+                feelsLikeTemperature = 293.0,
+                minimumTemperature = 287.0,
+                maximumTemperature = 298.0,
+                weatherDescription = "Partly Cloudy",
+                weatherIconCode = "02d",
+                windSpeed = 5.0,
+                windDirectionDegrees = 180,
+                humidityPercentage = 60,
+                visibilityInMeters = 10000,
+                atmosphericPressure = 1015,
+                cityName = "Cairo",
+                countryCode = "EG"
+            )
+        )
     }
 }

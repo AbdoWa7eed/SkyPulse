@@ -1,8 +1,19 @@
 package com.iti.skypulse.di
 
 import android.app.Application
-import com.iti.skypulse.data.local.prefs.AppPreferences
+import android.net.ConnectivityManager
+import android.content.Context
+import com.iti.skypulse.core.network.ConnectivityHelper
+import com.iti.skypulse.data.local.datasource.WeatherLocalDataSourceImpl
 import com.iti.skypulse.data.local.location.LocationHelper
+import com.iti.skypulse.data.local.prefs.AppPreferences
+import com.iti.skypulse.data.local.room.AppDatabase
+import com.iti.skypulse.data.remote.api.ApiClient
+import com.iti.skypulse.data.remote.api.WeatherApiService
+import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSourceImpl
+import com.iti.skypulse.data.repository.WeatherRepositoryImpl
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
 
 object ServiceLocator {
     private lateinit var appContext: Application
@@ -17,5 +28,37 @@ object ServiceLocator {
 
     val locationHelper: LocationHelper by lazy {
         LocationHelper(appContext)
+    }
+
+    val connectivityHelper: ConnectivityHelper by lazy {
+        ConnectivityHelper(
+            appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        )
+    }
+
+    private val appDatabase: AppDatabase by lazy {
+        AppDatabase.getInstance(appContext)
+    }
+
+    private val weatherApiService: WeatherApiService by lazy {
+        val langCode = runBlocking { appPreferences.language.first() }
+        ApiClient.init(langCode)
+        ApiClient.getInstance().create(WeatherApiService::class.java)
+    }
+
+    private val weatherRemoteDataSource by lazy {
+        WeatherRemoteDataSourceImpl(weatherApiService)
+    }
+
+    private val weatherLocalDataSource by lazy {
+        WeatherLocalDataSourceImpl(appDatabase.weatherDao())
+    }
+
+    val weatherRepository by lazy {
+        WeatherRepositoryImpl(
+            remoteDataSource = weatherRemoteDataSource,
+            localDataSource = weatherLocalDataSource,
+            connectivityHelper = connectivityHelper
+        )
     }
 }
