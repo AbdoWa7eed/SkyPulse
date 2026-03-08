@@ -1,35 +1,72 @@
 package com.iti.skypulse.ui.settings
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.iti.skypulse.ui.theme.AppTypography
+import com.iti.skypulse.R
+import com.iti.skypulse.core.utils.PressureUnit
+import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.ThemeMode
+import com.iti.skypulse.core.utils.WindUnit
+import com.iti.skypulse.ui.components.PrimaryAppBar
+import com.iti.skypulse.ui.settings.components.*
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
 fun SettingsScreen() {
-    Box(
+    var selectedTempUnit by remember { mutableStateOf(TempUnit.CELSIUS) }
+    var selectedWindUnit by remember { mutableStateOf(WindUnit.METERS_PER_SECOND) }
+    var selectedPressureUnit by remember { mutableStateOf(PressureUnit.HPA) }
+    var selectedThemeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
+    var selectedLanguage by remember { mutableStateOf("en") }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
+            .verticalScroll(rememberScrollState())
+
     ) {
-        Text(
-            text = "Settings Screen",
-            modifier = Modifier.padding(20.dp),
-            textAlign = TextAlign.Center,
-            style = AppTypography.semiBold24,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        PrimaryAppBar(title = stringResource(R.string.settings))
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 20.dp)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LanguageSection(
+                currentLanguageCode = selectedLanguage,
+                onLanguageChange = { selectedLanguage = it }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            MeasurementUnitsSection(
+                tempUnit = selectedTempUnit,
+                windUnit = selectedWindUnit,
+                pressureUnit = selectedPressureUnit,
+                onTempUnitChange = { selectedTempUnit = it },
+                onWindUnitChange = { selectedWindUnit = it },
+                onPressureUnitChange = { selectedPressureUnit = it }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            AppearanceSection(
+                currentMode = selectedThemeMode,
+                onModeChange = { selectedThemeMode = it }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+
+        SettingsVersion()
     }
 }
 

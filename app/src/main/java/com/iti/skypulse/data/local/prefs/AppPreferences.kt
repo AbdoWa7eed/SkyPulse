@@ -105,5 +105,4 @@ class AppPreferences(private val context: Context) {
             prefs[PRESSURE_UNIT_KEY] = unit.name
         }
     }
-
 }
