@@ -30,6 +30,9 @@ object AppTypography {
     val semiBold22 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
     val semiBold18 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
 
+    val semiBold16 =
+        TextStyle(fontFamily = Poppins, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+
     val medium16 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 16.sp)
     val medium14 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 14.sp)
     val medium12 = TextStyle(fontFamily = Poppins, fontWeight = FontWeight.Medium, fontSize = 12.sp)

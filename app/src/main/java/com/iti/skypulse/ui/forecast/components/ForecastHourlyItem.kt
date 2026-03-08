@@ -11,11 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.iti.skypulse.core.utils.ConvertedValue
+import com.iti.skypulse.data.model.HourlyForecastModel
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable
-fun ForecastHourlyItem(data: ForecastHourlyData) {
+fun ForecastHourlyItem(
+    data: HourlyForecastModel,
+    formatTemp: (Double) -> ConvertedValue
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(52.dp)
@@ -25,18 +30,14 @@ fun ForecastHourlyItem(data: ForecastHourlyData) {
             style = AppTypography.bold10,
             color = MaterialTheme.colorScheme.onSecondary
         )
-
         Spacer(modifier = Modifier.height(6.dp))
-
         WeatherIcon(
-            iconCode = data.iconCode,
+            iconCode = data.weatherIconCode,
             modifier = Modifier.size(32.dp)
         )
-
         Spacer(modifier = Modifier.height(6.dp))
-
         Text(
-            text = data.temperature,
+            text = formatTemp(data.temperature).displayInt(),
             style = AppTypography.bold14,
             color = MaterialTheme.colorScheme.onBackground
         )

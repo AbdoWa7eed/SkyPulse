@@ -3,15 +3,23 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.iti.skypulse.R
-
 data class ConvertedValue(
     val value: String,
     @param:StringRes val unitRes: Int
 ) {
-
     @Composable
     fun display(): String {
         return "$value ${stringResource(unitRes)}"
+    }
+
+    @Composable
+    fun displayInt(): String {
+        val intValue = value.toDoubleOrNull()?.toInt() ?: value
+        return "$intValue ${stringResource(unitRes)}"
+    }
+
+    fun displayValue(): String {
+        return "${value.toDoubleOrNull()?.toInt() ?: value}°"
     }
 }
 

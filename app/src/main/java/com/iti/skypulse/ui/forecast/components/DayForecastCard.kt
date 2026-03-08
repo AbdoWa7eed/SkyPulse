@@ -28,21 +28,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.iti.skypulse.core.utils.ConvertedValue
+import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.UnitConverter
+import com.iti.skypulse.data.model.DailyForecastModel
+import com.iti.skypulse.data.model.HourlyForecastModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
-
 @Composable
 fun DayForecastCard(
-    data: DailyForecastData,
+    data: DailyForecastModel,
     isExpanded: Boolean,
     onToggle: () -> Unit,
+    formatTemp: (Double) -> ConvertedValue,
     modifier: Modifier = Modifier
 ) {
     PrimaryCard(
         modifier = modifier.fillMaxWidth()
     ) {
+        val displayTemp =
+            "${formatTemp(data.highTemperature).displayValue()} / ${formatTemp(data.lowTemperature).displayValue()}"
         Column(
             modifier = Modifier.animateContentSize(
                 animationSpec = spring(
@@ -51,80 +58,84 @@ fun DayForecastCard(
                 )
             )
         ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            WeatherIcon(
-                iconCode = data.iconCode,
-                contentDescription = data.condition,
-                modifier = Modifier.size(48.dp)
-            )
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = data.dayName,
-                    style = AppTypography.semiBold18,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = data.date,
-                    style = AppTypography.medium12,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-            }
-
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    text = "${data.highTemp} / ${data.lowTemp}",
-                    style = AppTypography.semiBold18,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = data.condition,
-                    style = AppTypography.medium12,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Icon(
-                imageVector = if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                contentDescription = if (isExpanded) "Collapse" else "Expand",
-                tint = MaterialTheme.colorScheme.onSecondary,
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) { onToggle() }
-            )
-        }
-
-        if (isExpanded) {
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.15f)
-            )
-
-            LazyRow(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 14.dp),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                itemsIndexed(data.hourly) { _, item ->
-                    ForecastHourlyItem(data = item)
+                WeatherIcon(
+                    iconCode = data.weatherIconCode,
+                    contentDescription = data.weatherDescription,
+                    modifier = Modifier.size(48.dp)
+                )
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                Column(modifier = Modifier.weight(2f)) {
+                    Text(
+                        text = data.dayName,
+                        style = AppTypography.semiBold16,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = data.date,
+                        style = AppTypography.medium12,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = displayTemp,
+                        style = AppTypography.semiBold16,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = data.weatherDescription,
+                        style = AppTypography.medium12,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Icon(
+                    imageVector = if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                    contentDescription = if (isExpanded) "Collapse" else "Expand",
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onToggle() }
+                )
+            }
+
+            if (isExpanded) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.15f)
+                )
+
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    itemsIndexed(data.hourlyForecasts) { _, item ->
+                        ForecastHourlyItem(
+                            data = item,
+                            formatTemp = formatTemp
+                        )
+                    }
                 }
             }
         }
-        }
+
     }
 }
 
@@ -133,9 +144,22 @@ fun DayForecastCard(
 fun DayForecastCardPreview() {
     SkyPulseTheme {
         DayForecastCard(
-            data = sampleDailyForecast.first(),
+            data = DailyForecastModel(
+                dayName = "Sunday",
+                date = "Mar 08",
+                highTemperature = 298.0,
+                lowTemperature = 287.0,
+                weatherDescription = "Partly Cloudy",
+                weatherIconCode = "02d",
+                hourlyForecasts = listOf(
+                    HourlyForecastModel(time = "12:00", weatherIconCode = "02d", temperature = 295.0),
+                    HourlyForecastModel(time = "15:00", weatherIconCode = "02d", temperature = 297.0),
+                    HourlyForecastModel(time = "18:00", weatherIconCode = "02n", temperature = 293.0),
+                )
+            ),
             isExpanded = true,
-            onToggle = {}
+            onToggle = {},
+            formatTemp = { kelvin -> UnitConverter.formatTemp(kelvin, TempUnit.CELSIUS) }
         )
     }
 }
