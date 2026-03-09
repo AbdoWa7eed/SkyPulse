@@ -1,7 +1,9 @@
 package com.iti.skypulse
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,12 +24,15 @@ import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var appliedLanguage: Language
     private lateinit var appliedTheme: ThemeMode
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        appliedLanguage = runBlocking {
+            ServiceLocator.settingsRepository.language.first()
+        }
 
         appliedTheme = runBlocking {
             ServiceLocator.settingsRepository.themeMode.first()
@@ -35,9 +40,17 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
         enableEdgeToEdge()
+
         setContent {
             val themeMode by ServiceLocator.settingsRepository.themeMode
                 .collectAsStateWithLifecycle(appliedTheme)
+
+            val language by ServiceLocator.settingsRepository.language
+                .collectAsStateWithLifecycle(appliedLanguage)
+
+            LaunchedEffect(language) {
+                if (language != appliedLanguage) restartWithLanguage()
+            }
 
             SkyPulseTheme(themeMode = themeMode) {
                 AppNavigation()
@@ -45,5 +58,32 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun attachBaseContext(base: Context) {
+        val langCode = LanguagePreference.getLanguageCode(base)
+        val locale = Locale.forLanguageTag(langCode)
+        Locale.setDefault(locale)
+        val config = Configuration(base.resources.configuration)
+        config.setLocale(locale)
+        ServiceLocator.reinit()
+        super.attachBaseContext(base.createConfigurationContext(config))
+    }
+
+    private fun restartWithLanguage() {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)!!
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+    }
 
 }

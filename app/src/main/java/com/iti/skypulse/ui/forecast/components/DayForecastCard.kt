@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.core.utils.ConvertedValue
@@ -85,16 +86,22 @@ fun DayForecastCard(
                     )
                 }
 
-                Column(horizontalAlignment = Alignment.End) {
+                Column(
+                    modifier = Modifier.weight(1.5f),
+                    horizontalAlignment = Alignment.End
+                ) {
                     Text(
                         text = displayTemp,
-                        style = AppTypography.semiBold16,
-                        color = MaterialTheme.colorScheme.onBackground
+                        style = AppTypography.medium14,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
                     )
                     Text(
                         text = data.weatherDescription,
+                        maxLines = 2,
                         style = AppTypography.medium12,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.End
                     )
                 }
 

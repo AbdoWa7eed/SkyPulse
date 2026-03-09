@@ -23,4 +23,7 @@ class WeatherLocalDataSourceImpl(
     override suspend fun saveForecast(forecast: ForecastEntity) {
         weatherDao.saveForecast(forecast)
     }
+
+    override suspend fun clearAll() {
+    }
 }

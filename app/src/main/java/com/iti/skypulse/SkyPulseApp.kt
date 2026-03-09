@@ -15,5 +15,4 @@ class SkyPulseApp : Application() {
         super.onCreate()
         ServiceLocator.init(this)
     }
-
 }

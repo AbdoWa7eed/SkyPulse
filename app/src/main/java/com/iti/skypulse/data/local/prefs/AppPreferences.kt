@@ -70,6 +70,7 @@ class AppPreferences(private val context: Context) {
         }
 
     suspend fun saveLanguage(language: Language) {
+        LanguagePreference.saveLanguageCode(context, language.code )
         context.dataStore.edit { it[LANGUAGE_KEY] = language.code }
     }
 

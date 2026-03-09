@@ -132,7 +132,7 @@ fun WeatherDetailCard(
 
             Text(
                 text = data.value,
-                style = AppTypography.bold20,
+                style = AppTypography.semiBold16,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
