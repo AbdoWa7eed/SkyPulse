@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.iti.skypulse.core.utils.Language
 import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
@@ -28,6 +29,10 @@ class AppPreferences(private val context: Context) {
         private val TEMP_UNIT_KEY = stringPreferencesKey("temp_unit")
         private val WIND_UNIT_KEY = stringPreferencesKey("wind_unit")
         private val PRESSURE_UNIT_KEY = stringPreferencesKey("pressure_unit")
+        private val LOCATION_ADDRESS_KEY = stringPreferencesKey("location_address")
+
+        private val THEME_MODE_KEY = stringPreferencesKey("theme_mode")
+
     }
 
     val isOnboardingCompleted: Flow<Boolean> = context.dataStore.data
@@ -42,6 +47,7 @@ class AppPreferences(private val context: Context) {
             it[LOCATION_LAT_KEY] = location.lat
             it[LOCATION_LNG_KEY] = location.lng
             it[LOCATION_PROVIDER_KEY] = location.provider.name
+            it[LOCATION_ADDRESS_KEY] = location.address ?: ""
         }
     }
 
@@ -52,7 +58,9 @@ class AppPreferences(private val context: Context) {
             val provider = prefs[LOCATION_PROVIDER_KEY]?.let {
                 runCatching { LocationProvider.valueOf(it) }.getOrNull()
             }
-            if (lat != null && lng != null && provider != null) SavedLocation(lat, lng, provider)
+            val address = prefs[LOCATION_ADDRESS_KEY]?.ifEmpty { null }
+            if (lat != null && lng != null && provider != null)
+                SavedLocation(lat, lng, provider, address)
             else null
         }
 
@@ -93,5 +101,15 @@ class AppPreferences(private val context: Context) {
 
     suspend fun savePressureUnit(unit: PressureUnit) {
         context.dataStore.edit { it[PRESSURE_UNIT_KEY] = unit.name }
+    }
+
+    val themeMode: Flow<ThemeMode> = context.dataStore.data
+        .map { prefs ->
+            prefs[THEME_MODE_KEY]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() }
+                ?: ThemeMode.SYSTEM
+        }
+
+    suspend fun saveThemeMode(mode: ThemeMode) {
+        context.dataStore.edit { it[THEME_MODE_KEY] = mode.name }
     }
 }

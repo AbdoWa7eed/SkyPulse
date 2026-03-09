@@ -9,80 +9,77 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
-import com.iti.skypulse.core.utils.PressureUnit
-import com.iti.skypulse.core.utils.TempUnit
-import com.iti.skypulse.core.utils.ThemeMode
-import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.settings.components.*
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
-fun SettingsScreen() {
-    var selectedTempUnit by remember { mutableStateOf(TempUnit.CELSIUS) }
-    var selectedWindUnit by remember { mutableStateOf(WindUnit.METERS_PER_SECOND) }
-    var selectedPressureUnit by remember { mutableStateOf(PressureUnit.HPA) }
-    var selectedThemeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
-    var selectedLanguage by remember { mutableStateOf("en") }
-    var selectedProvider by remember { mutableStateOf(LocationProvider.GPS) }
+fun SettingsScreen(
+    viewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory())
+) {
+    val tempUnit by viewModel.tempUnit.collectAsState()
+    val windUnit by viewModel.windUnit.collectAsState()
+    val pressureUnit by viewModel.pressureUnit.collectAsState()
+    val language by viewModel.language.collectAsState()
+    val savedLocation by viewModel.savedLocation.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
 
-   CompositionLocalProvider(LocalOverscrollFactory provides null) {
-       Column(
-           modifier = Modifier
-               .fillMaxSize()
-               .verticalScroll(rememberScrollState())
-       ) {
-           PrimaryAppBar(title = stringResource(R.string.settings))
 
-           Column(
-               modifier = Modifier
-                   .fillMaxSize()
-                   .padding(horizontal = 20.dp)
-           ) {
-               Spacer(modifier = Modifier.height(16.dp))
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            PrimaryAppBar(title = stringResource(R.string.settings))
 
-               GeneralSection(
-                   currentLanguageCode = selectedLanguage,
-                   onLanguageChange = { selectedLanguage = it },
-                   currentProvider = selectedProvider,
-                   currentAddress = null,
-                   onProviderChange = { selectedProvider = it },
-                   onUpdateLocationClick = {}
-               )
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-               Spacer(modifier = Modifier.height(24.dp))
+                GeneralSection(
+                    currentLanguageCode = language.code,
+                    onLanguageChange = {  viewModel.setLanguage(it)},
+                    currentProvider = savedLocation?.provider ?: LocationProvider.GPS,
+                    currentAddress = savedLocation?.address,
+                    onProviderChange = { viewModel.setLocationProvider(it) },
+                    onUpdateLocationClick = { /* navigate to map later */ }
+                )
 
-               MeasurementUnitsSection(
-                   tempUnit = selectedTempUnit,
-                   windUnit = selectedWindUnit,
-                   pressureUnit = selectedPressureUnit,
-                   onTempUnitChange = { selectedTempUnit = it },
-                   onWindUnitChange = { selectedWindUnit = it },
-                   onPressureUnitChange = { selectedPressureUnit = it }
-               )
+                Spacer(modifier = Modifier.height(24.dp))
 
-               Spacer(modifier = Modifier.height(24.dp))
+                MeasurementUnitsSection(
+                    tempUnit = tempUnit,
+                    windUnit = windUnit,
+                    pressureUnit = pressureUnit,
+                    onTempUnitChange = { viewModel.setTempUnit(it) },
+                    onWindUnitChange = { viewModel.setWindUnit(it) },
+                    onPressureUnitChange = { viewModel.setPressureUnit(it) }
+                )
 
-               AppearanceSection(
-                   currentMode = selectedThemeMode,
-                   onModeChange = { selectedThemeMode = it }
-               )
+                Spacer(modifier = Modifier.height(24.dp))
 
-               Spacer(modifier = Modifier.height(32.dp))
+                AppearanceSection(
+                    currentMode = themeMode,
+                    onModeChange = { viewModel.setThemeMode(it) }
+                )
 
-               SettingsVersion()
-           }
+                Spacer(modifier = Modifier.height(32.dp))
 
-       }
-   }
+                SettingsVersion()
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
     SkyPulseTheme {
-        SettingsScreen()
     }
 }

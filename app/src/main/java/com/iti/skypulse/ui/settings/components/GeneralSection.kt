@@ -8,6 +8,9 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditLocation
 import androidx.compose.material.icons.filled.Language
@@ -25,11 +28,12 @@ import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.Language
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.ui.components.PrimaryCard
+import com.iti.skypulse.ui.components.PrimaryTextButton
 
 @Composable
 fun GeneralSection(
     currentLanguageCode: String,
-    onLanguageChange: (String) -> Unit,
+    onLanguageChange: (Language) -> Unit,
     currentProvider: LocationProvider,
     currentAddress: String?,
     onProviderChange: (LocationProvider) -> Unit,
@@ -50,7 +54,7 @@ fun GeneralSection(
                 SegmentedControl(
                     options = languages.map { stringResource(it.labelRes) },
                     selectedIndex = languages.indexOfFirst { it.code == currentLanguageCode },
-                    onOptionSelected = { index -> onLanguageChange(languages[index].code) }
+                    onOptionSelected = { index -> onLanguageChange(languages[index]) }
                 )
             }
 
@@ -72,32 +76,18 @@ fun GeneralSection(
                 enter = expandVertically() + fadeIn(),
                 exit = shrinkVertically() + fadeOut()
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                ) {
                     SettingsDivider()
 
                     SettingsRow(
                         icon = Icons.Default.EditLocation,
-                        label = stringResource(R.string.update_location)
+                        label = currentAddress ?: stringResource(R.string.update_location)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            if (currentAddress != null) {
-                                Text(
-                                    text = currentAddress,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                            TextButton(onClick = onUpdateLocationClick) {
-                                Text(stringResource(R.string.update))
-                            }
-                        }
-                    }
+                        PrimaryTextButton(
+                            text = stringResource(R.string.update),
+                            onClick = onUpdateLocationClick)                     }
                 }
             }
         }

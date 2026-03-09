@@ -3,6 +3,7 @@ package com.iti.skypulse.data.repository.settings
 import com.iti.skypulse.core.utils.Language
 import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.model.SavedLocation
@@ -17,6 +18,8 @@ class SettingsRepositoryImpl(private val preferences: AppPreferences) : Settings
     override val windUnit: Flow<WindUnit> = preferences.windUnit
     override val pressureUnit: Flow<PressureUnit> = preferences.pressureUnit
     override val savedLocation: Flow<SavedLocation?> = preferences.savedLocation
+    override val themeMode: Flow<ThemeMode> = preferences.themeMode
+
 
     override suspend fun setOnboardingCompleted() {
         preferences.setOnboardingCompleted(true)
@@ -40,5 +43,9 @@ class SettingsRepositoryImpl(private val preferences: AppPreferences) : Settings
 
     override suspend fun saveLocation(location: SavedLocation) {
         preferences.saveLocation(location)
+    }
+
+    override suspend fun setThemeMode(mode: ThemeMode) {
+        preferences.saveThemeMode(mode)
     }
 }

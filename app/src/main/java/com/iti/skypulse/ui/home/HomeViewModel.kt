@@ -1,6 +1,5 @@
 package com.iti.skypulse.ui.home
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.R

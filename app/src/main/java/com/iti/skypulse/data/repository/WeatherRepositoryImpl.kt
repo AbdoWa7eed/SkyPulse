@@ -27,8 +27,8 @@ class WeatherRepositoryImpl(
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getWeather(cacheKey)
 
-            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
-                cached.toWeatherModel()
+            if (false) {
+                cached!!.toWeatherModel()
             } else if (connectivityHelper.isOnline()) {
                 val fresh = remoteDataSource.getCurrentWeather(latitude, longitude).toWeatherModel()
                 localDataSource.saveWeather(fresh.toWeatherEntity(cacheKey))
@@ -45,8 +45,8 @@ class WeatherRepositoryImpl(
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getForecast(cacheKey)
 
-            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
-                cached.toForecastModel()
+            if (false) {
+                cached!!.toForecastModel()
             } else if (connectivityHelper.isOnline()) {
                 val fresh = remoteDataSource.getFiveDayForecast(latitude, longitude).toForecastModel()
                 localDataSource.saveForecast(fresh.toForecastEntity(cacheKey))

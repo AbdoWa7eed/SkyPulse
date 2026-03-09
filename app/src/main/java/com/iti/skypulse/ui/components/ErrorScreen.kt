@@ -25,15 +25,14 @@ import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
 fun ErrorScreen(
+    modifier: Modifier = Modifier,
     title: String,
     message: String? = null,
     onRetry: (() -> Unit)?,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

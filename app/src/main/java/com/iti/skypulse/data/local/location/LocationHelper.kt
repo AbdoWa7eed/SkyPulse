@@ -40,7 +40,8 @@ class LocationHelper(
                         val updated = SavedLocation(
                             lat = loc.latitude,
                             lng = loc.longitude,
-                            provider = LocationProvider.GPS
+                            provider = LocationProvider.GPS,
+                            address = getAddressFromLocation( loc.latitude , loc.longitude)
                         )
                         appPreferences.saveLocation(updated)
                         updated
@@ -76,7 +77,7 @@ class LocationHelper(
                 geocoder.getFromLocation(lat, lng, 1)
                     ?.firstOrNull()?.let { formatAddress(it) }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

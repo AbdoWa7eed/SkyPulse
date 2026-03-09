@@ -3,7 +3,6 @@ package com.iti.skypulse.ui.location
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation

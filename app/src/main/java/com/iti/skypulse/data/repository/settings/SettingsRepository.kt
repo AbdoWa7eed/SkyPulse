@@ -3,6 +3,7 @@ package com.iti.skypulse.data.repository.settings
 import com.iti.skypulse.core.utils.Language
 import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.model.SavedLocation
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,9 @@ interface SettingsRepository {
     val windUnit: Flow<WindUnit>
     val pressureUnit: Flow<PressureUnit>
     val savedLocation: Flow<SavedLocation?>
+
+    val themeMode: Flow<ThemeMode>
+
     suspend fun setLanguage(language: Language)
     suspend fun setTempUnit(unit: TempUnit)
     suspend fun setWindUnit(unit: WindUnit)
@@ -23,5 +27,6 @@ interface SettingsRepository {
 
     suspend fun setOnboardingCompleted()
 
+    suspend fun setThemeMode(mode: ThemeMode)
 
 }

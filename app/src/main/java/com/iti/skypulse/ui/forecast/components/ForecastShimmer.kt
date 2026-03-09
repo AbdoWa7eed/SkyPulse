@@ -20,8 +20,7 @@ import com.iti.skypulse.ui.components.ShimmerBox
 fun ForecastShimmer() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         repeat(5) {

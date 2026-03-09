@@ -2,7 +2,6 @@ package com.iti.skypulse.ui.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

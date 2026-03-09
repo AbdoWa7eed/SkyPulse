@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.ui.theme.AppTypography
 
@@ -45,7 +46,10 @@ fun SettingsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -55,6 +59,8 @@ fun SettingsRow(
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = AppTypography.medium14,
                 color = MaterialTheme.colorScheme.onBackground
             )

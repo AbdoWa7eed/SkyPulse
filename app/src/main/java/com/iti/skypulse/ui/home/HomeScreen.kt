@@ -45,6 +45,8 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp)
         ) {
 
             PrimaryAppBar(
@@ -71,25 +73,18 @@ fun HomeScreen(
                     val pressureUnit by viewModel.pressureUnit.collectAsState()
                     val windUnit by viewModel.windUnit.collectAsState()
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        AnimatedVisibility(visible = animationStep >= 1, enter = enterAnimation) {
-                            CurrentWeatherCard(weather = state.weather, tempUnit= tempUnit)
-                        }
-                        AnimatedVisibility(visible = animationStep >= 2, enter = enterAnimation) {
-                            HourlyForecast(items = state.hourlyForecasts, tempUnit= tempUnit)
-                        }
-                        AnimatedVisibility(visible = animationStep >= 3, enter = enterAnimation) {
-                            WeatherDetails(
-                                weather = state.weather,
-                                pressureUnit = pressureUnit,
-                                windUnit = windUnit
-                            )
-                        }
+                    AnimatedVisibility(visible = animationStep >= 1, enter = enterAnimation) {
+                        CurrentWeatherCard(weather = state.weather, tempUnit = tempUnit)
+                    }
+                    AnimatedVisibility(visible = animationStep >= 2, enter = enterAnimation) {
+                        HourlyForecast(items = state.hourlyForecasts, tempUnit = tempUnit)
+                    }
+                    AnimatedVisibility(visible = animationStep >= 3, enter = enterAnimation) {
+                        WeatherDetails(
+                            weather = state.weather,
+                            pressureUnit = pressureUnit,
+                            windUnit = windUnit
+                        )
                     }
                 }
             }
