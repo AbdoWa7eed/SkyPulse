@@ -12,6 +12,7 @@ import com.iti.skypulse.data.remote.api.ApiClient
 import com.iti.skypulse.data.remote.api.WeatherApiService
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSourceImpl
 import com.iti.skypulse.data.repository.WeatherRepositoryImpl
+import com.iti.skypulse.data.repository.settings.SettingsRepositoryImpl
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.first
 
@@ -22,12 +23,12 @@ object ServiceLocator {
         appContext = application
     }
 
-    val appPreferences: AppPreferences by lazy {
+    private val appPreferences: AppPreferences by lazy {
         AppPreferences(appContext)
     }
 
     val locationHelper: LocationHelper by lazy {
-        LocationHelper(appContext)
+        LocationHelper(appContext, appPreferences)
     }
 
     val connectivityHelper: ConnectivityHelper by lazy {
@@ -41,8 +42,8 @@ object ServiceLocator {
     }
 
     private val weatherApiService: WeatherApiService by lazy {
-        val langCode = runBlocking { appPreferences.language.first() }
-        ApiClient.init(langCode)
+        val lang = runBlocking { appPreferences.language.first() }
+        ApiClient.init(lang.code)
         ApiClient.getInstance().create(WeatherApiService::class.java)
     }
 
@@ -60,5 +61,9 @@ object ServiceLocator {
             localDataSource = weatherLocalDataSource,
             connectivityHelper = connectivityHelper
         )
+    }
+
+    val settingsRepository by lazy {
+        SettingsRepositoryImpl(appPreferences)
     }
 }

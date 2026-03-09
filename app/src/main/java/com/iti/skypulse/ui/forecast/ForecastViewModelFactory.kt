@@ -9,7 +9,7 @@ class ForecastViewModelFactory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         return ForecastViewModel(
             weatherRepository = ServiceLocator.weatherRepository,
-            appPreferences = ServiceLocator.appPreferences
+            settingsRepository = ServiceLocator.settingsRepository
         ) as T
     }
 }

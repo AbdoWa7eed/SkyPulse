@@ -1,12 +1,12 @@
-package com.iti.skypulse.ui.preferences
+package com.iti.skypulse.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.iti.skypulse.di.ServiceLocator
 
-class PreferencesViewModelFactory : ViewModelProvider.Factory {
+class SettingsViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return PreferencesViewModel(ServiceLocator.appPreferences) as T
+        return SettingsViewModel(ServiceLocator.settingsRepository) as T
     }
 }

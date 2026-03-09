@@ -1,35 +1,79 @@
 package com.iti.skypulse.ui.settings
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.iti.skypulse.ui.theme.AppTypography
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iti.skypulse.R
+import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.ui.components.PrimaryAppBar
+import com.iti.skypulse.ui.settings.components.*
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
-fun SettingsScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Settings Screen",
-            modifier = Modifier.padding(20.dp),
-            textAlign = TextAlign.Center,
-            style = AppTypography.semiBold24,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+fun SettingsScreen(
+    viewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory())
+) {
+    val tempUnit by viewModel.tempUnit.collectAsState()
+    val windUnit by viewModel.windUnit.collectAsState()
+    val pressureUnit by viewModel.pressureUnit.collectAsState()
+    val language by viewModel.language.collectAsState()
+    val savedLocation by viewModel.savedLocation.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
+
+
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            PrimaryAppBar(title = stringResource(R.string.settings))
+
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                GeneralSection(
+                    currentLanguageCode = language.code,
+                    onLanguageChange = {  viewModel.setLanguage(it)},
+                    currentProvider = savedLocation?.provider ?: LocationProvider.GPS,
+                    currentAddress = savedLocation?.address,
+                    onProviderChange = { viewModel.setLocationProvider(it) },
+                    onUpdateLocationClick = { /* navigate to map later */ }
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                MeasurementUnitsSection(
+                    tempUnit = tempUnit,
+                    windUnit = windUnit,
+                    pressureUnit = pressureUnit,
+                    onTempUnitChange = { viewModel.setTempUnit(it) },
+                    onWindUnitChange = { viewModel.setWindUnit(it) },
+                    onPressureUnitChange = { viewModel.setPressureUnit(it) }
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                AppearanceSection(
+                    currentMode = themeMode,
+                    onModeChange = { viewModel.setThemeMode(it) }
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                SettingsVersion()
+            }
+        }
     }
 }
 
@@ -37,6 +81,5 @@ fun SettingsScreen() {
 @Composable
 fun SettingsScreenPreview() {
     SkyPulseTheme {
-        SettingsScreen()
     }
 }

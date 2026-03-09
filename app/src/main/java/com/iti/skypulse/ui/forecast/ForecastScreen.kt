@@ -28,7 +28,6 @@ import com.iti.skypulse.ui.components.ErrorScreen
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.forecast.components.DayForecastCard
 import com.iti.skypulse.ui.forecast.components.ForecastShimmer
-import com.iti.skypulse.ui.preferences.LocalPreferencesViewModel
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 
@@ -37,7 +36,7 @@ fun ForecastScreen(
     viewModel: ForecastViewModel = viewModel(factory = ForecastViewModelFactory())
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val unitTemp by LocalPreferencesViewModel.current.tempUnit.collectAsState()
+    val unitTemp by viewModel.tempUnit.collectAsState()
 
     var expandedIndex by remember { mutableIntStateOf(0) }
 
@@ -45,8 +44,9 @@ fun ForecastScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 20.dp)
                 .background(MaterialTheme.colorScheme.background),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
 
             item {
@@ -78,7 +78,6 @@ fun ForecastScreen(
                             isExpanded = index == expandedIndex,
                             onToggle = { expandedIndex = if (expandedIndex == index) -1 else index },
                             formatTemp = { UnitConverter.formatTemp(it, unitTemp) },
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
                         )
                     }
                 }

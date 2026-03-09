@@ -49,7 +49,6 @@ fun MainScreen() {
                 AlarmsScreen()
             }
             composable<NavRoutes.SettingsRoute> {
-                BackHandler(enabled = true) {}
                 SettingsScreen()
             }
         }

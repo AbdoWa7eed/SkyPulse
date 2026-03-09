@@ -1,6 +1,10 @@
 package com.iti.skypulse
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
+import com.iti.skypulse.data.local.prefs.AppPreferences
+import com.iti.skypulse.data.local.prefs.LanguagePreference
 import com.iti.skypulse.di.ServiceLocator
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -10,16 +14,6 @@ class SkyPulseApp : Application() {
     override fun onCreate() {
         super.onCreate()
         ServiceLocator.init(this)
-        applyLanguage()
     }
 
-    private fun applyLanguage() {
-        val langCode = runBlocking { ServiceLocator.appPreferences.language.first() }
-        val locale = Locale.forLanguageTag(langCode)
-        Locale.setDefault(locale)
-
-        val config = resources.configuration
-        config.setLocale(locale)
-        createConfigurationContext(config)
-    }
 }

@@ -3,10 +3,10 @@ package com.iti.skypulse.ui.location
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ sealed class LocationPickerEvent {
 
 class LocationPickerViewModel(
     private val locationHelper: LocationHelper,
-    private val appPreferences: AppPreferences
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _locationState = MutableStateFlow<LocationState>(
@@ -80,7 +80,7 @@ class LocationPickerViewModel(
         val current = _locationState.value
         if (current is LocationState.Set) {
             viewModelScope.launch {
-                appPreferences.saveLocation(current.location)
+                settingsRepository.saveLocation(current.location)
                 _events.send(LocationPickerEvent.ProceedToHome)
             }
         }

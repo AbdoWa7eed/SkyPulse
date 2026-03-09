@@ -79,5 +79,25 @@
     <string name="unit_hpa">hPa</string>
     <string name="unit_mbar">mbar</string>
     <string name="unit_mmhg">mmHg</string>
+ 
+    <string name="measurement_units">Measurement Units</string>
+    <string name="temperature">Temperature</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="appearance">Appearance</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+    <string name="version_text">Version %1$s</string>
+    <string name="back">Back</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="general">General</string>
+    <string name="location">Location</string>
+    <string name="location_provider">Location Provider</string>
+    <string name="update_location">Current Location</string>
+    <string name="update">Update</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
 
 </resources>
