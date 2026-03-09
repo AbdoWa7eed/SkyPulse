@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
 import com.iti.skypulse.ui.splash.animation.SplashAnimationController
@@ -82,20 +85,22 @@ fun AnimatedLogoIcon(
     var atEnd by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { atEnd = true }
 
-    Image(
-        modifier = modifier
-            .size(width = 200.dp, height = 160.dp)
-            .graphicsLayer {
-                this.alpha = alpha
-                translationY = offsetY
-            },
-        painter = rememberAnimatedVectorPainter(
-            animatedImageVector = AnimatedImageVector
-                .animatedVectorResource(R.drawable.splash_logo_animated),
-            atEnd = atEnd
-        ),
-        contentDescription = stringResource(R.string.app_title)
-    )
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Image(
+            modifier = modifier
+                .size(width = 200.dp, height = 160.dp)
+                .graphicsLayer {
+                    this.alpha = alpha
+                    translationY = offsetY
+                },
+            painter = rememberAnimatedVectorPainter(
+                animatedImageVector = AnimatedImageVector
+                    .animatedVectorResource(R.drawable.splash_logo_animated),
+                atEnd = atEnd
+            ),
+            contentDescription = stringResource(R.string.app_title)
+        )
+    }
 }
 
 @Composable

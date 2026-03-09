@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">SkyPulse</string>
+    <string name="app_title">SkyPulse</string>
+
+    <!-- Screen 1 — Welcome -->
+    <string name="onboarding_title_1">مرحباً بك في SkyPulse</string>
+    <string name="onboarding_subtitle_1">احصل على تحديثات الطقس في أي وقت وكن مستعداً أينما كنت.</string>
+
+    <!-- Screen 2 — Location Access -->
+    <string name="onboarding_title_2">اختر موقعك</string>
+    <string name="onboarding_subtitle_2">استخدم GPS أو اختر مدينة للحصول على توقعات دقيقة فوراً.</string>
+
+    <!-- Screen 3 — Weather Alerts -->
+    <string name="onboarding_title_3">لا تفوّت أي تغيير</string>
+    <string name="onboarding_subtitle_3">احصل على تنبيهات للأمطار والرياح ودرجات الحرارة الشديدة لتبقى على اطلاع.</string>
+
+    <string name="skip">تخطي</string>
+    <string name="next">التالي</string>
+    <string name="get_started">ابدأ الآن</string>
+
+    <string name="home">الرئيسية</string>
+    <string name="forecast">التوقعات</string>
+    <string name="favorite_locations">المفضلة</string>
+    <string name="alarms">التنبيهات</string>
+    <string name="settings">الإعدادات</string>
+
+    <string name="location_icon">أيقونة الموقع</string>
+    <string name="hourly_forecast">التوقعات بالساعة</string>
+    <string name="weather_details">تفاصيل الطقس</string>
+    <string name="upcoming_forecast">التوقعات القادمة</string>
+
+    <string name="location_picker_title">اختر موقعك</string>
+    <string name="location_picker_subtitle">يحتاج SkyPulse إلى موقعك لعرض طقس دقيق لمنطقتك</string>
+    <string name="location_picker_gps">استخدام GPS</string>
+    <string name="location_picker_map">اختيار من الخريطة</string>
+
+    <string name="error_location_fetch">تعذّر تحديد الموقع</string>
+    <string name="permission_required_title">إذن الموقع مطلوب</string>
+    <string name="permission_required_message">تم رفض إذن الموقع. يرجى تفعيله من إعدادات التطبيق لاستخدام GPS.</string>
+    <string name="open_settings">فتح الإعدادات</string>
+    <string name="use_map_instead">استخدام الخريطة بدلاً من ذلك</string>
+
+    <string name="location_fetching">جارٍ تحديد الموقع…</string>
+    <string name="location_found">تم العثور على الموقع</string>
+    <string name="location_coordinates">%.4f°، %.4f°</string>
+    <string name="location_provider_gps">يتم التحديث عبر GPS</string>
+    <string name="location_provider_map">تم التعيين عبر الخريطة</string>
+    <string name="location_fetching_subtitle">جارٍ تحديد موقعك الحالي…</string>
+    <string name="location_confirm">استخدام هذا الموقع</string>
+    <string name="location_refresh">تحديث GPS</string>
+    <string name="location_cancel">إلغاء</string>
+
+    <string name="location_disabled_title">الموقع معطّل</string>
+    <string name="location_disabled_message">يرجى تفعيل خدمات الموقع في إعدادات جهازك لاستخدام GPS.</string>
+
+    <string name="error_no_internet">لا يوجد اتصال بالإنترنت</string>
+    <string name="error_no_cache">لا توجد بيانات محفوظة</string>
+    <string name="error_no_location">تعذّر تحديد الموقع</string>
+    <string name="error_generic">حدث خطأ ما، يرجى المحاولة مجدداً</string>
+    <string name="error_message_title">حدث خطأ ما</string>
+    <string name="error_message_description">تعذّر الحصول على بيانات الطقس. يرجى التحقق من اتصالك والمحاولة مجدداً.</string>
+    <string name="try_again">حاول مجدداً</string>
+
+    <string name="feels_like">يبدو كـ %1$d°</string>
+    <string name="wind">الرياح</string>
+    <string name="wind_direction">الاتجاه: %1$d°</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="atmospheric_moisture">الرطوبة الجوية</string>
+    <string name="visibility">الرؤية</string>
+    <string name="visibility_value">%1$d كم</string>
+    <string name="clear_sky">سماء صافية</string>
+    <string name="limited_visibility">رؤية محدودة</string>
+    <string name="pressure">الضغط</string>
+    <string name="atmospheric_pressure">الضغط الجوي</string>
+    <string name="humidity_value">%1$d%%</string>
+
+    <string name="unit_celsius">°م</string>
+    <string name="unit_fahrenheit">°ف</string>
+    <string name="unit_kelvin">ك</string>
+    <string name="unit_ms">م/ث</string>
+    <string name="unit_kmh">كم/س</string>
+    <string name="unit_mph">ميل/س</string>
+    <string name="unit_hpa">هكتوباسكال</string>
+    <string name="unit_mbar">ملي بار</string>
+    <string name="unit_mmhg">ملم زئبق</string>
+
+    <string name="measurement_units">وحدات القياس</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="appearance">المظهر</string>
+    <string name="light">فاتح</string>
+    <string name="dark">داكن</string>
+    <string name="system">النظام</string>
+    <string name="version_text">الإصدار %1$s</string>
+    <string name="back">رجوع</string>
+
+    <string name="language">اللغة</string>
+    <string name="english">الإنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="general">عام</string>
+    <string name="location">الموقع</string>
+    <string name="location_provider">مزوّد الموقع</string>
+    <string name="update_location">الموقع الحالي</string>
+    <string name="update">تحديث</string>
+    <string name="gps">GPS</string>
+    <string name="map">خريطة</string>
+</resources>

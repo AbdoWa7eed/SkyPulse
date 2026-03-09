@@ -8,4 +8,6 @@ interface WeatherLocalDataSource {
     suspend fun saveWeather(weather: WeatherEntity)
     suspend fun getForecast(cityName: String): ForecastEntity?
     suspend fun saveForecast(forecast: ForecastEntity)
+
+    suspend fun clearAll()
 }
