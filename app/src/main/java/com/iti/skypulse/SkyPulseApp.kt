@@ -14,8 +14,8 @@ class SkyPulseApp : Application() {
     }
 
     private fun applyLanguage() {
-        val langCode = runBlocking { ServiceLocator.appPreferences.language.first() }
-        val locale = Locale.forLanguageTag(langCode)
+        val lang = runBlocking { ServiceLocator.settingsRepository.language.first() }
+        val locale = Locale.forLanguageTag(lang.code)
         Locale.setDefault(locale)
 
         val config = resources.configuration

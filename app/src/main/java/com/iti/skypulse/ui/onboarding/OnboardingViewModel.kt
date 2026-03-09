@@ -3,6 +3,7 @@ package com.iti.skypulse.ui.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.data.local.prefs.AppPreferences
+import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 
 class OnboardingViewModel(
-    private val appPreferences: AppPreferences
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     val pages = listOf(
@@ -45,7 +46,7 @@ class OnboardingViewModel(
 
     fun finishOnboarding() {
         viewModelScope.launch {
-            appPreferences.setOnboardingCompleted(true)
+            settingsRepository.setOnboardingCompleted()
             _navigationEvent.emit(Unit)
         }
     }

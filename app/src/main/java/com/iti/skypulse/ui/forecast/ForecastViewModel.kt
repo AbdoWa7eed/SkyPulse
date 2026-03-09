@@ -5,21 +5,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.R
 import com.iti.skypulse.core.error.toMessageRes
-import com.iti.skypulse.data.local.prefs.AppPreferences
+import com.iti.skypulse.core.extensions.toStateFlow
+import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.data.model.ForecastModel
-import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.data.repository.WeatherRepository
+import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ForecastViewModel(
     private val weatherRepository: WeatherRepository,
-    private val appPreferences: AppPreferences
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ForecastUiState>(ForecastUiState.Loading)
     val uiState: StateFlow<ForecastUiState> = _uiState
+
+    val tempUnit: StateFlow<TempUnit> = settingsRepository.tempUnit
+            .toStateFlow(viewModelScope, TempUnit.CELSIUS)
 
     init {
         loadForecast()
@@ -28,17 +32,14 @@ class ForecastViewModel(
     fun loadForecast() {
         viewModelScope.launch {
             _uiState.value = ForecastUiState.Loading
-            val location = resolveLocation()
-            if (location == null) {
-                _uiState.value = ForecastUiState.Error(R.string.error_no_location)
-                return@launch
+            settingsRepository.savedLocation.collect { location ->
+                if (location == null) {
+                    _uiState.value = ForecastUiState.Error(R.string.error_no_location)
+                } else {
+                    fetchForecast(location.lat, location.lng)
+                }
             }
-            fetchForecast(location.lat, location.lng)
         }
-    }
-
-    private suspend fun resolveLocation(): SavedLocation? {
-        return appPreferences.getSavedLocation()
     }
 
     private suspend fun fetchForecast(latitude: Double, longitude: Double) {

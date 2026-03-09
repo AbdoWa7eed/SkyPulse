@@ -7,6 +7,6 @@ import com.iti.skypulse.di.ServiceLocator
 class StartupViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return StartupViewModel(ServiceLocator.appPreferences) as T
+        return StartupViewModel(ServiceLocator.settingsRepository) as T
     }
 }

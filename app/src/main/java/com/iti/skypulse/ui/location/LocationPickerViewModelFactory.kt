@@ -8,6 +8,6 @@ class LocationPickerViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return LocationPickerViewModel(ServiceLocator.locationHelper, ServiceLocator.appPreferences) as T
+        return LocationPickerViewModel(ServiceLocator.locationHelper, ServiceLocator.settingsRepository) as T
     }
 }

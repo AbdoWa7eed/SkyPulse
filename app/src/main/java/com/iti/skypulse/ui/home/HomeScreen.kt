@@ -6,19 +6,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +29,6 @@ import com.iti.skypulse.ui.home.components.CurrentWeatherCard
 import com.iti.skypulse.ui.home.components.HomeShimmer
 import com.iti.skypulse.ui.home.components.HourlyForecast
 import com.iti.skypulse.ui.home.components.WeatherDetails
-import com.iti.skypulse.ui.preferences.LocalPreferencesViewModel
-import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 @Composable
 fun HomeScreen(
@@ -41,7 +36,9 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val animationStep by rememberHomeAnimationStep()
-    val enterAnimation = fadeIn(tween(400)) + slideInVertically(tween(400)) { it / 4 }
+    val enterAnimation =
+        fadeIn(tween(400)) +
+                slideInVertically(tween(400)) { it / 4 }
 
     CompositionLocalProvider(LocalOverscrollFactory provides null) {
         Column(
@@ -70,10 +67,9 @@ fun HomeScreen(
                 }
 
                 is HomeUiState.Success -> {
-                    val preferencesViewModel = LocalPreferencesViewModel.current
-                    val tempUnit by preferencesViewModel.tempUnit.collectAsState()
-                    val pressureUnit by preferencesViewModel.pressureUnit.collectAsState()
-                    val windUnit by preferencesViewModel.windUnit.collectAsState()
+                    val tempUnit by viewModel.tempUnit.collectAsState()
+                    val pressureUnit by viewModel.pressureUnit.collectAsState()
+                    val windUnit by viewModel.windUnit.collectAsState()
 
                     Column(
                         modifier = Modifier
