@@ -4,10 +4,12 @@ import com.iti.skypulse.data.local.room.entity.ForecastEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
 import com.iti.skypulse.data.model.DailyForecastModel
 import com.iti.skypulse.data.model.ForecastModel
+import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.HourlyForecastModel
 import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.data.remote.dto.ForecastItemDto
 import com.iti.skypulse.data.remote.dto.ForecastResponseDto
+import com.iti.skypulse.data.remote.dto.GeoPlaceDto
 import com.iti.skypulse.data.remote.dto.WeatherResponseDto
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -108,6 +110,17 @@ private fun ForecastItemDto.toHourlyForecastModel() = HourlyForecastModel(
     weatherIconCode = weatherConditions.firstOrNull()?.iconCode ?: "",
     temperature = mainMetrics.temperature
 )
+
+
+fun GeoPlaceDto.toGeoPlace(langCode: String): GeoPlace {
+    return GeoPlace(
+        name = localNames?.get(langCode) ?: name,
+        latitude = lat,
+        longitude = lng,
+        country = country,
+        state   = state
+    )
+}
 
 private fun String.toDayName(): String {
     return try {

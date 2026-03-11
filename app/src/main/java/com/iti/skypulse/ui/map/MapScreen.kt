@@ -1,28 +1,25 @@
 package com.iti.skypulse.ui.map
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
+import com.iti.skypulse.R
+import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.map.components.MapBottomPanel
-import com.iti.skypulse.ui.map.components.MapContent
+import com.iti.skypulse.ui.map.components.MapSearchBar
 import com.iti.skypulse.ui.navigation.MapSource
+import kotlinx.coroutines.launch
 
 @Composable
 fun MapScreen(
@@ -31,26 +28,40 @@ fun MapScreen(
     onNavigateToMain: () -> Unit,
     viewModel: MapViewModel = viewModel(factory = MapViewModelFactory(source))
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    var query by remember { mutableStateOf("") }
+    val selectionState by viewModel.selectionState.collectAsState()
+    val searchResults by viewModel.searchResults.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val cameraPositionState = rememberCameraPositionState()
+    var mapLoaded by remember { mutableStateOf(false) }
+    var screenLaunchedState by remember { mutableStateOf(false) }
 
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(
-            viewModel.initialPosition,
-            viewModel.initialZoom)
+
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(600)
+        screenLaunchedState = true
     }
 
-    val confirmedLocation = when (val s = uiState) {
+    val confirmedLocation: SavedLocation? = when (val s = selectionState) {
         is MapSelectionState.AddressResolved -> s.location
-        is MapSelectionState.WeatherLoaded   -> s.location
-        else                                 -> null
+        is MapSelectionState.WeatherLoaded -> s.location
+        else -> null
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is MapEvent.NavigateToMain -> onNavigateToMain()
-                is MapEvent.NavigateBack   -> onBack()
+                is MapEvent.NavigateBack -> onBack()
+                is MapEvent.MoveCameraTo -> {
+                    coroutineScope.launch {
+                        cameraPositionState.animate(
+                            update = CameraUpdateFactory.newLatLngZoom(event.latLng, event.zoom),
+                            durationMs = 600
+                        )
+                    }
+                }
             }
         }
     }
@@ -67,20 +78,67 @@ fun MapScreen(
             onBack = onBack
         )
 
-        MapContent(
-            query = query,
-            selectionState = uiState,
-            confirmedLocation = confirmedLocation,
-            cameraPositionState = cameraPositionState,
-            onQueryChange = { query = it },
-            onMapClick = { lat, lng -> viewModel.onMapClick(lat, lng) },
-            bottomPanel = {
-                MapBottomPanel(
-                    selectionState = uiState,
-                    confirmedLocation = confirmedLocation,
-                    onConfirm = { viewModel.onConfirm() }
+        if (screenLaunchedState) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                GoogleMap(
+                    modifier = Modifier.fillMaxSize(),
+                    cameraPositionState = cameraPositionState,
+                    properties = MapProperties(mapType = MapType.NORMAL),
+                    onMapLoaded = { mapLoaded = true },
+                    onMapClick = { latLng ->
+                        viewModel.onMapClick(
+                            latLng.latitude,
+                            latLng.longitude
+                        )
+                    }
+                ) {
+                    confirmedLocation?.let { loc ->
+                        Marker(
+                            state = MarkerState(position = LatLng(loc.lat, loc.lng)),
+                            title = loc.address
+                        )
+                    }
+                }
+
+                if (!mapLoaded) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                MapSearchBar(
+                    query = searchQuery,
+                    hint = stringResource(R.string.search_hint),
+                    results = searchResults,
+                    onQueryChange = { viewModel.onSearchQueryChange(it) },
+                    onPlaceSelected = { viewModel.onPlaceSelected(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.TopCenter)
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
                 )
+
+                if (mapLoaded) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        MapBottomPanel(
+                            selectionState = selectionState,
+                            confirmedLocation = confirmedLocation,
+                            onConfirm = { viewModel.onConfirm() }
+                        )
+                    }
+                }
             }
-        )
+        }
+
     }
+
 }

@@ -1,5 +1,6 @@
 package com.iti.skypulse.ui.map
 
+import com.google.android.gms.maps.model.LatLng
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.data.model.WeatherModel
@@ -20,4 +21,6 @@ sealed class MapSelectionState {
 sealed class MapEvent {
     data object NavigateToMain : MapEvent()
     data object NavigateBack : MapEvent()
+
+    data class MoveCameraTo(val latLng: LatLng, val zoom: Float = 12f) : MapEvent()
 }

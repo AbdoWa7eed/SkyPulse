@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+    private const val BASE_URL = "https://api.openweathermap.org/"
     private const val API_KEY_FIELD = "appid"
     private const val LANGUAGE_FIELD = "lang"
 

@@ -18,6 +18,7 @@ import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
 fun SettingsScreen(
+    onUpdateLocation: () -> Unit,
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory())
 ) {
     val tempUnit by viewModel.tempUnit.collectAsState()
@@ -48,7 +49,7 @@ fun SettingsScreen(
                     currentProvider = savedLocation?.provider ?: LocationProvider.GPS,
                     currentAddress = savedLocation?.address,
                     onProviderChange = { viewModel.setLocationProvider(it) },
-                    onUpdateLocationClick = { /* navigate to map later */ }
+                    onUpdateLocationClick = onUpdateLocation
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))

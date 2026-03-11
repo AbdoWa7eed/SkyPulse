@@ -22,15 +22,12 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val startupViewModel: StartupViewModel = viewModel(factory = StartupViewModelFactory())
     val postSplashDestination by startupViewModel.postSplashDestination.collectAsState()
-
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashGraph
     ) {
 
-        composable<NavRoutes.SplashGraph>(
-            exitTransition = { slideOutLeft() }
-        ) {
+        composable<NavRoutes.SplashGraph>{
             AnimatedSplashScreen(
                 onFinished = {
                     val destination = postSplashDestination ?: return@AnimatedSplashScreen
@@ -53,10 +50,7 @@ fun AppNavigation() {
                 )
             }
 
-            composable<NavRoutes.LocationPickerRoute>(
-                enterTransition = { slideInRight() },
-                exitTransition = { slideOutLeft() }
-            ) {
+            composable<NavRoutes.LocationPickerRoute> {
                 LocationPickerScreen(
                     onLocationSet = {
                         navController.navigate(NavRoutes.MainGraph) {
@@ -70,14 +64,17 @@ fun AppNavigation() {
                 )
             }
 
-            composable<NavRoutes.MapPickerRoute>(
-                enterTransition = { slideInRight() },
-                exitTransition = { slideOutLeft() }
-            ) { backStackEntry ->
+            composable<NavRoutes.MapPickerRoute>
+            { backStackEntry ->
                 val source = backStackEntry.toRoute<NavRoutes.MapPickerRoute>().source
                 MapScreen(
                     source = source,
-                    onBack = { navController.popBackStack() },
+                    onBack = {
+                        val previousEntry = navController.previousBackStackEntry
+                        if (previousEntry != null) {
+                            navController.popBackStack()
+                        }
+                    },
                     onNavigateToMain = {
                         navController.navigate(NavRoutes.MainGraph) {
                             popUpTo(NavRoutes.LocationGraph) { inclusive = true }
@@ -87,10 +84,17 @@ fun AppNavigation() {
             }
         }
 
-        composable<NavRoutes.MainGraph>(
-            enterTransition = { slideInRight() }
-        ) {
-            MainScreen()
+        composable<NavRoutes.MainGraph> {
+            MainScreen(
+                onUpdateLocation = {
+                    navController
+                        .navigate(NavRoutes.MapPickerRoute(MapSource.UPDATE_LOCATION))
+                },
+                onAddFavorite  = {
+                    navController
+                        .navigate(NavRoutes.MapPickerRoute(MapSource.ADD_FAVORITE))
+                },
+            )
         }
     }
 }

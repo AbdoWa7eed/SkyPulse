@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.maps.MapsInitializer
 import com.iti.skypulse.core.utils.Language
 import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.data.local.prefs.LanguagePreference

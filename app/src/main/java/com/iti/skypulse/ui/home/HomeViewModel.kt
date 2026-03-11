@@ -1,5 +1,6 @@
 package com.iti.skypulse.ui.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.R
@@ -43,6 +44,7 @@ class HomeViewModel(
     private fun observeWeather() {
         viewModelScope.launch {
             currentLocation.collect { loc ->
+                Log.d("TAG", "observeWeather: ")
                     if (loc == null) {
                         _uiState.value = HomeUiState.Error(R.string.error_no_location)
                     } else {

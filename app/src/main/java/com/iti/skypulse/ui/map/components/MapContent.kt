@@ -18,16 +18,17 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.iti.skypulse.R
+import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.ui.map.MapSelectionState
 
 @Composable
 fun MapContent(
     query: String,
-    selectionState: MapSelectionState,
+    searchResults: List<GeoPlace>,
     confirmedLocation: SavedLocation?,
     cameraPositionState: CameraPositionState,
     onQueryChange: (String) -> Unit,
+    onPlaceSelected: (GeoPlace) -> Unit,
     onMapClick: (lat: Double, lng: Double) -> Unit,
     bottomPanel: @Composable () -> Unit
 ) {
@@ -56,7 +57,9 @@ fun MapContent(
         MapSearchBar(
             query = query,
             hint = stringResource(R.string.search_hint),
+            results = searchResults,
             onQueryChange = onQueryChange,
+            onPlaceSelected = onPlaceSelected,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
