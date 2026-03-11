@@ -8,12 +8,14 @@ import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
+import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val locationHelper: LocationHelper
 ) : ViewModel() {
 
     val tempUnit = settingsRepository.tempUnit

@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.secrets)
 }
 
 android {
@@ -39,6 +40,10 @@ android {
             "\"${properties["WEATHER_API_KEY"]}\""
         )
     }
+}
+
+secrets {
+    propertiesFileName = "local.properties"
 }
 
 dependencies {
@@ -76,7 +81,8 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.okhttp.logging)
     implementation(libs.shimmer)
-
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
 
 
 }

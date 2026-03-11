@@ -104,4 +104,12 @@
     <string name="update">تحديث</string>
     <string name="gps">GPS</string>
     <string name="map">خريطة</string>
+    <string name="current_selection">الاختيار الحالي</string>
+    <string name="details">تفاصيل</string>
+    <string name="confirm_location">تأكيد الموقع</string>
+    <string name="search_city_hint">ابحث عن مدينة أو إحداثيات</string>
+    <string name="add_favorite">إضافة مفضلة</string>
+    <string name="choose_location">اختر الموقع</string>
+    <string name="set_as_home">تعيين كموقع رئيسي</string>
+    <string name="search_hint">ابحث عن مدينة ما ...</string>
 </resources>

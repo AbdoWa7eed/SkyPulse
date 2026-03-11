@@ -44,7 +44,7 @@ object ServiceLocator {
         ConnectivityHelper(appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
     }
     val locationHelper: LocationHelper by lazy { LocationHelper(appContext, appPreferences) }
-    val settingsRepository by lazy { SettingsRepositoryImpl(appPreferences) }
+    val settingsRepository by lazy { SettingsRepositoryImpl(appPreferences, weatherLocalDataSource) }
 
     private lateinit var _weatherApiService: WeatherApiService
     private lateinit var _weatherRemoteDataSource: WeatherRemoteDataSourceImpl

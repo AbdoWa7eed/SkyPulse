@@ -5,9 +5,11 @@ import com.iti.skypulse.core.network.ConnectivityHelper
 import com.iti.skypulse.data.local.datasource.WeatherLocalDataSource
 import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.model.ForecastModel
+import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.data.model.mapper.toForecastEntity
 import com.iti.skypulse.data.model.mapper.toForecastModel
+import com.iti.skypulse.data.model.mapper.toGeoPlace
 import com.iti.skypulse.data.model.mapper.toWeatherEntity
 import com.iti.skypulse.data.model.mapper.toWeatherModel
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSource
@@ -55,6 +57,13 @@ class WeatherRepositoryImpl(
                 localDataSource.saveForecast(fresh.toForecastEntity(cacheKey))
                 fresh
             } else cached?.toForecastModel() ?: throw AppException.NoCacheException()
+        }
+    }
+
+    override suspend fun searchPlaces(query: String): Result<List<GeoPlace>>{
+        return runCatching {
+            val langCode = appPreferences.language.first().code
+            remoteDataSource.searchPlaces(query).map { dto -> dto.toGeoPlace(langCode)}
         }
     }
 

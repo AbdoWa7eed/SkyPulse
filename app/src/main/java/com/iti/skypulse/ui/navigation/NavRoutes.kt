@@ -20,7 +20,7 @@ sealed class NavRoutes {
     data object LocationPickerRoute : NavRoutes()
 
     @Serializable
-    data object MapPickerRoute : NavRoutes()
+    data class MapPickerRoute(val source: MapSource) : NavRoutes()
 
     @Serializable
     data object HomeRoute : NavRoutes()

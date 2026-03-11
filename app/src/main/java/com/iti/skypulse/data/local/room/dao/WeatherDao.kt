@@ -26,4 +26,10 @@ interface WeatherDao {
 
     @Query("DELETE FROM forecast WHERE cacheKey = :cacheKey")
     suspend fun deleteForecast(cacheKey: String)
+
+    @Query("DELETE FROM weather")
+    suspend fun clearWeather()
+
+    @Query("DELETE FROM forecast")
+    suspend fun clearForecast()
 }

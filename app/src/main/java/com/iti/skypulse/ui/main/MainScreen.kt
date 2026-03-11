@@ -17,7 +17,10 @@ import com.iti.skypulse.ui.navigation.NavRoutes
 import com.iti.skypulse.ui.settings.SettingsScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onUpdateLocation: () -> Unit,
+    onAddFavorite: () -> Unit
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -49,7 +52,7 @@ fun MainScreen() {
                 AlarmsScreen()
             }
             composable<NavRoutes.SettingsRoute> {
-                SettingsScreen()
+                SettingsScreen(onUpdateLocation = onUpdateLocation)
             }
         }
     }

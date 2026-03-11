@@ -25,5 +25,7 @@ class WeatherLocalDataSourceImpl(
     }
 
     override suspend fun clearAll() {
+        weatherDao.clearWeather()
+        weatherDao.clearForecast()
     }
 }

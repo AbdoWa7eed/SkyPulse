@@ -5,11 +5,15 @@ import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
+import com.iti.skypulse.data.local.datasource.WeatherLocalDataSource
 import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.model.SavedLocation
 import kotlinx.coroutines.flow.Flow
 
-class SettingsRepositoryImpl(private val preferences: AppPreferences) : SettingsRepository {
+class SettingsRepositoryImpl(
+    private val preferences: AppPreferences,
+    private val weatherLocalDataSource: WeatherLocalDataSource
+) : SettingsRepository {
 
     override val isOnboardingCompleted: Flow<Boolean> = preferences.isOnboardingCompleted
 
@@ -42,6 +46,7 @@ class SettingsRepositoryImpl(private val preferences: AppPreferences) : Settings
     }
 
     override suspend fun saveLocation(location: SavedLocation) {
+        weatherLocalDataSource.clearAll()
         preferences.saveLocation(location)
     }
 

@@ -1,18 +1,16 @@
 package com.iti.skypulse
 
 import android.app.Application
-import android.content.Context
-import android.content.res.Configuration
-import com.iti.skypulse.data.local.prefs.AppPreferences
-import com.iti.skypulse.data.local.prefs.LanguagePreference
+import com.google.android.gms.maps.MapsInitializer
 import com.iti.skypulse.di.ServiceLocator
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class SkyPulseApp : Application() {
     override fun onCreate() {
         super.onCreate()
         ServiceLocator.init(this)
+        MapsInitializer.initialize(this)
     }
 }
