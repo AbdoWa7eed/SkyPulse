@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.ui.common.GpsStateObserver
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -19,6 +20,12 @@ fun rememberGpsWarningState(
 ): Boolean {
     var showWarning by remember { mutableStateOf(false) }
     val currentIsGpsAvailable by rememberUpdatedState(isGpsAvailable)
+
+    fun check() {
+        if (savedLocation?.provider == LocationProvider.GPS) {
+            showWarning = !currentIsGpsAvailable()
+        }
+    }
 
     LaunchedEffect(Unit) {
         events.collect { showWarning = true }
@@ -31,6 +38,9 @@ fun rememberGpsWarningState(
             null                 -> Unit
         }
     }
+
+    GpsStateObserver(onGpsStateChanged = { check() })
+
 
     return showWarning
 }
