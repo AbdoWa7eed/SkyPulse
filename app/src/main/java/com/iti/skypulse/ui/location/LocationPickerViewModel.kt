@@ -1,8 +1,9 @@
 package com.iti.skypulse.ui.location
 
-import android.location.Location
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iti.skypulse.core.error.AppException
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
@@ -14,9 +15,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 sealed class LocationPickerEvent {
+    data object RequestLocationPermission : LocationPickerEvent()
     data object ShowLocationDisabledDialog : LocationPickerEvent()
     data class ShowSnackBarError(val message: String) : LocationPickerEvent()
-
     data object ProceedToHome : LocationPickerEvent()
 }
 
@@ -25,8 +26,7 @@ class LocationPickerViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    private val _locationState = MutableStateFlow<LocationState>(
-        LocationState.NotSet)
+    private val _locationState = MutableStateFlow<LocationState>(LocationState.NotSet)
     val locationState: StateFlow<LocationState> = _locationState
 
     private val _events = Channel<LocationPickerEvent>(Channel.BUFFERED)
@@ -37,11 +37,11 @@ class LocationPickerViewModel(
             _locationState.value = LocationState.Loading
             locationHelper.getLocation()
                 .onSuccess { location -> handleLocationResult(location) }
-                .onFailure { handleLocationError(it.message ?: "TIME OUT") }
+                .onFailure { handleLocationError(it) }
         }
     }
 
-    private suspend fun handleLocationResult(location: Location?) {
+    private suspend fun handleLocationResult(location: android.location.Location?) {
         if (location == null) {
             _events.send(LocationPickerEvent.ShowLocationDisabledDialog)
             _locationState.value = LocationState.NotSet
@@ -58,22 +58,14 @@ class LocationPickerViewModel(
         )
     }
 
-    private suspend fun handleLocationError(message: String) {
-        _events.send(LocationPickerEvent.ShowSnackBarError(message))
+    private suspend fun handleLocationError(error: Throwable) {
         _locationState.value = LocationState.NotSet
-    }
-
-    fun setMapLocation(lat: Double, lng: Double) {
-        viewModelScope.launch {
-            val address = locationHelper.getAddressFromLocation(lat, lng)
-            val saved = SavedLocation(
-                lat = lat,
-                lng = lng,
-                provider = LocationProvider.MAP,
-                address = address
-            )
-            _locationState.value = LocationState.Set(saved)
+        val event = when (error) {
+            is AppException.LocationPermissionException -> LocationPickerEvent.RequestLocationPermission
+            is AppException.LocationDisabledException  -> LocationPickerEvent.ShowLocationDisabledDialog
+            else -> LocationPickerEvent.ShowSnackBarError(error.message ?: "Unknown error")
         }
+        _events.send(event)
     }
 
     fun confirmLocation() {

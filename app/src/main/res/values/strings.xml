@@ -107,6 +107,7 @@
     <string name="choose_location">Choose Location</string>
     <string name="set_as_home">Set as Home</string>
     <string name="search_hint">Search city or coordinates</string>
+    <string name="gps_unavailable_warning">GPS or location permission is unavailable. The last saved location will be used as a fallback.</string>
 
 
 </resources>

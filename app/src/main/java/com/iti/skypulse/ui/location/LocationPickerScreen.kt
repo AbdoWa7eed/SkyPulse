@@ -40,6 +40,8 @@ fun LocationPickerScreen(
             when (event) {
                 is LocationPickerEvent.ShowLocationDisabledDialog ->
                     dialogType = LocationDialogType.LOCATION_DISABLED
+                is LocationPickerEvent.RequestLocationPermission ->
+                    dialogType = LocationDialogType.PERMISSION_DENIED
                 is LocationPickerEvent.ShowSnackBarError ->
                     scope.launch {
                         snackbarHostState.showSnackbar(event.message)

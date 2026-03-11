@@ -1,5 +1,8 @@
 package com.iti.skypulse.data.model.mapper
 
+import com.iti.skypulse.core.extensions.toDayName
+import com.iti.skypulse.core.extensions.toFormattedDate
+import com.iti.skypulse.core.extensions.toLocalizedTime
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
 import com.iti.skypulse.data.model.DailyForecastModel
@@ -11,10 +14,6 @@ import com.iti.skypulse.data.remote.dto.ForecastItemDto
 import com.iti.skypulse.data.remote.dto.ForecastResponseDto
 import com.iti.skypulse.data.remote.dto.GeoPlaceDto
 import com.iti.skypulse.data.remote.dto.WeatherResponseDto
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 fun WeatherResponseDto.toWeatherModel() = WeatherModel(
     temperature = mainMetrics.temperature,
     feelsLikeTemperature = mainMetrics.feelsLikeTemperature,
@@ -106,7 +105,7 @@ fun ForecastEntity.toForecastModel() = ForecastModel(
 )
 
 private fun ForecastItemDto.toHourlyForecastModel() = HourlyForecastModel(
-    time = dateTimeText.substring(11, 16),
+    time = dateTimeText.toLocalizedTime(),
     weatherIconCode = weatherConditions.firstOrNull()?.iconCode ?: "",
     temperature = mainMetrics.temperature
 )
@@ -120,18 +119,4 @@ fun GeoPlaceDto.toGeoPlace(langCode: String): GeoPlace {
         country = country,
         state   = state
     )
-}
-
-private fun String.toDayName(): String {
-    return try {
-        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
-        SimpleDateFormat("EEEE", Locale.getDefault()).format(date ?: Date())
-    } catch (_: Exception) { this }
-}
-
-private fun String.toFormattedDate(): String {
-    return try {
-        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
-        SimpleDateFormat("MMM dd", Locale.getDefault()).format(date ?: Date())
-    } catch (_: Exception) { this }
 }
