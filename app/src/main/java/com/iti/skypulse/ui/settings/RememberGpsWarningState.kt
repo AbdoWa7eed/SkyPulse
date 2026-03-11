@@ -1,0 +1,36 @@
+package com.iti.skypulse.ui.settings
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
+import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.data.model.SavedLocation
+import kotlinx.coroutines.flow.Flow
+
+@Composable
+fun rememberGpsWarningState(
+    savedLocation: SavedLocation?,
+    isGpsAvailable: () -> Boolean,
+    events: Flow<SettingsEvent>
+): Boolean {
+    var showWarning by remember { mutableStateOf(false) }
+    val currentIsGpsAvailable by rememberUpdatedState(isGpsAvailable)
+
+    LaunchedEffect(Unit) {
+        events.collect { showWarning = true }
+    }
+
+    LaunchedEffect(savedLocation) {
+        when (savedLocation?.provider) {
+            LocationProvider.MAP -> showWarning = false
+            LocationProvider.GPS -> showWarning = !currentIsGpsAvailable()
+            null                 -> Unit
+        }
+    }
+
+    return showWarning
+}

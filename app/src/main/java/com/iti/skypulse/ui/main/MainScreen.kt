@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.iti.skypulse.ui.alarms.AlarmsScreen
+import com.iti.skypulse.ui.common.GpsStateObserver
 import com.iti.skypulse.ui.favorites.FavoriteLocationsScreen
 import com.iti.skypulse.ui.forecast.ForecastScreen
 import com.iti.skypulse.ui.home.HomeScreen
@@ -19,16 +21,15 @@ import com.iti.skypulse.ui.settings.SettingsScreen
 @Composable
 fun MainScreen(
     onUpdateLocation: () -> Unit,
-    onAddFavorite: () -> Unit
+    onAddFavorite: () -> Unit,
+    viewModel: MainViewModel = viewModel(factory = MainViewModelFactory())
 ) {
     val navController = rememberNavController()
 
+    GpsStateObserver(onGpsStateChanged = { viewModel.onGpsStateChanged() })
+
     Scaffold(
-        bottomBar = {
-            BottomNavigationBar(
-                navController
-            )
-        }
+        bottomBar = { BottomNavigationBar(navController) }
     ) { padding ->
         NavHost(
             navController = navController,

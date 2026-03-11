@@ -44,7 +44,6 @@ class HomeViewModel(
     private fun observeWeather() {
         viewModelScope.launch {
             currentLocation.collect { loc ->
-                Log.d("TAG", "observeWeather: ")
                     if (loc == null) {
                         _uiState.value = HomeUiState.Error(R.string.error_no_location)
                     } else {

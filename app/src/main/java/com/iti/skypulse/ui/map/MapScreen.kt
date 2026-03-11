@@ -34,6 +34,17 @@ fun MapScreen(
     val cameraPositionState = rememberCameraPositionState()
     var mapLoaded by remember { mutableStateOf(false) }
     var screenLaunchedState by remember { mutableStateOf(false) }
+    val uiSettings = remember {
+        MapUiSettings(
+            zoomControlsEnabled = false,
+            compassEnabled = true,
+            myLocationButtonEnabled = true,
+            zoomGesturesEnabled = true,
+            scrollGesturesEnabled = true,
+            tiltGesturesEnabled = false,
+            rotationGesturesEnabled = true
+        )
+    }
 
 
     LaunchedEffect(Unit) {
@@ -83,6 +94,7 @@ fun MapScreen(
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState,
+                    uiSettings =  uiSettings,
                     properties = MapProperties(mapType = MapType.NORMAL),
                     onMapLoaded = { mapLoaded = true },
                     onMapClick = { latLng ->

@@ -11,7 +11,13 @@ import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.repository.settings.SettingsRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+
+sealed class SettingsEvent {
+    data object ShowGpsUnavailableWarning : SettingsEvent()
+}
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
@@ -36,6 +42,11 @@ class SettingsViewModel(
     val themeMode = settingsRepository.themeMode
         .toStateFlow(viewModelScope, ThemeMode.SYSTEM)
 
+    private val _events = MutableSharedFlow<SettingsEvent>()
+    val events = _events.asSharedFlow()
+
+    val isGpsAvailable: Boolean
+        get() = locationHelper.isGpsAvailable()
 
     fun setTempUnit(unit: TempUnit) =
         viewModelScope.launch { settingsRepository.setTempUnit(unit) }
@@ -50,9 +61,13 @@ class SettingsViewModel(
         viewModelScope.launch { settingsRepository.setLanguage(language) }
 
     fun setLocationProvider(provider: LocationProvider) {
-        val current = savedLocation.value ?: return
-        val updated = current.copy(provider = provider)
-        viewModelScope.launch { settingsRepository.saveLocation(updated) }
+        viewModelScope.launch {
+            val current = savedLocation.value ?: return@launch
+            settingsRepository.saveLocation(current.copy(provider = provider))
+            if (provider == LocationProvider.GPS && !isGpsAvailable) {
+                _events.emit(SettingsEvent.ShowGpsUnavailableWarning)
+            }
+        }
     }
 
     fun setThemeMode(mode: ThemeMode) =
