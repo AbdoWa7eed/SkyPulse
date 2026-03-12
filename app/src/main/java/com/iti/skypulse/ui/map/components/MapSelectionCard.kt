@@ -115,6 +115,7 @@ private fun SelectionWeatherSlot(state: MapSelectionState) {
             style = AppTypography.medium14,
             color = MaterialTheme.colorScheme.onSurface
         )
+        else -> {}
     }
 }
 

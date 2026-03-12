@@ -5,7 +5,9 @@ import com.iti.skypulse.core.extensions.toFormattedDate
 import com.iti.skypulse.core.extensions.toLocalizedTime
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
+import com.iti.skypulse.data.local.room.entity.WeatherWithForecast
 import com.iti.skypulse.data.model.DailyForecastModel
+import com.iti.skypulse.data.model.FavoriteWeather
 import com.iti.skypulse.data.model.ForecastModel
 import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.HourlyForecastModel
@@ -114,6 +116,11 @@ fun ForecastEntity.toForecastModel() = ForecastModel(
     longitude = longitude,
     latitude = latitude,
     dailyForecasts = dailyForecasts
+)
+
+fun WeatherWithForecast.toFavoriteModel() = FavoriteWeather(
+    weather = weather.toWeatherModel(),
+    forecast = forecast.toForecastModel()
 )
 
 private fun ForecastItemDto.toHourlyForecastModel() = HourlyForecastModel(

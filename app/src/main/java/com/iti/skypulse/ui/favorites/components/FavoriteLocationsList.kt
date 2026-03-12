@@ -1,7 +1,6 @@
 package com.iti.skypulse.ui.favorites.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +15,7 @@ fun FavoriteLocationsList(
     items: List<FavoriteLocationItem>,
     tempUnit: TempUnit,
     onRemove: (FavoriteLocationItem) -> Unit,
+    onClickItem:  (FavoriteLocationItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -31,6 +31,7 @@ fun FavoriteLocationsList(
                 item = item,
                 tempUnit = tempUnit,
                 onDismiss = { onRemove(item) },
+                onClick = onClickItem,
                 modifier = Modifier.animateItem()
             )
         }

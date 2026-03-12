@@ -22,6 +22,14 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val startupViewModel: StartupViewModel = viewModel(factory = StartupViewModelFactory())
     val postSplashDestination by startupViewModel.postSplashDestination.collectAsState()
+
+    fun navigateSingleTop(route: Any) {
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+        val targetRoute = route::class.qualifiedName
+        if (currentRoute?.contains(targetRoute ?: "") == true) return
+        navController.navigate(route)
+    }
+
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashGraph
@@ -87,12 +95,10 @@ fun AppNavigation() {
         composable<NavRoutes.MainGraph> {
             MainScreen(
                 onUpdateLocation = {
-                    navController
-                        .navigate(NavRoutes.MapPickerRoute(MapSource.UPDATE_LOCATION))
+                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.UPDATE_LOCATION)) // ✅
                 },
-                onAddFavorite  = {
-                    navController
-                        .navigate(NavRoutes.MapPickerRoute(MapSource.ADD_FAVORITE))
+                onAddFavorite = {
+                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.ADD_FAVORITE)) // ✅
                 },
             )
         }

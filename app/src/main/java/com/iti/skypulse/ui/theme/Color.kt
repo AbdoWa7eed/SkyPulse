@@ -16,5 +16,9 @@ val TextPrimary = Color(0xFFF1F5F9)
 val TextSecondary = Color(0xFF8E94A1)
 
 val Success = Color(0xFF22C55E)
-val Warning = Color(0xFFF59E0B)
+val Warning = Color(0x33F59E0B)
+
+val WarningDark = Color(0xFFD97706)
+
+val WarningLight = Color(0xFFB45309)
 val Danger = Color(0xFFEF4444)

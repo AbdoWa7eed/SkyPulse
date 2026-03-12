@@ -53,7 +53,7 @@ fun ForecastScreen(
                 PrimaryAppBar(
                     title = stringResource(R.string.upcoming_forecast),
                     location = when (val s = uiState) {
-                        is ForecastUiState.Success -> s.forecast.cityName else -> ""
+                        is ForecastUiState.Success -> s.forecast.cityName else -> null
                     }
                 )
             }

@@ -58,7 +58,7 @@
     <string name="error_message_title">Something went wrong</string>
     <string name="error_message_description">We couldn\'t retrieve the latest weather data. Please check your connection and try again.</string>
     <string name="try_again">Try Again</string>
-    <string name="feels_like">Feels like %1$d°</string>
+    <string name="feels_like">Feels like %1$s</string>
     <string name="wind">Wind</string>
     <string name="wind_direction">Direction: %1$d°</string>
     <string name="humidity">Humidity</string>
@@ -114,5 +114,6 @@
     <string name="delete">Delete</string>
     <string name="location_removed">Location removed</string>
     <string name="undo">Undo</string>
+    <string name="five_day_forecast">5-Days Forecast</string>
 
 </resources>

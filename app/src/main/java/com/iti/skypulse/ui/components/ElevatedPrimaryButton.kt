@@ -18,7 +18,8 @@ fun ElevatedPrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    content: @Composable (() -> Unit)? = null,
 ) {
     ElevatedButton(
         onClick = onClick,
@@ -37,10 +38,15 @@ fun ElevatedPrimaryButton(
             pressedElevation = 2.dp
         )
     ) {
-        Text(
-            text = text,
-            style = AppTypography.medium16,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        if(content == null) {
+            Text(
+                text = text,
+                style = AppTypography.medium16,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }else content()
+
+
+
     }
 }

@@ -1,6 +1,7 @@
 package com.iti.skypulse.ui.favorites.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +42,7 @@ fun FavoriteLocationCard(
     item: FavoriteLocationItem,
     tempUnit: TempUnit,
     onDismiss: () -> Unit,
+    onClick: (FavoriteLocationItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
@@ -62,6 +63,7 @@ fun FavoriteLocationCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { onClick(item) }
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -85,35 +87,25 @@ fun FavoriteLocationCard(
                     )
                 }
 
-                when {
-                    item.isLoadingWeather -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    else -> {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(start = 12.dp)
-                        ) {
-                            WeatherIcon(
-                                iconCode = item.weather.weatherIconCode,
-                                modifier = Modifier.size(44.dp)
-                            )
-                            Text(
-                                text = UnitConverter.formatTemp(
-                                    item.weather.temperature,
-                                    tempUnit
-                                ).display(),
-                                style = AppTypography.regular16,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(start = 12.dp)
+                ) {
+                    WeatherIcon(
+                        iconCode = item.weather.weatherIconCode,
+                        modifier = Modifier.size(44.dp)
+                    )
+                    Text(
+                        text = UnitConverter.formatTemp(
+                            item.weather.temperature,
+                            tempUnit
+                        ).display(),
+                        style = AppTypography.regular16,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
+
             }
         }
     }

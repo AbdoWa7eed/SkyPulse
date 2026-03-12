@@ -8,6 +8,7 @@ import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.data.repository.WeatherRepository
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import com.iti.skypulse.ui.navigation.MapSource
@@ -116,6 +117,7 @@ class MapViewModel(
     suspend fun getCurrentWeather(location: SavedLocation) {
         weatherRepository.getCurrentWeather(location.lat, location.lng)
             .onSuccess { weather ->
+                lastKnownWeather = weather
                 _selectionState.value = MapSelectionState.WeatherLoaded(
                     location = location,
                     weather = weather,
@@ -126,7 +128,9 @@ class MapViewModel(
 
     fun onConfirm() {
         val location = confirmedLocation() ?: return
+        if (_selectionState.value is MapSelectionState.Confirming) return
         viewModelScope.launch {
+            _selectionState.value = MapSelectionState.Confirming
             when (source) {
                 MapSource.ONBOARDING, MapSource.UPDATE_LOCATION -> {
                     settingsRepository.saveLocation(location)
@@ -135,11 +139,25 @@ class MapViewModel(
                 MapSource.ADD_FAVORITE -> {
                     weatherRepository.addFavorite(location.lat, location.lng)
                         .onSuccess { _events.emit(MapEvent.NavigateBack) }
-                        .onFailure { _events.emit(MapEvent.ShowError(it)) }
+                        .onFailure {
+                            _selectionState.value = MapSelectionState.WeatherLoaded(
+                                location = location,
+                                weather = (getCurrentSelectionWeather() ?: return@onFailure),
+                                tempUnit = tempUnit
+                            )
+                            _events.emit(MapEvent.ShowError(it))
+                        }
                 }
             }
         }
     }
+
+    private fun getCurrentSelectionWeather(): WeatherModel? =
+        (_selectionState.value as? MapSelectionState.WeatherLoaded)?.weather
+            ?: (_selectionState.value as? MapSelectionState.Confirming).let {
+                lastKnownWeather
+            }
+    private var lastKnownWeather: WeatherModel? = null
 
     private fun confirmedLocation(): SavedLocation? =
         when (val s = _selectionState.value) {

@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
@@ -20,10 +19,10 @@ import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.ui.components.ErrorScreen
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.favorites.components.EmptyFavoritesState
+import com.iti.skypulse.ui.favorites.components.details.FavoriteDetailBottomSheet
 import com.iti.skypulse.ui.favorites.components.FavoriteLocationsList
 import com.iti.skypulse.ui.favorites.components.FavoriteLocationsShimmer
 import com.iti.skypulse.ui.favorites.components.rememberFavoriteSnackbarState
-import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 @Composable
 fun FavoriteLocationsScreen(
@@ -32,10 +31,11 @@ fun FavoriteLocationsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val tempUnit by viewModel.tempUnit.collectAsState()
+    val selectedItem by viewModel.selectedItem.collectAsState()
 
     val snackbarHostState = rememberFavoriteSnackbarState(
         events = viewModel.events,
-        onUndo = viewModel::undo
+        onUndo = viewModel::undo,
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -43,9 +43,8 @@ fun FavoriteLocationsScreen(
         FavoriteLocationsContent(
             state = state,
             tempUnit = tempUnit,
-            onRemove = { item ->
-                viewModel.removeFavoriteItem(item)
-            },
+            onRemove = viewModel::removeFavoriteItem,
+            onClickItem = viewModel::onItemClick,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
@@ -64,9 +63,17 @@ fun FavoriteLocationsScreen(
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 8.dp, vertical = 16.dp)
         )
+    }
 
+    selectedItem?.let { item ->
+        FavoriteDetailBottomSheet(
+            item = item,
+            tempUnit = tempUnit,
+            onDismiss = viewModel::onBottomSheetDismiss
+        )
     }
 }
+
 @Composable
 private fun FavoriteFloatingActionButton(
     onAddFavorite: () -> Unit,
@@ -95,6 +102,7 @@ private fun FavoriteLocationsContent(
     state: FavoriteLocationsState,
     tempUnit: TempUnit,
     onRemove: (FavoriteLocationItem) -> Unit,
+    onClickItem: (FavoriteLocationItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -106,32 +114,10 @@ private fun FavoriteLocationsContent(
             is FavoriteLocationsState.Success -> FavoriteLocationsList(
                 items = state.items,
                 tempUnit = tempUnit,
-                onRemove = onRemove
+                onRemove = onRemove,
+                onClickItem = onClickItem
             )
             is FavoriteLocationsState.Error -> ErrorScreen(title = state.message)
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun FavoriteLocationsSuccessPreview() {
-    SkyPulseTheme {
-        FavoriteLocationsScreen(
-            onAddFavorite = {},
-
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun FavoriteLocationsEmptyPreview() {
-    SkyPulseTheme {
-        FavoriteLocationsScreen(
-            onAddFavorite = {},
-
-        )
     }
 }

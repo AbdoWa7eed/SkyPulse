@@ -17,12 +17,12 @@ sealed class MapSelectionState {
         val weather: WeatherModel,
         val tempUnit: TempUnit
     ) : MapSelectionState()
+    data object Confirming : MapSelectionState()
 }
 
 sealed class MapEvent {
     data object NavigateToMain : MapEvent()
     data object NavigateBack : MapEvent()
-
     data class ShowError(val error: Throwable) : MapEvent()
     data class MoveCameraTo(val latLng: LatLng, val zoom: Float = 12f) : MapEvent()
 }

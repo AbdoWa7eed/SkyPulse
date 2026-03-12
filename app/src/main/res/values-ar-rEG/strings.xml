@@ -61,7 +61,7 @@
     <string name="error_message_description">تعذّر الحصول على بيانات الطقس. يرجى التحقق من اتصالك والمحاولة مجدداً.</string>
     <string name="try_again">حاول مجدداً</string>
 
-    <string name="feels_like">يبدو كـ %1$d°</string>
+    <string name="feels_like">يشعر  كأنه %1$s</string>
     <string name="wind">الرياح</string>
     <string name="wind_direction">الاتجاه: %1$d°</string>
     <string name="humidity">الرطوبة</string>
@@ -119,4 +119,5 @@
     <string name="delete">حذف</string>
     <string name="location_removed">تم حذف الموقع</string>
     <string name="undo">تراجع</string>
+    <string name="five_day_forecast">5-Days Forecast</string>
 </resources>

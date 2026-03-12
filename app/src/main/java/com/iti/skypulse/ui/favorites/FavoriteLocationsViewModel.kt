@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.core.extensions.toStateFlow
 import com.iti.skypulse.core.utils.TempUnit
+import com.iti.skypulse.data.model.FavoriteWeather
 import com.iti.skypulse.data.repository.WeatherRepository
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+
 class FavoriteLocationsViewModel(
     settingsRepository: SettingsRepository,
     private val weatherRepository: WeatherRepository
@@ -27,6 +29,9 @@ class FavoriteLocationsViewModel(
     private val _events = MutableSharedFlow<FavoriteLocationsEvent>()
     val events = _events.asSharedFlow()
 
+    private val _selectedItem = MutableStateFlow<FavoriteLocationItem?>(null)
+    val selectedItem: StateFlow<FavoriteLocationItem?> = _selectedItem.asStateFlow()
+
     init {
         loadFavorites()
     }
@@ -34,28 +39,44 @@ class FavoriteLocationsViewModel(
     private fun loadFavorites() {
         viewModelScope.launch {
             _state.value = FavoriteLocationsState.Loading
+            syncFavorites()
+            observeFavorites()
+        }
+    }
 
-            weatherRepository.getFavorites()
-                .take(1)
-                .collect { items ->
-                    items.forEach { weather ->
-                        launch {
-                            weatherRepository.refreshFavorite(weather.latitude, weather.longitude)
-                        }
-                    }
-                }
-
-            weatherRepository.getFavorites().collect { items ->
-                _state.value = if (items.isEmpty()) FavoriteLocationsState.Empty
-                else FavoriteLocationsState.Success(
-                    items.map { weather ->
-                        FavoriteLocationItem(
-                            weather = weather
+    private suspend fun syncFavorites() {
+        weatherRepository.getFavorites()
+            .take(1)
+            .collect { favorites ->
+                favorites.forEach { fav ->
+                    viewModelScope.launch {
+                        weatherRepository.refreshFavorite(
+                            fav.weather.latitude,
+                            fav.weather.longitude
                         )
                     }
-                )
+                }
             }
+    }
+
+    private suspend fun observeFavorites() {
+        weatherRepository.getFavorites().collect { favorites ->
+            _state.value = if (favorites.isEmpty()) FavoriteLocationsState.Empty
+            else FavoriteLocationsState.Success(favorites.map { it.toUiItem() })
         }
+    }
+
+    private fun FavoriteWeather.toUiItem() = FavoriteLocationItem(
+        weather = weather,
+        forecast = forecast
+    )
+
+    fun onItemClick(item: FavoriteLocationItem) {
+        _selectedItem.value = item
+    }
+
+    fun onBottomSheetDismiss() {
+        _selectedItem.value = null
     }
 
     fun removeFavoriteItem(item: FavoriteLocationItem) {
@@ -70,5 +91,4 @@ class FavoriteLocationsViewModel(
             weatherRepository.addFavorite(item.weather.latitude, item.weather.longitude)
         }
     }
-
 }
