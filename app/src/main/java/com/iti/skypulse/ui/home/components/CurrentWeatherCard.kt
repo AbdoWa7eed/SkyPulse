@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,7 +20,7 @@ import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.UnitConverter
-
+import com.iti.skypulse.R
 
 @Composable
 fun CurrentWeatherCard(
@@ -57,7 +58,10 @@ fun CurrentWeatherCard(
             )
 
             Text(
-                text = UnitConverter.formatTemp(weather.feelsLikeTemperature, tempUnit).display(),
+                text = stringResource(
+                    R.string.feels_like,
+                    UnitConverter.formatTemp(weather.feelsLikeTemperature, tempUnit).display()
+                ),
                 style = AppTypography.regular12,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -129,7 +133,9 @@ fun CardPreview() {
                 visibilityInMeters = 10000,
                 atmosphericPressure = 1015,
                 cityName = "Cairo",
-                countryCode = "EG"
+                countryCode = "EG",
+                longitude = 30.1,
+                latitude = 40.5
             )
         )
     }

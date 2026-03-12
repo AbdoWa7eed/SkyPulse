@@ -2,12 +2,21 @@ package com.iti.skypulse.data.local.datasource
 
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
+import com.iti.skypulse.data.local.room.entity.WeatherWithForecast
+import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSource {
-    suspend fun getWeather(cityName: String): WeatherEntity?
+    suspend fun getWeather(cacheKey: String): WeatherEntity?
     suspend fun saveWeather(weather: WeatherEntity)
-    suspend fun getForecast(cityName: String): ForecastEntity?
-    suspend fun saveForecast(forecast: ForecastEntity)
+    suspend fun deleteWeather(cacheKey: String)
 
-    suspend fun clearAll()
+    suspend fun getForecast(cacheKey: String): ForecastEntity?
+    suspend fun saveForecast(forecast: ForecastEntity)
+    suspend fun deleteForecast(cacheKey: String)
+
+    fun getFavorites(): Flow<List<WeatherWithForecast>>
+    suspend fun markAsFavorite(cacheKey: String)
+    suspend fun unmarkAsFavorite(cacheKey: String)
+
+    suspend fun isFavorite(cacheKey: String): Boolean
 }

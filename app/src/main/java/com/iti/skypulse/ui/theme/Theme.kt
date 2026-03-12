@@ -12,6 +12,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +33,8 @@ val DarkColorScheme = darkColorScheme(
     onSurface = TextPrimary,
     error = Danger,
     onError = TextPrimary,
+    surfaceVariant = Warning,
+    onSurfaceVariant = TextPrimary,
 )
 
 val LightColorScheme = lightColorScheme(
@@ -47,6 +50,8 @@ val LightColorScheme = lightColorScheme(
     onSurface = TextPrimaryLight,
     error = Danger,
     onError = TextPrimary,
+    surfaceVariant = WarningLight,
+    onSurfaceVariant = TextPrimaryLight,
 )
 
 @Composable
@@ -107,6 +112,11 @@ fun SkyPulseTheme(
     }
 
     val colorScheme = animateColorScheme(target = targetScheme)
+    val warningColors = if (darkTheme) {
+        WarningColors(warning = Warning, onWarning = WarningDark)
+    } else {
+        WarningColors(warning = Warning, onWarning = WarningLight)
+    }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -119,8 +129,13 @@ fun SkyPulseTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalWarningColors provides warningColors
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            content = content
+        )
+    }
+
 }

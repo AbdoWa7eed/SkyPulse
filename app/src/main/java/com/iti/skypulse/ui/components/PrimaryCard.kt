@@ -21,21 +21,20 @@ fun PrimaryCard(
 ) {
     val defaultGlass = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
     val finalColor = if (containerColor == Color.Unspecified) defaultGlass else containerColor
-    val shape = RoundedCornerShape(18.dp)
 
     Card(
         modifier = modifier
             .shadow(
-                elevation = 4.dp,
-                shape = shape,
+                elevation = 1.dp,
+                shape = RoundedCornerShape(0.dp),
                 ambientColor = Color.Black.copy(alpha = 0.08f),
                 spotColor = Color.Black.copy(alpha = 0.12f)
             )
             .background(
                 color = finalColor,
-                shape = shape
+                shape = RoundedCornerShape(18.dp)
             ),
-        shape = shape,
+        shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(
             width = 0.5.dp,

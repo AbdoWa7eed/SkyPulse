@@ -58,7 +58,7 @@
     <string name="error_message_title">Something went wrong</string>
     <string name="error_message_description">We couldn\'t retrieve the latest weather data. Please check your connection and try again.</string>
     <string name="try_again">Try Again</string>
-    <string name="feels_like">Feels like %1$d°</string>
+    <string name="feels_like">Feels like %1$s</string>
     <string name="wind">Wind</string>
     <string name="wind_direction">Direction: %1$d°</string>
     <string name="humidity">Humidity</string>
@@ -108,6 +108,12 @@
     <string name="set_as_home">Set as Home</string>
     <string name="search_hint">Search city or coordinates</string>
     <string name="gps_unavailable_warning">GPS or location permission is unavailable. The last saved location will be used as a fallback.</string>
-
+    <string name="favorites">Favorite Locations</string>
+    <string name="no_favorites_title">No favorites yet</string>
+    <string name="no_favorites_subtitle">Tap the + button to add your first favorite location</string>
+    <string name="delete">Delete</string>
+    <string name="location_removed">Location removed</string>
+    <string name="undo">Undo</string>
+    <string name="five_day_forecast">5-Days Forecast</string>
 
 </resources>

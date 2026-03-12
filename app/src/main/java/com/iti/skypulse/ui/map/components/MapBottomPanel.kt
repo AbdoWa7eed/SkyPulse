@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +27,10 @@ fun MapBottomPanel(
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+
+    val isConfirming = selectionState is MapSelectionState.Confirming
+
     val enterAnimation =
         fadeIn(tween(400)) +
                 slideInVertically(tween(400)) { it / 4 }
@@ -52,7 +59,17 @@ fun MapBottomPanel(
             ElevatedPrimaryButton(
                 text = stringResource(R.string.confirm_location),
                 onClick = onConfirm,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = confirmedLocation != null && !isConfirming,
+                content = if (isConfirming) {
+                    {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                } else null
             )
         }
     }

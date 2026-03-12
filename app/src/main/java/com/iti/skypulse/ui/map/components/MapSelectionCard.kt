@@ -115,6 +115,7 @@ private fun SelectionWeatherSlot(state: MapSelectionState) {
             style = AppTypography.medium14,
             color = MaterialTheme.colorScheme.onSurface
         )
+        else -> {}
     }
 }
 
@@ -159,7 +160,10 @@ private fun WeatherLoadedPreview() {
                     weatherDescription = "Clear Sky", weatherIconCode = "01d",
                     windSpeed = 3.0, windDirectionDegrees = 90,
                     humidityPercentage = 30, visibilityInMeters = 10000,
-                    atmosphericPressure = 1010, cityName = "Cairo", countryCode = "EG"
+                    atmosphericPressure = 1010, cityName = "Cairo",
+                    countryCode = "EG",
+                    longitude = 30.1,
+                    latitude = 40.5
                 ),
                 tempUnit = TempUnit.CELSIUS
             ),

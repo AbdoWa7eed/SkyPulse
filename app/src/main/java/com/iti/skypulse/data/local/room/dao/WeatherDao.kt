@@ -4,8 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
+import com.iti.skypulse.data.local.room.entity.WeatherWithForecast
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
@@ -32,4 +35,18 @@ interface WeatherDao {
 
     @Query("DELETE FROM forecast")
     suspend fun clearForecast()
+
+    @Transaction
+    @Query("SELECT * FROM weather WHERE isFavorite = 1")
+    fun getFavorites(): Flow<List<WeatherWithForecast>>
+
+    @Query("UPDATE weather SET isFavorite = 1 WHERE cacheKey = :cacheKey")
+    suspend fun markAsFavorite(cacheKey: String)
+
+    @Query("UPDATE weather SET isFavorite = 0 WHERE cacheKey = :cacheKey")
+    suspend fun unmarkAsFavorite(cacheKey: String)
+
+    @Query("SELECT isFavorite FROM weather WHERE cacheKey = :cacheKey")
+    suspend fun isFavorite(cacheKey: String): Boolean
+
 }

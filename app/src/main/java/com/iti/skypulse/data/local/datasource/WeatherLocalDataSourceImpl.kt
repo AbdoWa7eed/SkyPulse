@@ -8,24 +8,16 @@ class WeatherLocalDataSourceImpl(
     private val weatherDao: WeatherDao
 ) : WeatherLocalDataSource {
 
-    override suspend fun getWeather(cityName: String): WeatherEntity? {
-        return weatherDao.getWeather(cityName)
-    }
+    override suspend fun getWeather(cacheKey: String): WeatherEntity? = weatherDao.getWeather(cacheKey)
+    override suspend fun saveWeather(weather: WeatherEntity) = weatherDao.saveWeather(weather)
+    override suspend fun deleteWeather(cacheKey: String) = weatherDao.deleteWeather(cacheKey)
 
-    override suspend fun saveWeather(weather: WeatherEntity) {
-        weatherDao.saveWeather(weather)
-    }
+    override suspend fun getForecast(cacheKey: String): ForecastEntity? = weatherDao.getForecast(cacheKey)
+    override suspend fun saveForecast(forecast: ForecastEntity) = weatherDao.saveForecast(forecast)
+    override suspend fun deleteForecast(cacheKey: String) = weatherDao.deleteForecast(cacheKey)
 
-    override suspend fun getForecast(cityName: String): ForecastEntity? {
-        return weatherDao.getForecast(cityName)
-    }
-
-    override suspend fun saveForecast(forecast: ForecastEntity) {
-        weatherDao.saveForecast(forecast)
-    }
-
-    override suspend fun clearAll() {
-        weatherDao.clearWeather()
-        weatherDao.clearForecast()
-    }
+    override fun getFavorites() = weatherDao.getFavorites()
+    override suspend fun markAsFavorite(cacheKey: String) = weatherDao.markAsFavorite(cacheKey)
+    override suspend fun unmarkAsFavorite(cacheKey: String) = weatherDao.unmarkAsFavorite(cacheKey)
+    override suspend fun isFavorite(cacheKey: String) = weatherDao.isFavorite(cacheKey)
 }

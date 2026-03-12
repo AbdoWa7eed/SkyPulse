@@ -61,7 +61,7 @@
     <string name="error_message_description">تعذّر الحصول على بيانات الطقس. يرجى التحقق من اتصالك والمحاولة مجدداً.</string>
     <string name="try_again">حاول مجدداً</string>
 
-    <string name="feels_like">يبدو كـ %1$d°</string>
+    <string name="feels_like">يشعر  كأنه %1$s</string>
     <string name="wind">الرياح</string>
     <string name="wind_direction">الاتجاه: %1$d°</string>
     <string name="humidity">الرطوبة</string>
@@ -108,10 +108,16 @@
     <string name="details">تفاصيل</string>
     <string name="confirm_location">تأكيد الموقع</string>
     <string name="search_city_hint">ابحث عن مدينة أو إحداثيات</string>
-    <string name="add_favorite">إضافة مفضلة</string>
     <string name="choose_location">اختر الموقع</string>
     <string name="set_as_home">تعيين كموقع رئيسي</string>
     <string name="search_hint">ابحث عن مدينة أو موقع</string>
     <string name="gps_unavailable_warning">نظام تحديد الموقع (GPS) أو إذن الموقع غير متاح. سيتم استخدام آخر موقع محفوظ كخيار بديل.</string>
-
+    <string name="favorites">المواقع المفضلة</string>
+    <string name="no_favorites_title">لا توجد مفضلات بعد</string>
+    <string name="no_favorites_subtitle">اضغط على زر + لإضافة موقعك المفضل الأول</string>
+    <string name="add_favorite">إضافة مفضلة</string>
+    <string name="delete">حذف</string>
+    <string name="location_removed">تم حذف الموقع</string>
+    <string name="undo">تراجع</string>
+    <string name="five_day_forecast">5-Days Forecast</string>
 </resources>
