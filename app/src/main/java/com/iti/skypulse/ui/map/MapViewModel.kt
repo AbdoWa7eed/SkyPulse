@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 @OptIn(FlowPreview::class)
 class MapViewModel(
@@ -134,8 +133,9 @@ class MapViewModel(
                     _events.emit(MapEvent.NavigateToMain)
                 }
                 MapSource.ADD_FAVORITE -> {
-                    // TODO: Implement ADD FAVORITE LOGIC
-                    _events.emit(MapEvent.NavigateBack)
+                    weatherRepository.addFavorite(location.lat, location.lng)
+                        .onSuccess { _events.emit(MapEvent.NavigateBack) }
+                        .onFailure { _events.emit(MapEvent.ShowError(it)) }
                 }
             }
         }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun rememberFavoriteSnackbarState(
     events: Flow<FavoriteLocationsEvent>,
-    onUndo: (FavoriteLocationItem, Int) -> Unit,
+    onUndo: (FavoriteLocationItem) -> Unit,
 ): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -32,7 +32,7 @@ fun rememberFavoriteSnackbarState(
                         duration = SnackbarDuration.Short
                     )
                     if (snackbarData == SnackbarResult.ActionPerformed) {
-                        onUndo(event.item, event.index)
+                        onUndo(event.item)
                     }
                 }
             }

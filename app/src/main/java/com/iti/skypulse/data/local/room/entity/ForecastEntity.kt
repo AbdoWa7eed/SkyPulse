@@ -9,6 +9,9 @@ data class ForecastEntity(
     @PrimaryKey
     val cacheKey: String,
     val cityName: String,
+    val latitude: Double,
+    val longitude: Double,
+    val isFavorite: Boolean = false,
     val countryCode: String,
     val dailyForecasts: List<DailyForecastModel>,
     val lastUpdated: Long = System.currentTimeMillis()

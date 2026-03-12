@@ -71,8 +71,7 @@ fun FavoriteLocationCard(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = item.location.address?.substringBefore(",")
-                            ?: "${item.location.lat}, ${item.location.lng}",
+                        text = item.weather.cityName,
                         style = AppTypography.semiBold18,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.map.components.MapBottomPanel
 import com.iti.skypulse.ui.map.components.MapSearchBar
+import com.iti.skypulse.ui.map.components.rememberMapActionsState
 import com.iti.skypulse.ui.navigation.MapSource
 import kotlinx.coroutines.launch
 
@@ -46,6 +48,25 @@ fun MapScreen(
         )
     }
 
+    val snackbarHostState = rememberMapActionsState(
+        events = viewModel.events,
+        onNavigateToMain = onNavigateToMain,
+        onNavigateBack = onBack
+    )
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            if (event is MapEvent.MoveCameraTo) {
+                scope.launch {
+                    cameraPositionState.animate(
+                        CameraUpdateFactory.newLatLngZoom(event.latLng, event.zoom)
+                    )
+                }
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(600)
@@ -58,99 +79,94 @@ fun MapScreen(
         else -> null
     }
 
-    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        viewModel.events.collect { event ->
-            when (event) {
-                is MapEvent.NavigateToMain -> onNavigateToMain()
-                is MapEvent.NavigateBack -> onBack()
-                is MapEvent.MoveCameraTo -> {
-                    coroutineScope.launch {
-                        cameraPositionState.animate(
-                            update = CameraUpdateFactory.newLatLngZoom(event.latLng, event.zoom),
-                            durationMs = 600
-                        )
-                    }
-                }
-            }
-        }
-    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(top = 20.dp)
-    ) {
-        PrimaryAppBar(
-            title = stringResource(source.titleRes),
-            paddingValues = PaddingValues(horizontal = 16.dp),
-            onBack = onBack
-        )
+    Box(modifier = Modifier.fillMaxSize()) {
 
-        if (screenLaunchedState) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                GoogleMap(
-                    modifier = Modifier.fillMaxSize(),
-                    cameraPositionState = cameraPositionState,
-                    uiSettings =  uiSettings,
-                    properties = MapProperties(mapType = MapType.NORMAL),
-                    onMapLoaded = { mapLoaded = true },
-                    onMapClick = { latLng ->
-                        viewModel.onMapClick(
-                            latLng.latitude,
-                            latLng.longitude
-                        )
-                    }
-                ) {
-                    confirmedLocation?.let { loc ->
-                        Marker(
-                            state = MarkerState(position = LatLng(loc.lat, loc.lng)),
-                            title = loc.address
-                        )
-                    }
-                }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(top = 20.dp)
+        ) {
+            PrimaryAppBar(
+                title = stringResource(source.titleRes),
+                paddingValues = PaddingValues(horizontal = 16.dp),
+                onBack = onBack
+            )
 
-                if (!mapLoaded) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f)),
-                        contentAlignment = Alignment.Center
+            if (screenLaunchedState) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState,
+                        uiSettings =  uiSettings,
+                        properties = MapProperties(mapType = MapType.NORMAL),
+                        onMapLoaded = { mapLoaded = true },
+                        onMapClick = { latLng ->
+                            viewModel.onMapClick(
+                                latLng.latitude,
+                                latLng.longitude
+                            )
+                        }
                     ) {
-                        CircularProgressIndicator()
+                        confirmedLocation?.let { loc ->
+                            Marker(
+                                state = MarkerState(position = LatLng(loc.lat, loc.lng)),
+                                title = loc.address
+                            )
+                        }
                     }
-                }
 
-                MapSearchBar(
-                    query = searchQuery,
-                    hint = stringResource(R.string.search_hint),
-                    results = searchResults,
-                    onQueryChange = { viewModel.onSearchQueryChange(it) },
-                    onPlaceSelected = { viewModel.onPlaceSelected(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = 20.dp, vertical = 12.dp)
-                )
+                    if (!mapLoaded) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
 
-                if (mapLoaded) {
-                    Box(
+                    MapSearchBar(
+                        query = searchQuery,
+                        hint = stringResource(R.string.search_hint),
+                        results = searchResults,
+                        onQueryChange = { viewModel.onSearchQueryChange(it) },
+                        onPlaceSelected = { viewModel.onPlaceSelected(it) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
-                    ) {
-                        MapBottomPanel(
-                            selectionState = selectionState,
-                            confirmedLocation = confirmedLocation,
-                            onConfirm = { viewModel.onConfirm() }
-                        )
+                            .align(Alignment.TopCenter)
+                            .padding(horizontal = 20.dp, vertical = 12.dp)
+                    )
+
+                    if (mapLoaded) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
+                        ) {
+                            MapBottomPanel(
+                                selectionState = selectionState,
+                                confirmedLocation = confirmedLocation,
+                                onConfirm = { viewModel.onConfirm() }
+                            )
+                        }
                     }
                 }
             }
+
         }
 
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 8.dp, vertical = 16.dp)
+        )
     }
+
+
 
 }

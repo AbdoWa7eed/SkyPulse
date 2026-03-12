@@ -15,5 +15,7 @@ data class WeatherModel(
     val atmosphericPressure: Int,
 
     val cityName: String,
+    val latitude:Double,
+    val longitude: Double,
     val countryCode: String,
 )

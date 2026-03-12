@@ -27,6 +27,8 @@ fun WeatherResponseDto.toWeatherModel() = WeatherModel(
     visibilityInMeters = visibilityInMeters,
     atmosphericPressure = mainMetrics.atmosphericPressure,
     cityName = cityName,
+    latitude = coordinates.latitude,
+    longitude = coordinates.longitude,
     countryCode = systemInfo.countryCode
 )
 
@@ -52,7 +54,9 @@ fun ForecastResponseDto.toForecastModel(): ForecastModel {
     return ForecastModel(
         cityName = city.cityName,
         countryCode = city.countryCode,
-        dailyForecasts = dailyForecasts
+        latitude = city.coordinates.latitude,
+        longitude = city.coordinates.longitude,
+        dailyForecasts = dailyForecasts,
     )
 }
 
@@ -71,6 +75,8 @@ fun WeatherModel.toWeatherEntity(cacheKey: String) = WeatherEntity(
     humidityPercentage = humidityPercentage,
     visibilityInMeters = visibilityInMeters,
     atmosphericPressure = atmosphericPressure,
+    longitude = longitude,
+    latitude = latitude,
     lastUpdated = System.currentTimeMillis()
 )
 
@@ -87,6 +93,8 @@ fun WeatherEntity.toWeatherModel() = WeatherModel(
     windDirectionDegrees = windDirectionDegrees,
     humidityPercentage = humidityPercentage,
     visibilityInMeters = visibilityInMeters,
+    longitude = longitude,
+    latitude = latitude,
     atmosphericPressure = atmosphericPressure
 )
 
@@ -95,12 +103,16 @@ fun ForecastModel.toForecastEntity(cacheKey: String) = ForecastEntity(
     cityName = cityName,
     countryCode = countryCode,
     dailyForecasts = dailyForecasts,
+    longitude = longitude,
+    latitude = latitude,
     lastUpdated = System.currentTimeMillis()
 )
 
 fun ForecastEntity.toForecastModel() = ForecastModel(
     cityName = cityName,
     countryCode = countryCode,
+    longitude = longitude,
+    latitude = latitude,
     dailyForecasts = dailyForecasts
 )
 

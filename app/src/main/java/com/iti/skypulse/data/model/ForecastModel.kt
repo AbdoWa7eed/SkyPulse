@@ -2,6 +2,8 @@ package com.iti.skypulse.data.model
 
 data class ForecastModel(
     val cityName: String,
+    val latitude:Double,
+    val longitude: Double,
     val countryCode: String,
     val dailyForecasts: List<DailyForecastModel>
 )

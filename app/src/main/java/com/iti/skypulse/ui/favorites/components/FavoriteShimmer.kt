@@ -11,7 +11,7 @@ import com.iti.skypulse.ui.components.ShimmerBox
 @Composable
 fun FavoriteLocationsShimmer(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         repeat(4) {

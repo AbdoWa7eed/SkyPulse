@@ -8,6 +8,9 @@ data class WeatherEntity(
     @PrimaryKey
     val cacheKey: String,
     val cityName: String,
+    val latitude: Double,
+    val longitude: Double,
+    val isFavorite: Boolean = false,
     val countryCode: String,
     val temperature: Double,
     val feelsLikeTemperature: Double,

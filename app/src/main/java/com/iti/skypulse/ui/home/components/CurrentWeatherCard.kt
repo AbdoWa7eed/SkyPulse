@@ -129,7 +129,9 @@ fun CardPreview() {
                 visibilityInMeters = 10000,
                 atmosphericPressure = 1015,
                 cityName = "Cairo",
-                countryCode = "EG"
+                countryCode = "EG",
+                longitude = 30.1,
+                latitude = 40.5
             )
         )
     }

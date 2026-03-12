@@ -13,7 +13,9 @@ import com.iti.skypulse.data.model.mapper.toGeoPlace
 import com.iti.skypulse.data.model.mapper.toWeatherEntity
 import com.iti.skypulse.data.model.mapper.toWeatherModel
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSource
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 private const val CACHE_EXPIRY_MS = 30 * 60 * 1000L
 
@@ -24,39 +26,27 @@ class WeatherRepositoryImpl(
     private val connectivityHelper: ConnectivityHelper
 ) : WeatherRepository {
 
-    override suspend fun getCurrentWeather(
-        latitude: Double,
-        longitude: Double
-    ): Result<WeatherModel> {
+    override suspend fun getCurrentWeather(latitude: Double, longitude: Double): Result<WeatherModel> {
         return runCatching {
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getWeather(cacheKey)
-
-            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
-                cached.toWeatherModel()
-            } else if (connectivityHelper.isOnline()) {
-                val fresh = remoteDataSource.getCurrentWeather(latitude, longitude).toWeatherModel()
-                localDataSource.saveWeather(fresh.toWeatherEntity(cacheKey))
-                fresh
-            } else cached?.toWeatherModel() ?: throw AppException.NoCacheException()
+            when {
+                cached != null && !isCacheExpired(cached.lastUpdated) -> cached.toWeatherModel()
+                connectivityHelper.isOnline() -> fetchAndSaveWeather(latitude, longitude, cacheKey)
+                else -> cached?.toWeatherModel() ?: throw AppException.NoCacheException()
+            }
         }
     }
 
-    override suspend fun getFiveDayForecast(
-        latitude: Double,
-        longitude: Double
-    ): Result<ForecastModel> {
+    override suspend fun getFiveDayForecast(latitude: Double, longitude: Double): Result<ForecastModel> {
         return runCatching {
             val cacheKey = buildCacheKey(latitude, longitude)
             val cached = localDataSource.getForecast(cacheKey)
-
-            if (cached != null && !isCacheExpired(cached.lastUpdated)) {
-                cached.toForecastModel()
-            } else if (connectivityHelper.isOnline()) {
-                val fresh = remoteDataSource.getFiveDayForecast(latitude, longitude).toForecastModel()
-                localDataSource.saveForecast(fresh.toForecastEntity(cacheKey))
-                fresh
-            } else cached?.toForecastModel() ?: throw AppException.NoCacheException()
+            when {
+                cached != null && !isCacheExpired(cached.lastUpdated) -> cached.toForecastModel()
+                connectivityHelper.isOnline() -> fetchAndSaveForecast(latitude, longitude, cacheKey)
+                else -> cached?.toForecastModel() ?: throw AppException.NoCacheException()
+            }
         }
     }
 
@@ -66,10 +56,58 @@ class WeatherRepositoryImpl(
             remoteDataSource.searchPlaces(query).map { dto -> dto.toGeoPlace(langCode)}
         }
     }
-
-    private fun isCacheExpired(lastUpdated: Long): Boolean {
-        return System.currentTimeMillis() - lastUpdated > CACHE_EXPIRY_MS
+    override suspend fun addFavorite(latitude: Double, longitude: Double): Result<Unit> {
+        return runCatching {
+            val cacheKey = buildCacheKey(latitude, longitude)
+            when {
+                localDataSource.getWeather(cacheKey) != null ->
+                    localDataSource.markAsFavorite(cacheKey)
+                connectivityHelper.isOnline() -> fetchAndSaveWeather(latitude, longitude, cacheKey, isFavorite = true)
+                else -> throw AppException.NoInternetException()
+            }
+        }
     }
+    override suspend fun removeFavorite(latitude: Double, longitude: Double) {
+        localDataSource.unmarkAsFavorite(buildCacheKey(latitude, longitude))
+    }
+
+    override suspend fun refreshFavorite(latitude: Double, longitude: Double) {
+        if (!connectivityHelper.isOnline()) return
+        runCatching {
+            val cacheKey = buildCacheKey(latitude, longitude)
+            fetchAndSaveWeather(latitude, longitude, cacheKey, isFavorite = true)
+        }
+    }
+
+    override fun getFavorites(): Flow<List<WeatherModel>> {
+        return localDataSource.getFavorites()
+            .map { entities -> entities.map { it.toWeatherModel() } }
+    }
+
+
+    private suspend fun fetchAndSaveWeather(
+        latitude: Double,
+        longitude: Double,
+        cacheKey: String,
+        isFavorite: Boolean = false
+    ): WeatherModel {
+        val model = remoteDataSource.getCurrentWeather(latitude, longitude).toWeatherModel()
+        localDataSource.saveWeather(model.toWeatherEntity(cacheKey).copy(isFavorite = isFavorite))
+        return model
+    }
+
+    private suspend fun fetchAndSaveForecast(
+        latitude: Double,
+        longitude: Double,
+        cacheKey: String
+    ): ForecastModel {
+        val model = remoteDataSource.getFiveDayForecast(latitude, longitude).toForecastModel()
+        localDataSource.saveForecast(model.toForecastEntity(cacheKey))
+        return model
+    }
+
+    private fun isCacheExpired(lastUpdated: Long) =
+        System.currentTimeMillis() - lastUpdated > CACHE_EXPIRY_MS
 
     private suspend fun buildCacheKey(latitude: Double, longitude: Double): String {
         val lang = appPreferences.language.first().code
