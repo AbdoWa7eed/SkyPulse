@@ -28,7 +28,7 @@ fun ErrorScreen(
     modifier: Modifier = Modifier,
     title: String,
     message: String? = null,
-    onRetry: (() -> Unit)?,
+    onRetry: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier

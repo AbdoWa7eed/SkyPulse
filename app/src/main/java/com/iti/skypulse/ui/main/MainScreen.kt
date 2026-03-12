@@ -46,7 +46,7 @@ fun MainScreen(
             }
             composable<NavRoutes.FavoriteLocationsRoute> {
                 BackHandler(enabled = true) {}
-                FavoriteLocationsScreen()
+                FavoriteLocationsScreen(onAddFavorite)
             }
             composable<NavRoutes.AlarmsRoute> {
                 BackHandler(enabled = true) {}
