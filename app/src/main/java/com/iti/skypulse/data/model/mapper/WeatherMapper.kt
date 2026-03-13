@@ -62,8 +62,9 @@ fun ForecastResponseDto.toForecastModel(): ForecastModel {
     )
 }
 
-fun WeatherModel.toWeatherEntity(cacheKey: String) = WeatherEntity(
+fun WeatherModel.toWeatherEntity(cacheKey: String, lang: String) = WeatherEntity(
     cacheKey = cacheKey,
+    lang = lang,
     cityName = cityName,
     countryCode = countryCode,
     temperature = temperature,
@@ -100,8 +101,9 @@ fun WeatherEntity.toWeatherModel() = WeatherModel(
     atmosphericPressure = atmosphericPressure
 )
 
-fun ForecastModel.toForecastEntity(cacheKey: String) = ForecastEntity(
+fun ForecastModel.toForecastEntity(cacheKey: String, lang: String) = ForecastEntity(
     cacheKey = cacheKey,
+    lang = lang,
     cityName = cityName,
     countryCode = countryCode,
     dailyForecasts = dailyForecasts,

@@ -31,6 +31,7 @@ import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable
 fun FavoriteDetailStatsGrid(weather: WeatherModel) {
+    // TODO : HANDLING THE UNIT CONVERSION
     val stats = listOf(
         Triple(stringResource(R.string.wind), "${weather.windSpeed} m/s", Icons.Rounded.Air),
         Triple(stringResource(R.string.humidity), "${weather.humidityPercentage}%", Icons.Rounded.WaterDrop),

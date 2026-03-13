@@ -1,5 +1,7 @@
 package com.iti.skypulse.data.model
 
-fun buildCacheKey(latitude: Double, longitude: Double, lang: String): String {
-    return "${"%.2f".format(latitude)},${"%.2f".format(longitude)},$lang"
+import java.util.Locale
+
+fun buildCacheKey(latitude: Double, longitude: Double): String {
+    return "%.2f,%.2f".format(Locale.US, latitude, longitude)
 }

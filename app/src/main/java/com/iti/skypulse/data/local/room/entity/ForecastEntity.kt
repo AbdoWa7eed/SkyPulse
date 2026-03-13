@@ -8,6 +8,7 @@ import com.iti.skypulse.data.model.DailyForecastModel
 data class ForecastEntity(
     @PrimaryKey
     val cacheKey: String,
+    val lang: String,
     val cityName: String,
     val latitude: Double,
     val longitude: Double,
