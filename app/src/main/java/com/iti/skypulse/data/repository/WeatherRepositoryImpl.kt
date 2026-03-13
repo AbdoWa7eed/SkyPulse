@@ -17,11 +17,12 @@ import com.iti.skypulse.data.model.mapper.toWeatherEntity
 import com.iti.skypulse.data.model.mapper.toWeatherModel
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 private const val CACHE_EXPIRY_MS = 30 * 60 * 1000L
-
 class WeatherRepositoryImpl(
     private val appPreferences: AppPreferences,
     private val remoteDataSource: WeatherRemoteDataSource,
@@ -31,11 +32,15 @@ class WeatherRepositoryImpl(
 
     override suspend fun getCurrentWeather(latitude: Double, longitude: Double): Result<WeatherModel> {
         return runCatching {
-            val cacheKey = getCacheKey(latitude, longitude)
-            val cached = localDataSource.getWeather(cacheKey)
+            val lang = getLang()
+            val cacheKey = buildCacheKey(latitude, longitude)
+            val cached = localDataSource.getWeather(cacheKey, lang)
             when {
                 cached != null && !isCacheExpired(cached.lastUpdated) -> cached.toWeatherModel()
-                connectivityHelper.isOnline() -> fetchAndSaveWeather(latitude, longitude, cacheKey)
+                connectivityHelper.isOnline() -> {
+                    val isFav = localDataSource.isFavorite(cacheKey)
+                    fetchAndSaveWeather(latitude, longitude, cacheKey, lang, isFav)
+                }
                 else -> cached?.toWeatherModel() ?: throw AppException.NoCacheException()
             }
         }
@@ -43,35 +48,35 @@ class WeatherRepositoryImpl(
 
     override suspend fun getFiveDayForecast(latitude: Double, longitude: Double): Result<ForecastModel> {
         return runCatching {
-            val cacheKey = getCacheKey(latitude, longitude)
-            val cached = localDataSource.getForecast(cacheKey)
+            val lang = getLang()
+            val cacheKey = buildCacheKey(latitude, longitude)
+            val cached = localDataSource.getForecast(cacheKey, lang)
             when {
                 cached != null && !isCacheExpired(cached.lastUpdated) -> cached.toForecastModel()
-                connectivityHelper.isOnline() -> fetchAndSaveForecast(latitude, longitude, cacheKey)
+                connectivityHelper.isOnline() -> fetchAndSaveForecast(latitude, longitude, cacheKey, lang)
                 else -> cached?.toForecastModel() ?: throw AppException.NoCacheException()
             }
         }
     }
 
-    override suspend fun searchPlaces(query: String): Result<List<GeoPlace>>{
+    override suspend fun searchPlaces(query: String): Result<List<GeoPlace>> {
         return runCatching {
-            val langCode = appPreferences.language.first().code
-            remoteDataSource.searchPlaces(query).map { dto -> dto.toGeoPlace(langCode)}
+            val langCode = getLang()
+            remoteDataSource.searchPlaces(query).map { dto -> dto.toGeoPlace(langCode) }
         }
     }
 
     override suspend fun addFavorite(latitude: Double, longitude: Double): Result<Unit> {
         return runCatching {
-            val cacheKey = getCacheKey(latitude, longitude)
-            val cachedWeather = localDataSource.getWeather(cacheKey)
-            val cachedForecast = localDataSource.getForecast(cacheKey)
-
+            val lang = getLang()
+            val cacheKey = buildCacheKey(latitude, longitude)
+            val cachedForecast = localDataSource.getForecast(cacheKey, lang)
             if (cachedForecast == null || isCacheExpired(cachedForecast.lastUpdated)) {
-                fetchAndSaveForecast(latitude, longitude, cacheKey)
+                fetchAndSaveForecast(latitude, longitude, cacheKey, lang)
             }
-
+            val cachedWeather = localDataSource.getWeather(cacheKey, lang)
             if (cachedWeather == null || isCacheExpired(cachedWeather.lastUpdated)) {
-                fetchAndSaveWeather(latitude, longitude, cacheKey, isFavorite = true)
+                fetchAndSaveWeather(latitude, longitude, cacheKey, lang, isFavorite = true)
             } else {
                 localDataSource.markAsFavorite(cacheKey)
             }
@@ -79,30 +84,44 @@ class WeatherRepositoryImpl(
     }
 
     override suspend fun removeFavorite(latitude: Double, longitude: Double) {
-        val cacheKey = getCacheKey(latitude, longitude)
+        val cacheKey = buildCacheKey(latitude, longitude)
         localDataSource.unmarkAsFavorite(cacheKey)
-
-        val homeLocation = appPreferences.savedLocation.first()
-        val isHomeLocation = homeLocation?.lat == latitude && homeLocation.lng == longitude
-
-        if (!isHomeLocation) {
-            localDataSource.deleteWeather(cacheKey)
-            localDataSource.deleteForecast(cacheKey)
-        }
     }
 
     override suspend fun refreshFavorite(latitude: Double, longitude: Double) {
         if (!connectivityHelper.isOnline()) return
         runCatching {
-            val cacheKey = getCacheKey(latitude, longitude)
-            fetchAndSaveWeather(latitude, longitude, cacheKey, isFavorite = true)
-            fetchAndSaveForecast(latitude, longitude, cacheKey)
+            val lang = getLang()
+            val cacheKey = buildCacheKey(latitude, longitude)
+            fetchAndSaveWeather(latitude, longitude, cacheKey, lang, isFavorite = true)
+            fetchAndSaveForecast(latitude, longitude, cacheKey, lang)
+        }
+    }
+    override fun getFavorites(): Flow<List<FavoriteWeather>> {
+        return flow {
+            val lang = getLang()
+            syncFavoritesForLanguage(lang)
+            emitAll(
+                localDataSource.getFavorites(lang)
+                    .map { entities -> entities.map { it.toFavoriteModel() } }
+            )
         }
     }
 
-    override fun getFavorites(): Flow<List<FavoriteWeather>> {
-        return localDataSource.getFavorites()
-            .map { entities -> entities.map { it.toFavoriteModel() } }
+    private suspend fun syncFavoritesForLanguage(lang: String) {
+        if (!connectivityHelper.isOnline()) return
+        val allFavorites = localDataSource.getAllFavoriteLocations()
+        allFavorites.forEach { (lat, lng) ->
+            val key = buildCacheKey(lat, lng)
+            val hasWeather = localDataSource.getWeather(key, lang) != null
+            val hasForecast = localDataSource.getForecast(key, lang) != null
+            if (!hasWeather || !hasForecast) {
+                runCatching {
+                    if (!hasWeather) fetchAndSaveWeather(lat, lng, key, lang, isFavorite = true)
+                    if (!hasForecast) fetchAndSaveForecast(lat, lng, key, lang)
+                }
+            }
+        }
     }
 
 
@@ -110,28 +129,27 @@ class WeatherRepositoryImpl(
         latitude: Double,
         longitude: Double,
         cacheKey: String,
+        lang: String,
         isFavorite: Boolean = false
     ): WeatherModel {
         val model = remoteDataSource.getCurrentWeather(latitude, longitude).toWeatherModel()
-        localDataSource.saveWeather(model.toWeatherEntity(cacheKey).copy(isFavorite = isFavorite))
+        localDataSource.saveWeather(model.toWeatherEntity(cacheKey, lang).copy(isFavorite = isFavorite))
         return model
     }
 
     private suspend fun fetchAndSaveForecast(
         latitude: Double,
         longitude: Double,
-        cacheKey: String
+        cacheKey: String,
+        lang: String
     ): ForecastModel {
         val model = remoteDataSource.getFiveDayForecast(latitude, longitude).toForecastModel()
-        localDataSource.saveForecast(model.toForecastEntity(cacheKey))
+        localDataSource.saveForecast(model.toForecastEntity(cacheKey, lang))
         return model
     }
 
     private fun isCacheExpired(lastUpdated: Long) =
         System.currentTimeMillis() - lastUpdated > CACHE_EXPIRY_MS
 
-    private suspend fun getCacheKey(latitude: Double, longitude: Double): String {
-        val lang = appPreferences.language.first().code
-        return buildCacheKey(latitude, longitude, lang)
-    }
+    private suspend fun getLang(): String = appPreferences.language.first().code
 }

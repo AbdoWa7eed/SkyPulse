@@ -6,14 +6,14 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
+import com.iti.skypulse.data.local.room.entity.LatLngEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
 import com.iti.skypulse.data.local.room.entity.WeatherWithForecast
 import kotlinx.coroutines.flow.Flow
-
 @Dao
 interface WeatherDao {
-    @Query("SELECT * FROM weather WHERE cacheKey = :cacheKey")
-    suspend fun getWeather(cacheKey: String): WeatherEntity?
+    @Query("SELECT * FROM weather WHERE cacheKey = :cacheKey AND lang = :lang")
+    suspend fun getWeather(cacheKey: String, lang: String): WeatherEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveWeather(weather: WeatherEntity)
@@ -21,8 +21,8 @@ interface WeatherDao {
     @Query("DELETE FROM weather WHERE cacheKey = :cacheKey")
     suspend fun deleteWeather(cacheKey: String)
 
-    @Query("SELECT * FROM forecast WHERE cacheKey = :cacheKey")
-    suspend fun getForecast(cacheKey: String): ForecastEntity?
+    @Query("SELECT * FROM forecast WHERE cacheKey = :cacheKey AND lang = :lang")
+    suspend fun getForecast(cacheKey: String, lang: String): ForecastEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveForecast(forecast: ForecastEntity)
@@ -37,8 +37,8 @@ interface WeatherDao {
     suspend fun clearForecast()
 
     @Transaction
-    @Query("SELECT * FROM weather WHERE isFavorite = 1")
-    fun getFavorites(): Flow<List<WeatherWithForecast>>
+    @Query("SELECT * FROM weather WHERE isFavorite = 1 AND lang = :lang")
+    fun getFavorites(lang: String): Flow<List<WeatherWithForecast>>
 
     @Query("UPDATE weather SET isFavorite = 1 WHERE cacheKey = :cacheKey")
     suspend fun markAsFavorite(cacheKey: String)
@@ -49,4 +49,7 @@ interface WeatherDao {
     @Query("SELECT isFavorite FROM weather WHERE cacheKey = :cacheKey")
     suspend fun isFavorite(cacheKey: String): Boolean
 
+
+    @Query("SELECT latitude, longitude FROM weather WHERE isFavorite = 1 GROUP BY latitude, longitude")
+    suspend fun getAllFavoriteLocations(): List<LatLngEntity>
 }

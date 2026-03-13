@@ -18,5 +18,4 @@ interface WeatherRepository {
 
     suspend fun refreshFavorite(latitude: Double, longitude: Double)
 
-
 }

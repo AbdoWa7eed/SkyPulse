@@ -48,11 +48,10 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun saveLocation(location: SavedLocation) {
-        val lang = appPreferences.language.first().code
         val oldLocation = appPreferences.savedLocation.first()
 
         oldLocation?.let {
-            val oldCacheKey = buildCacheKey(it.lat, it.lng, lang)
+            val oldCacheKey = buildCacheKey(it.lat, it.lng)
             val isOldFavorite = weatherLocalDataSource.isFavorite(oldCacheKey)
 
             if (!isOldFavorite) {
