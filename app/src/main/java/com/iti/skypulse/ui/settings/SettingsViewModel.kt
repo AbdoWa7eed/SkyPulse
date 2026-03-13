@@ -24,15 +24,6 @@ class SettingsViewModel(
     private val locationHelper: LocationHelper
 ) : ViewModel() {
 
-    val tempUnit = settingsRepository.tempUnit
-        .toStateFlow(viewModelScope, TempUnit.CELSIUS)
-
-    val windUnit = settingsRepository.windUnit
-        .toStateFlow(viewModelScope, WindUnit.METERS_PER_SECOND)
-
-    val pressureUnit = settingsRepository.pressureUnit
-        .toStateFlow(viewModelScope, PressureUnit.HPA)
-
     val language = settingsRepository.language
         .toStateFlow(viewModelScope, Language.ENGLISH)
 

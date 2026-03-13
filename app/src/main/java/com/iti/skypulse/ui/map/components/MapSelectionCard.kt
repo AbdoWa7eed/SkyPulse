@@ -34,6 +34,7 @@ import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
+import com.iti.skypulse.ui.map.MapLocationData
 import com.iti.skypulse.ui.map.MapSelectionState
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
@@ -98,9 +99,10 @@ private fun SelectionLabel() {
 private fun SelectionAddressSlot(state: MapSelectionState) {
     when (state) {
         is MapSelectionState.ResolvingAddress -> SelectionLoadingIndicator()
-        is MapSelectionState.AddressResolved  -> AddressText(state.location)
-        is MapSelectionState.WeatherLoaded    -> AddressText(state.location)
-        else                                  -> Unit
+        is MapSelectionState.AddressResolved -> AddressText(state.location)
+        is MapSelectionState.WeatherLoaded -> AddressText(state.data.location)
+        is MapSelectionState.Confirming -> AddressText(state.data.location)
+        else -> Unit
     }
 }
 
@@ -110,13 +112,18 @@ private fun SelectionWeatherSlot(state: MapSelectionState) {
     SelectionDivider()
     when (state) {
         is MapSelectionState.AddressResolved -> SelectionLoadingIndicator()
-        is MapSelectionState.WeatherLoaded   -> Text(
-            text = UnitConverter.formatTemp(state.weather.temperature, state.tempUnit).display(),
-            style = AppTypography.medium14,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        else -> {}
+        is MapSelectionState.WeatherLoaded -> WeatherTempText(state.data)
+        is MapSelectionState.Confirming -> WeatherTempText(state.data)
     }
+}
+
+@Composable
+private fun WeatherTempText(data: MapLocationData) {
+    Text(
+        text = UnitConverter.formatTemp(data.weather.temperature, data.tempUnit).display(),
+        style = AppTypography.medium14,
+        color = MaterialTheme.colorScheme.onSurface
+    )
 }
 
 @Composable
@@ -153,19 +160,19 @@ private fun WeatherLoadedPreview() {
     SkyPulseTheme {
         MapSelectionCard(
             state = MapSelectionState.WeatherLoaded(
-                location = SavedLocation(30.0444, 31.2357, LocationProvider.MAP, "Cairo, Egypt"),
-                weather = WeatherModel(
-                    temperature = 305.0, feelsLikeTemperature = 307.0,
-                    minimumTemperature = 300.0, maximumTemperature = 308.0,
-                    weatherDescription = "Clear Sky", weatherIconCode = "01d",
-                    windSpeed = 3.0, windDirectionDegrees = 90,
-                    humidityPercentage = 30, visibilityInMeters = 10000,
-                    atmosphericPressure = 1010, cityName = "Cairo",
-                    countryCode = "EG",
-                    longitude = 30.1,
-                    latitude = 40.5
-                ),
-                tempUnit = TempUnit.CELSIUS
+                data = MapLocationData(
+                    location = SavedLocation(30.0444, 31.2357, LocationProvider.MAP, "Cairo, Egypt"),
+                    weather = WeatherModel(
+                        temperature = 305.0, feelsLikeTemperature = 307.0,
+                        minimumTemperature = 300.0, maximumTemperature = 308.0,
+                        weatherDescription = "Clear Sky", weatherIconCode = "01d",
+                        windSpeed = 3.0, windDirectionDegrees = 90,
+                        humidityPercentage = 30, visibilityInMeters = 10000,
+                        atmosphericPressure = 1010, cityName = "Cairo",
+                        countryCode = "EG", longitude = 30.1, latitude = 40.5
+                    ),
+                    tempUnit = TempUnit.CELSIUS
+                )
             ),
             modifier = Modifier.padding(16.dp)
         )

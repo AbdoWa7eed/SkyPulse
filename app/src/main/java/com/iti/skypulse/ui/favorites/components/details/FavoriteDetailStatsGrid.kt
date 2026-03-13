@@ -25,18 +25,40 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
+import com.iti.skypulse.core.utils.UnitConverter
 import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.theme.AppTypography
+import com.iti.skypulse.ui.theme.AppUnits
 
 @Composable
-fun FavoriteDetailStatsGrid(weather: WeatherModel) {
-    // TODO : HANDLING THE UNIT CONVERSION
+fun FavoriteDetailStatsGrid(
+    weather: WeatherModel,
+    units: AppUnits
+) {
     val stats = listOf(
-        Triple(stringResource(R.string.wind), "${weather.windSpeed} m/s", Icons.Rounded.Air),
-        Triple(stringResource(R.string.humidity), "${weather.humidityPercentage}%", Icons.Rounded.WaterDrop),
-        Triple(stringResource(R.string.visibility), "${"%.1f".format(weather.visibilityInMeters / 1000.0)} km", Icons.Rounded.Visibility),
-        Triple(stringResource(R.string.pressure), "${weather.atmosphericPressure} hPa", Icons.Rounded.Speed),
+        Triple(
+            stringResource(R.string.wind),
+            UnitConverter
+                .formatWind(weather.windSpeed, units.windUnit).display(),
+            Icons.Rounded.Air
+        ),
+        Triple(
+            stringResource(R.string.humidity),
+            stringResource(R.string.humidity_value, weather.humidityPercentage),
+            Icons.Rounded.WaterDrop
+        ),
+        Triple(
+            stringResource(R.string.visibility),
+            stringResource(R.string.visibility_value, weather.visibilityInMeters / 1000),
+            Icons.Rounded.Visibility
+        ),
+        Triple(
+            stringResource(R.string.pressure),
+            UnitConverter
+                .formatPressure(weather.atmosphericPressure, units.pressureUnit).display(),
+            Icons.Rounded.Speed
+        ),
     )
 
     LazyVerticalGrid(

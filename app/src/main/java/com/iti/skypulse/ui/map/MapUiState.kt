@@ -8,16 +8,18 @@ import com.iti.skypulse.data.model.WeatherModel
 
 
 
+data class MapLocationData(
+    val location: SavedLocation,
+    val weather: WeatherModel,
+    val tempUnit: TempUnit
+)
+
 sealed class MapSelectionState {
     data object Idle : MapSelectionState()
     data object ResolvingAddress : MapSelectionState()
     data class AddressResolved(val location: SavedLocation) : MapSelectionState()
-    data class WeatherLoaded(
-        val location: SavedLocation,
-        val weather: WeatherModel,
-        val tempUnit: TempUnit
-    ) : MapSelectionState()
-    data object Confirming : MapSelectionState()
+    data class WeatherLoaded(val data: MapLocationData) : MapSelectionState()
+    data class Confirming(val data: MapLocationData) : MapSelectionState()
 }
 
 sealed class MapEvent {

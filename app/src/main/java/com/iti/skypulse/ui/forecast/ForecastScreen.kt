@@ -28,6 +28,7 @@ import com.iti.skypulse.ui.components.ErrorScreen
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.forecast.components.DayForecastCard
 import com.iti.skypulse.ui.forecast.components.ForecastShimmer
+import com.iti.skypulse.ui.theme.LocalAppUnits
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
 
@@ -36,7 +37,7 @@ fun ForecastScreen(
     viewModel: ForecastViewModel = viewModel(factory = ForecastViewModelFactory())
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val unitTemp by viewModel.tempUnit.collectAsState()
+    val unitTemp = LocalAppUnits.current.tempUnit
 
     var expandedIndex by remember { mutableIntStateOf(0) }
 

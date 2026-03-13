@@ -6,6 +6,6 @@ import com.iti.skypulse.ui.favorites.FavoriteLocationsViewModel
 class FavoriteLocationsViewModelFactory : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return FavoriteLocationsViewModel(ServiceLocator.settingsRepository, ServiceLocator.weatherRepository) as T
+        return FavoriteLocationsViewModel( ServiceLocator.weatherRepository) as T
     }
 }

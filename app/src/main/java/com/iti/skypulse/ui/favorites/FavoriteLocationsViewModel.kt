@@ -16,15 +16,11 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class FavoriteLocationsViewModel(
-    settingsRepository: SettingsRepository,
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<FavoriteLocationsState>(FavoriteLocationsState.Loading)
     val state: StateFlow<FavoriteLocationsState> = _state.asStateFlow()
-
-    val tempUnit = settingsRepository.tempUnit
-        .toStateFlow(viewModelScope, TempUnit.CELSIUS)
 
     private val _events = MutableSharedFlow<FavoriteLocationsEvent>()
     val events = _events.asSharedFlow()

@@ -23,6 +23,7 @@ import com.iti.skypulse.ui.favorites.components.details.FavoriteDetailBottomShee
 import com.iti.skypulse.ui.favorites.components.FavoriteLocationsList
 import com.iti.skypulse.ui.favorites.components.FavoriteLocationsShimmer
 import com.iti.skypulse.ui.favorites.components.rememberFavoriteSnackbarState
+import com.iti.skypulse.ui.theme.LocalAppUnits
 
 @Composable
 fun FavoriteLocationsScreen(
@@ -30,7 +31,7 @@ fun FavoriteLocationsScreen(
     viewModel: FavoriteLocationsViewModel = viewModel(factory = FavoriteLocationsViewModelFactory())
 ) {
     val state by viewModel.state.collectAsState()
-    val tempUnit by viewModel.tempUnit.collectAsState()
+    val units = LocalAppUnits.current
     val selectedItem by viewModel.selectedItem.collectAsState()
 
     val snackbarHostState = rememberFavoriteSnackbarState(
@@ -42,7 +43,7 @@ fun FavoriteLocationsScreen(
 
         FavoriteLocationsContent(
             state = state,
-            tempUnit = tempUnit,
+            tempUnit = units.tempUnit,
             onRemove = viewModel::removeFavoriteItem,
             onClickItem = viewModel::onItemClick,
             modifier = Modifier
@@ -68,7 +69,7 @@ fun FavoriteLocationsScreen(
     selectedItem?.let { item ->
         FavoriteDetailBottomSheet(
             item = item,
-            tempUnit = tempUnit,
+            units = units,
             onDismiss = viewModel::onBottomSheetDismiss
         )
     }

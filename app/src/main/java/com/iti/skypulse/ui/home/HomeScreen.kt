@@ -29,6 +29,7 @@ import com.iti.skypulse.ui.home.components.CurrentWeatherCard
 import com.iti.skypulse.ui.home.components.HomeShimmer
 import com.iti.skypulse.ui.home.components.HourlyForecast
 import com.iti.skypulse.ui.home.components.WeatherDetails
+import com.iti.skypulse.ui.theme.LocalAppUnits
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 @Composable
 fun HomeScreen(
@@ -69,21 +70,18 @@ fun HomeScreen(
                 }
 
                 is HomeUiState.Success -> {
-                    val tempUnit by viewModel.tempUnit.collectAsState()
-                    val pressureUnit by viewModel.pressureUnit.collectAsState()
-                    val windUnit by viewModel.windUnit.collectAsState()
-
+                    val units = LocalAppUnits.current
                     AnimatedVisibility(visible = animationStep >= 1, enter = enterAnimation) {
-                        CurrentWeatherCard(weather = state.weather, tempUnit = tempUnit)
+                        CurrentWeatherCard(weather = state.weather, tempUnit = units.tempUnit)
                     }
                     AnimatedVisibility(visible = animationStep >= 2, enter = enterAnimation) {
-                        HourlyForecast(items = state.hourlyForecasts, tempUnit = tempUnit)
+                        HourlyForecast(items = state.hourlyForecasts, tempUnit = units.tempUnit)
                     }
                     AnimatedVisibility(visible = animationStep >= 3, enter = enterAnimation) {
                         WeatherDetails(
                             weather = state.weather,
-                            pressureUnit = pressureUnit,
-                            windUnit = windUnit
+                            pressureUnit = units.pressureUnit,
+                            windUnit = units.windUnit
                         )
                     }
                 }

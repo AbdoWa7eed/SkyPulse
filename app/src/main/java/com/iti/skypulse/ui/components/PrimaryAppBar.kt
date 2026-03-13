@@ -40,8 +40,7 @@ fun PrimaryAppBar(
     onBack: (() -> Unit)? = null
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val backIcon = if (isRtl) Icons.AutoMirrored.Rounded.ArrowForward
-    else      Icons.AutoMirrored.Rounded.ArrowBack
+    val backIcon = Icons.AutoMirrored.Rounded.ArrowBack
 
     Row(
         modifier = modifier

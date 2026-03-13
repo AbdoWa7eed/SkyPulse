@@ -9,7 +9,6 @@ class HomeViewModelFactory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         return HomeViewModel(
             weatherRepository = ServiceLocator.weatherRepository,
-            settingsRepository = ServiceLocator.settingsRepository,
             locationHelper = ServiceLocator.locationHelper
         ) as T
     }

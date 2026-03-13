@@ -16,24 +16,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
-import com.iti.skypulse.data.model.SavedLocation
 import com.iti.skypulse.ui.components.ElevatedPrimaryButton
 import com.iti.skypulse.ui.map.MapSelectionState
 
 @Composable
 fun MapBottomPanel(
     selectionState: MapSelectionState,
-    confirmedLocation: SavedLocation?,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-
     val isConfirming = selectionState is MapSelectionState.Confirming
+    val hasConfirmedLocation = selectionState is MapSelectionState.WeatherLoaded
+            || selectionState is MapSelectionState.AddressResolved
+            || selectionState is MapSelectionState.Confirming
 
-    val enterAnimation =
-        fadeIn(tween(400)) +
-                slideInVertically(tween(400)) { it / 4 }
+    val enterAnimation = fadeIn(tween(400)) + slideInVertically(tween(400)) { it / 4 }
 
     Column(
         modifier = modifier
@@ -42,7 +39,7 @@ fun MapBottomPanel(
             .padding(vertical = 16.dp)
     ) {
         AnimatedVisibility(
-            modifier= Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 24.dp),
             visible = selectionState !is MapSelectionState.Idle,
             enter = enterAnimation
         ) {
@@ -53,18 +50,18 @@ fun MapBottomPanel(
         }
 
         AnimatedVisibility(
-            visible = confirmedLocation != null,
+            visible = hasConfirmedLocation,
             enter = enterAnimation
         ) {
             ElevatedPrimaryButton(
                 text = stringResource(R.string.confirm_location),
-                onClick = onConfirm,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = confirmedLocation != null && !isConfirming,
+                onClick = { if (!isConfirming) onConfirm() },
+                modifier = Modifier
+                    .fillMaxWidth(),
                 content = if (isConfirming) {
                     {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
+                            modifier = Modifier.size(28.dp),
                             strokeWidth = 2.dp,
                             color = MaterialTheme.colorScheme.onPrimary
                         )

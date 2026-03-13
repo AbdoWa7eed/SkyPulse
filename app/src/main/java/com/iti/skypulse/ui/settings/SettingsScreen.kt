@@ -13,15 +13,14 @@ import com.iti.skypulse.R
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.settings.components.*
+import com.iti.skypulse.ui.theme.LocalAppUnits
 
 @Composable
 fun SettingsScreen(
     onUpdateLocation: () -> Unit,
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory())
 ) {
-    val tempUnit by viewModel.tempUnit.collectAsState()
-    val windUnit by viewModel.windUnit.collectAsState()
-    val pressureUnit by viewModel.pressureUnit.collectAsState()
+    val units = LocalAppUnits.current
     val language by viewModel.language.collectAsState()
     val savedLocation by viewModel.savedLocation.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
@@ -57,9 +56,9 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             MeasurementUnitsSection(
-                tempUnit = tempUnit,
-                windUnit = windUnit,
-                pressureUnit = pressureUnit,
+                tempUnit = units.tempUnit,
+                windUnit = units.windUnit,
+                pressureUnit = units.pressureUnit,
                 onTempUnitChange = { viewModel.setTempUnit(it) },
                 onWindUnitChange = { viewModel.setWindUnit(it) },
                 onPressureUnitChange = { viewModel.setPressureUnit(it) }

@@ -23,12 +23,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.ui.favorites.FavoriteLocationItem
+import com.iti.skypulse.ui.theme.AppUnits
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteDetailBottomSheet(
     item: FavoriteLocationItem,
-    tempUnit: TempUnit,
+    units: AppUnits,
     onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -58,11 +59,11 @@ fun FavoriteDetailBottomSheet(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            FavoriteDetailHeader(item = item, tempUnit = tempUnit)
+            FavoriteDetailHeader(item = item, tempUnit = units.tempUnit)
             Spacer(modifier = Modifier.height(20.dp))
-            FavoriteDetailStatsGrid(weather = item.weather)
+            FavoriteDetailStatsGrid(weather = item.weather, units = units)
             Spacer(modifier = Modifier.height(20.dp))
-            FavoriteDetailForecast(forecast = item.forecast, tempUnit = tempUnit)
+            FavoriteDetailForecast(forecast = item.forecast, tempUnit = units.tempUnit)
         }
     }
 }

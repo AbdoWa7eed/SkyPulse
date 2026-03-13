@@ -21,19 +21,11 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val weatherRepository: WeatherRepository,
-    private val settingsRepository: SettingsRepository,
     private val locationHelper: LocationHelper
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState
-
-    val tempUnit: StateFlow<TempUnit> = settingsRepository.tempUnit
-        .toStateFlow(viewModelScope, TempUnit.CELSIUS)
-    val windUnit: StateFlow<WindUnit> = settingsRepository.windUnit
-        .toStateFlow(viewModelScope, WindUnit.METERS_PER_SECOND)
-    val pressureUnit: StateFlow<PressureUnit> = settingsRepository.pressureUnit
-        .toStateFlow(viewModelScope, PressureUnit.HPA)
 
     private val currentLocation = locationHelper.currentLocation
 

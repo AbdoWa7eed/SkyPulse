@@ -8,7 +8,6 @@ import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.model.GeoPlace
 import com.iti.skypulse.data.model.LocationProvider
 import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.data.model.WeatherModel
 import com.iti.skypulse.data.repository.WeatherRepository
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import com.iti.skypulse.ui.navigation.MapSource
@@ -60,14 +59,13 @@ class MapViewModel(
                 _events.emit(MapEvent.MoveCameraTo(position, zoom))
                 saved?.let {
                     _selectionState.value = MapSelectionState.AddressResolved(it)
-                    getCurrentWeather(it)
-
+                    loadWeatherForLocation(it)
                 }
             }
-
         }
         observeSearchQuery()
     }
+
     private fun observeSearchQuery() {
         _searchQuery
             .debounce(400)
@@ -98,7 +96,6 @@ class MapViewModel(
     fun onMapClick(lat: Double, lng: Double) {
         viewModelScope.launch {
             _selectionState.value = MapSelectionState.ResolvingAddress
-
             val address = locationHelper.getAddressFromLocation(lat, lng)
             val location = SavedLocation(
                 lat = lat,
@@ -106,63 +103,50 @@ class MapViewModel(
                 provider = LocationProvider.MAP,
                 address = address
             )
-
             _selectionState.value = MapSelectionState.AddressResolved(location)
-
-            getCurrentWeather(location)
-
+            loadWeatherForLocation(location)
         }
     }
 
-    suspend fun getCurrentWeather(location: SavedLocation) {
+    private suspend fun loadWeatherForLocation(location: SavedLocation) {
         weatherRepository.getCurrentWeather(location.lat, location.lng)
             .onSuccess { weather ->
-                lastKnownWeather = weather
                 _selectionState.value = MapSelectionState.WeatherLoaded(
-                    location = location,
-                    weather = weather,
-                    tempUnit = tempUnit
+                    MapLocationData(location, weather, tempUnit)
                 )
             }
     }
 
     fun onConfirm() {
-        val location = confirmedLocation() ?: return
+        val data = confirmedData() ?: return
         if (_selectionState.value is MapSelectionState.Confirming) return
+        _selectionState.value = MapSelectionState.Confirming(data)
         viewModelScope.launch {
-            _selectionState.value = MapSelectionState.Confirming
             when (source) {
-                MapSource.ONBOARDING, MapSource.UPDATE_LOCATION -> {
-                    settingsRepository.saveLocation(location)
-                    _events.emit(MapEvent.NavigateToMain)
-                }
-                MapSource.ADD_FAVORITE -> {
-                    weatherRepository.addFavorite(location.lat, location.lng)
-                        .onSuccess { _events.emit(MapEvent.NavigateBack) }
-                        .onFailure {
-                            _selectionState.value = MapSelectionState.WeatherLoaded(
-                                location = location,
-                                weather = (getCurrentSelectionWeather() ?: return@onFailure),
-                                tempUnit = tempUnit
-                            )
-                            _events.emit(MapEvent.ShowError(it))
-                        }
-                }
+                MapSource.ONBOARDING, MapSource.UPDATE_LOCATION -> saveLocation(data.location)
+                MapSource.ADD_FAVORITE -> addFavorite(data)
             }
         }
     }
 
-    private fun getCurrentSelectionWeather(): WeatherModel? =
-        (_selectionState.value as? MapSelectionState.WeatherLoaded)?.weather
-            ?: (_selectionState.value as? MapSelectionState.Confirming).let {
-                lastKnownWeather
-            }
-    private var lastKnownWeather: WeatherModel? = null
+    private suspend fun saveLocation(location: SavedLocation) {
+        settingsRepository.saveLocation(location)
+        _events.emit(MapEvent.NavigateToMain)
+    }
 
-    private fun confirmedLocation(): SavedLocation? =
+    private suspend fun addFavorite(data: MapLocationData) {
+        weatherRepository.addFavorite(data.location.lat, data.location.lng)
+            .onSuccess { _events.emit(MapEvent.NavigateBack) }
+            .onFailure {
+                _selectionState.value = MapSelectionState.WeatherLoaded(data)
+                _events.emit(MapEvent.ShowError(it))
+            }
+    }
+
+    private fun confirmedData(): MapLocationData? =
         when (val s = _selectionState.value) {
-            is MapSelectionState.AddressResolved -> s.location
-            is MapSelectionState.WeatherLoaded   -> s.location
-            else                                 -> null
+            is MapSelectionState.WeatherLoaded -> s.data
+            is MapSelectionState.Confirming -> s.data
+            else -> null
         }
 }

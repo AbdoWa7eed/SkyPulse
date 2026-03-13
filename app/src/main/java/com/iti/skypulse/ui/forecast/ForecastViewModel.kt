@@ -22,9 +22,6 @@ class ForecastViewModel(
     private val _uiState = MutableStateFlow<ForecastUiState>(ForecastUiState.Loading)
     val uiState: StateFlow<ForecastUiState> = _uiState
 
-    val tempUnit: StateFlow<TempUnit> = settingsRepository.tempUnit
-            .toStateFlow(viewModelScope, TempUnit.CELSIUS)
-
     init {
         loadForecast()
     }

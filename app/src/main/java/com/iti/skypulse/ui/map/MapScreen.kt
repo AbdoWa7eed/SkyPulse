@@ -36,6 +36,7 @@ fun MapScreen(
     val cameraPositionState = rememberCameraPositionState()
     var mapLoaded by remember { mutableStateOf(false) }
     var screenLaunchedState by remember { mutableStateOf(false) }
+
     val uiSettings = remember {
         MapUiSettings(
             zoomControlsEnabled = false,
@@ -73,16 +74,14 @@ fun MapScreen(
         screenLaunchedState = true
     }
 
-    val confirmedLocation: SavedLocation? = when (val s = selectionState) {
+    val markerLocation: SavedLocation? = when (val s = selectionState) {
         is MapSelectionState.AddressResolved -> s.location
-        is MapSelectionState.WeatherLoaded -> s.location
+        is MapSelectionState.WeatherLoaded -> s.data.location
+        is MapSelectionState.Confirming -> s.data.location
         else -> null
     }
 
-
-
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,17 +99,14 @@ fun MapScreen(
                     GoogleMap(
                         modifier = Modifier.fillMaxSize(),
                         cameraPositionState = cameraPositionState,
-                        uiSettings =  uiSettings,
+                        uiSettings = uiSettings,
                         properties = MapProperties(mapType = MapType.NORMAL),
                         onMapLoaded = { mapLoaded = true },
                         onMapClick = { latLng ->
-                            viewModel.onMapClick(
-                                latLng.latitude,
-                                latLng.longitude
-                            )
+                            viewModel.onMapClick(latLng.latitude, latLng.longitude)
                         }
                     ) {
-                        confirmedLocation?.let { loc ->
+                        markerLocation?.let { loc ->
                             Marker(
                                 state = MarkerState(position = LatLng(loc.lat, loc.lng)),
                                 title = loc.address
@@ -149,14 +145,12 @@ fun MapScreen(
                         ) {
                             MapBottomPanel(
                                 selectionState = selectionState,
-                                confirmedLocation = confirmedLocation,
                                 onConfirm = { viewModel.onConfirm() }
                             )
                         }
                     }
                 }
             }
-
         }
 
         SnackbarHost(
@@ -166,7 +160,4 @@ fun MapScreen(
                 .padding(horizontal = 8.dp, vertical = 16.dp)
         )
     }
-
-
-
 }
