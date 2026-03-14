@@ -35,25 +35,10 @@ class FavoriteLocationsViewModel(
     private fun loadFavorites() {
         viewModelScope.launch {
             _state.value = FavoriteLocationsState.Loading
-            syncFavorites()
             observeFavorites()
         }
     }
 
-    private suspend fun syncFavorites() {
-        weatherRepository.getFavorites()
-            .take(1)
-            .collect { favorites ->
-                favorites.forEach { fav ->
-                    viewModelScope.launch {
-                        weatherRepository.refreshFavorite(
-                            fav.weather.latitude,
-                            fav.weather.longitude
-                        )
-                    }
-                }
-            }
-    }
 
     private suspend fun observeFavorites() {
         weatherRepository.getFavorites().collect { favorites ->
