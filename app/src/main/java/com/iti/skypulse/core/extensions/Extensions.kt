@@ -40,3 +40,12 @@ fun String.toFormattedDate(): String {
         SimpleDateFormat("MMM dd", Locale.getDefault()).format(date ?: Date())
     } catch (_: Exception) { this }
 }
+
+fun Long.toFormattedDateTime(): String =
+    SimpleDateFormat("EEE, MMM d • hh:mm a", Locale.getDefault()).format(Date(this))
+
+fun Long.toFormattedDate(): String =
+    SimpleDateFormat("EEE, MMM d yyyy", Locale.getDefault()).format(Date(this))
+
+fun Long.toFormattedTime(): String =
+    SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date(this))

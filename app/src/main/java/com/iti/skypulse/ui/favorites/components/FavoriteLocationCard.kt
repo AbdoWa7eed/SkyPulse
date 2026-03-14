@@ -32,11 +32,10 @@ import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.UnitConverter
 import com.iti.skypulse.ui.components.PrimaryCard
+import com.iti.skypulse.ui.components.SwipeToDeleteBox
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.favorites.FavoriteLocationItem
 import com.iti.skypulse.ui.theme.AppTypography
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteLocationCard(
     item: FavoriteLocationItem,
@@ -45,19 +44,9 @@ fun FavoriteLocationCard(
     onClick: (FavoriteLocationItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val dismissState = rememberSwipeToDismissBoxState(
-        positionalThreshold = { totalDistance -> totalDistance * 0.6f }
-    )
-
-    val swipeProgress = if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart)
-        dismissState.progress else 0f
-
-    SwipeToDismissBox(
-        state = dismissState,
-        modifier = modifier,
-        enableDismissFromStartToEnd = false,
-        onDismiss = { onDismiss() },
-        backgroundContent = { DeleteBackground(progress = swipeProgress) }
+    SwipeToDeleteBox(
+        onDelete = onDismiss,
+        modifier = modifier
     ) {
         PrimaryCard(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -80,53 +69,25 @@ fun FavoriteLocationCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = item.weather.weatherDescription.replaceFirstChar { c -> c.uppercaseChar() },
+                        text = item.weather.weatherDescription.replaceFirstChar { it.uppercaseChar() },
                         style = AppTypography.regular14,
                         color = MaterialTheme.colorScheme.onSecondary,
                         maxLines = 1
                     )
                 }
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(start = 12.dp)
                 ) {
-                    WeatherIcon(
-                        iconCode = item.weather.weatherIconCode,
-                        modifier = Modifier.size(44.dp)
-                    )
+                    WeatherIcon(iconCode = item.weather.weatherIconCode, modifier = Modifier.size(44.dp))
                     Text(
-                        text = UnitConverter.formatTemp(
-                            item.weather.temperature,
-                            tempUnit
-                        ).display(),
+                        text = UnitConverter.formatTemp(item.weather.temperature, tempUnit).display(),
                         style = AppTypography.regular16,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-
             }
         }
-    }
-}
-
-@Composable
-private fun DeleteBackground(progress: Float) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(18.dp))
-            .background(MaterialTheme.colorScheme.error.copy(alpha = progress * 0.2f)),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.Delete,
-            contentDescription = stringResource(R.string.delete),
-            tint = Color.White.copy(alpha = progress),
-            modifier = Modifier
-                .padding(end = 24.dp)
-                .size(22.dp)
-        )
     }
 }

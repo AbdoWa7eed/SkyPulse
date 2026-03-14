@@ -2,14 +2,13 @@ package com.iti.skypulse.ui.favorites.components.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Air
 import androidx.compose.material.icons.rounded.Speed
@@ -61,29 +60,37 @@ fun FavoriteDetailStatsGrid(
         ),
     )
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.heightIn(max = 300.dp)
-    ) {
-        items(stats) { (label, value, icon) ->
-            FavoriteStatCard(
-                label = label,
-                value = value,
-                icon = icon
-            )
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        stats.chunked(2).forEach { row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                row.forEach { (label, value, icon) ->
+                    FavoriteStatCard(
+                        label = label,
+                        value = value,
+                        icon = icon,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun FavoriteStatCard(
+    modifier: Modifier = Modifier,
     label: String,
     value: String,
     icon: ImageVector
 ) {
-    PrimaryCard {
+    PrimaryCard(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -105,7 +112,7 @@ private fun FavoriteStatCard(
                 )
                 Text(
                     text = value,
-                    style = AppTypography.semiBold18,
+                    style = AppTypography.medium16,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
