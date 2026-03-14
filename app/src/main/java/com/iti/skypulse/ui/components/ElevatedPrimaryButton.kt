@@ -1,5 +1,6 @@
 package com.iti.skypulse.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ fun ElevatedPrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    padding: PaddingValues = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
     enabled: Boolean = true,
     content: @Composable (() -> Unit)? = null,
 ) {
@@ -27,7 +29,7 @@ fun ElevatedPrimaryButton(
         modifier = modifier
             .fillMaxWidth()
             .height(78.dp)
-            .padding(horizontal = 24.dp, vertical = 12.dp),
+            .padding(padding),
         shape = RoundedCornerShape(24),
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = MaterialTheme.colorScheme.primary,

@@ -119,5 +119,26 @@
     <string name="delete">حذف</string>
     <string name="location_removed">تم حذف الموقع</string>
     <string name="undo">تراجع</string>
-    <string name="five_day_forecast">5-Days Forecast</string>
+    <string name="five_day_forecast">التوقعات القادمة</string>
+    <string name="add_alert">إضافة تنبيه</string>
+    <string name="alert_condition">حالة الطقس</string>
+    <string name="alert_notification_type">نوع التنبيه</string>
+    <string name="alert_rain">مطر</string>
+    <string name="alert_snow">ثلوج</string>
+    <string name="alert_fog">ضباب</string>
+    <string name="alert_high_temp">درجة حرارة مرتفعة</string>
+    <string name="alert_low_temp">درجة حرارة منخفضة</string>
+    <string name="alert_high_wind">رياح قوية</string>
+    <string name="alert_type_notification">إشعار</string>
+    <string name="alert_type_alarm">صوت إنذار</string>
+    <string name="no_alerts_title">لا توجد تنبيهات بعد</string>
+    <string name="no_alerts_subtitle">اضغط على + لإضافة تنبيه لحالة الطقس</string>
+    <string name="alert_date">التاريخ</string>
+    <string name="alert_time">الوقت</string>
+    <string name="pick_date">اختر تاريخًا</string>
+    <string name="confirm">تأكيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="pick_time">اختر وقتًا</string>
+    <string name="error_past_time">يجب أن يكون التاريخ والوقت المحددان في المستقبل.</string>
+
 </resources>
