@@ -6,12 +6,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import android.content.Context
 import com.iti.skypulse.data.local.room.converter.ForecastTypeConverter
+import com.iti.skypulse.data.local.room.dao.WeatherAlertDao
 import com.iti.skypulse.data.local.room.dao.WeatherDao
 import com.iti.skypulse.data.local.room.entity.ForecastEntity
+import com.iti.skypulse.data.local.room.entity.WeatherAlertEntity
 import com.iti.skypulse.data.local.room.entity.WeatherEntity
 
 @Database(
-    entities = [WeatherEntity::class, ForecastEntity::class],
+    entities = [WeatherEntity::class, ForecastEntity::class, WeatherAlertEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -19,6 +21,8 @@ import com.iti.skypulse.data.local.room.entity.WeatherEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun weatherDao(): WeatherDao
+
+    abstract fun weatherAlertDao() : WeatherAlertDao
 
     companion object {
         private const val DATABASE_NAME = "skypulse_db"
