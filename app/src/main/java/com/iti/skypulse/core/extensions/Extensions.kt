@@ -1,5 +1,7 @@
 package com.iti.skypulse.core.extensions
 
+import android.content.Context
+import android.content.res.Configuration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,8 +46,11 @@ fun String.toFormattedDate(): String {
 fun Long.toFormattedDateTime(): String =
     SimpleDateFormat("EEE, MMM d • hh:mm a", Locale.getDefault()).format(Date(this))
 
-fun Long.toFormattedDate(): String =
-    SimpleDateFormat("EEE, MMM d yyyy", Locale.getDefault()).format(Date(this))
-
-fun Long.toFormattedTime(): String =
-    SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date(this))
+fun Context.withLocale(languageCode: String): Context {
+    val locale = Locale(languageCode)
+    Locale.setDefault(locale)
+    val config = Configuration(resources.configuration).apply {
+        setLocale(locale)
+    }
+    return createConfigurationContext(config)
+}

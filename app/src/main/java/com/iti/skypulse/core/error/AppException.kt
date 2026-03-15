@@ -9,6 +9,9 @@ sealed class AppException : Exception() {
     class ApiException(val code: Int, override val message: String) : AppException()
     class LocationPermissionException : AppException()
     class LocationDisabledException : AppException()
+
+    class AlertExpiredException : AppException()
+
 }
 
 @StringRes
@@ -18,6 +21,7 @@ fun Throwable?.toMessageRes(): Int {
         is AppException.NoCacheException    -> R.string.error_no_cache
         is AppException.LocationPermissionException -> R.string.permission_required_message
         is AppException.LocationDisabledException   -> R.string.location_disabled_message
+        is AppException.AlertExpiredException -> R.string.error_past_time
         else                                -> R.string.error_generic
     }
 }

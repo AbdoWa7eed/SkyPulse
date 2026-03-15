@@ -10,3 +10,23 @@ data class WeatherAlert(
     val isEnabled: Boolean,
     val scheduledTime: Long
 )
+
+fun WeatherAlertType.matches(
+    conditionCode: Int,
+    tempCelsius: Double,
+    windSpeedMs: Double
+): Boolean = when (this) {
+    WeatherAlertType.RAIN ->
+        conditionCode in 300..321 || conditionCode in 500..531
+    WeatherAlertType.SNOW ->
+        conditionCode in 600..622
+
+    WeatherAlertType.FOG ->
+        conditionCode in 700..781
+
+    WeatherAlertType.HIGH_TEMP ->
+        tempCelsius >= 40.0
+
+    WeatherAlertType.HIGH_WIND ->
+        windSpeedMs >= 10.0
+}

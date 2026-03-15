@@ -140,5 +140,24 @@
     <string name="cancel">إلغاء</string>
     <string name="pick_time">اختر وقتًا</string>
     <string name="error_past_time">يجب أن يكون التاريخ والوقت المحددان في المستقبل.</string>
+    <string name="alert_notification_title_rain">🌧️ تنبيه أمطار</string>
+    <string name="alert_notification_title_snow">❄️ تنبيه تساقط الثلوج</string>
+    <string name="alert_notification_title_fog">🌫️ تنبيه انخفاض الرؤية</string>
+    <string name="alert_notification_title_high_temp">🌡️ تنبيه حرارة مرتفعة</string>
+    <string name="alert_notification_title_high_wind">💨 تنبيه رياح قوية</string>
+
+    <string name="alert_notification_message_rain">من المتوقع هطول أمطار في الوقت الذي حددته. يُفضل حمل مظلة.</string>
+    <string name="alert_notification_message_snow">من المتوقع تساقط الثلوج في الوقت الذي حددته. قد تكون الطرق زلقة.</string>
+    <string name="alert_notification_message_fog">من المتوقع انخفاض في مستوى الرؤية. يُرجى القيادة بحذر إذا كنت ستخرج.</string>
+    <string name="alert_notification_message_high_temp">من المتوقع أن تتجاوز درجات الحرارة 40°م. احرص على شرب الماء وتجنب التعرض المباشر للشمس.</string>
+    <string name="alert_notification_message_high_wind">من المتوقع رياح قوية في الوقت الذي حددته. يُرجى تثبيت الأشياء القابلة للتطاير.</string>
+
+    <string name="alert_notification_title_clear">✅ لا توجد تحذيرات</string>
+    <string name="alert_notification_message_clear">لا توجد مخاطر جوية في الوقت الذي حددته. نتمنى لك يومًا سعيدًا!</string>
+
+    <string name="alert_notification_error_title">⚠️ فشل التحقق من الطقس</string>
+    <string name="alert_notification_error_message">تعذر جلب بيانات الطقس. يرجى التحقق يدويًا.</string>
+
+    <string name="dismiss">إغلاق</string>
 
 </resources>

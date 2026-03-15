@@ -7,6 +7,10 @@ data class ConvertedValue(
     val value: String,
     @param:StringRes val unitRes: Int
 ) {
+
+    val numericValue: Double
+        get() = value.toDoubleOrNull() ?: 0.0
+
     @Composable
     fun display(): String {
         return "$value ${stringResource(unitRes)}"
