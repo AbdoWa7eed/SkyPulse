@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
-import com.iti.skypulse.data.model.GeoPlace
+import com.iti.skypulse.data.model.location.GeoPlace
 import com.iti.skypulse.ui.theme.AppTypography
 
 @Composable

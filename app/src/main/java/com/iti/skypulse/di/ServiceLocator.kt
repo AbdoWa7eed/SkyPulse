@@ -12,7 +12,7 @@ import com.iti.skypulse.data.local.room.AppDatabase
 import com.iti.skypulse.data.remote.api.ApiClient
 import com.iti.skypulse.data.remote.api.WeatherApiService
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSourceImpl
-import com.iti.skypulse.data.repository.WeatherRepositoryImpl
+import com.iti.skypulse.data.repository.weather.WeatherRepositoryImpl
 import com.iti.skypulse.data.repository.settings.SettingsRepositoryImpl
 
 object ServiceLocator {

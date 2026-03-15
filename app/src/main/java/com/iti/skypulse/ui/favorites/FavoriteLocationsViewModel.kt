@@ -2,17 +2,13 @@ package com.iti.skypulse.ui.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.skypulse.core.extensions.toStateFlow
-import com.iti.skypulse.core.utils.TempUnit
-import com.iti.skypulse.data.model.FavoriteWeather
-import com.iti.skypulse.data.repository.WeatherRepository
-import com.iti.skypulse.data.repository.settings.SettingsRepository
+import com.iti.skypulse.data.model.weather.FavoriteWeather
+import com.iti.skypulse.data.repository.weather.WeatherRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class FavoriteLocationsViewModel(

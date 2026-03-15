@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.weather.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography

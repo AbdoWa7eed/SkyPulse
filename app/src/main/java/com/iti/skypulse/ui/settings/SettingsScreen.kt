@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
-import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.data.model.location.LocationProvider
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.settings.components.*
 import com.iti.skypulse.ui.theme.LocalAppUnits

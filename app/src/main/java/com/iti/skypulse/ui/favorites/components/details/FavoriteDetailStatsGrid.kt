@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.UnitConverter
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.weather.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.AppUnits

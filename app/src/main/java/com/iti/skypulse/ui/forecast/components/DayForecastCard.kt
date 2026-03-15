@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.iti.skypulse.core.utils.ConvertedValue
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.UnitConverter
-import com.iti.skypulse.data.model.DailyForecastModel
-import com.iti.skypulse.data.model.HourlyForecastModel
+import com.iti.skypulse.data.model.weather.DailyForecastModel
+import com.iti.skypulse.data.model.weather.HourlyForecastModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography

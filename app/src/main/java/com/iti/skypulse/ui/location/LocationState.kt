@@ -1,6 +1,6 @@
 package com.iti.skypulse.ui.location
 
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.SavedLocation
 
 sealed class LocationState {
     data object NotSet : LocationState()

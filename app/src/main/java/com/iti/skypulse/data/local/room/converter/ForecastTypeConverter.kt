@@ -3,7 +3,7 @@ package com.iti.skypulse.data.local.room.converter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.iti.skypulse.data.model.DailyForecastModel
+import com.iti.skypulse.data.model.weather.DailyForecastModel
 
 class ForecastTypeConverter {
 

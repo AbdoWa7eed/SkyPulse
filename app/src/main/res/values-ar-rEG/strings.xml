@@ -21,7 +21,7 @@
     <string name="home">الرئيسية</string>
     <string name="forecast">التوقعات</string>
     <string name="favorite_locations">المفضلة</string>
-    <string name="alarms">التنبيهات</string>
+    <string name="alerts">التنبيهات</string>
     <string name="settings">الإعدادات</string>
 
     <string name="location_icon">أيقونة الموقع</string>

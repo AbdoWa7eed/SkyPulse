@@ -9,7 +9,7 @@ import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.local.location.LocationHelper
-import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.data.model.location.LocationProvider
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

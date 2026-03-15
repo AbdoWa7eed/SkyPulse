@@ -32,7 +32,7 @@ sealed class NavRoutes {
     data object FavoriteLocationsRoute : NavRoutes()
 
     @Serializable
-    data object AlarmsRoute : NavRoutes()
+    data object AlertsRoute : NavRoutes()
 
     @Serializable
     data object SettingsRoute : NavRoutes()

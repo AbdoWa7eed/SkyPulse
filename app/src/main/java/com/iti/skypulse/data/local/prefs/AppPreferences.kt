@@ -11,8 +11,8 @@ import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
-import com.iti.skypulse.data.model.LocationProvider
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.LocationProvider
+import com.iti.skypulse.data.model.location.SavedLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

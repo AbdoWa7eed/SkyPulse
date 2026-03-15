@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.data.local.location.LocationHelper
-import com.iti.skypulse.data.model.GeoPlace
-import com.iti.skypulse.data.model.LocationProvider
-import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.data.repository.WeatherRepository
+import com.iti.skypulse.data.model.location.GeoPlace
+import com.iti.skypulse.data.model.location.LocationProvider
+import com.iti.skypulse.data.model.location.SavedLocation
+import com.iti.skypulse.data.repository.weather.WeatherRepository
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import com.iti.skypulse.ui.navigation.MapSource
 import kotlinx.coroutines.Dispatchers

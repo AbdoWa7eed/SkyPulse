@@ -29,10 +29,10 @@ sealed class BottomNavigationItem(
         route = NavRoutes.FavoriteLocationsRoute
     )
 
-    data object Alarms : BottomNavigationItem(
-        title = R.string.alarms,
+    data object Alerts : BottomNavigationItem(
+        title = R.string.alerts,
         icon = R.drawable.ic_alarms,
-        route = NavRoutes.AlarmsRoute
+        route = NavRoutes.AlertsRoute
     )
 
     data object Settings : BottomNavigationItem(
@@ -46,7 +46,7 @@ sealed class BottomNavigationItem(
             Home,
             Forecast,
             SavedLocations,
-            Alarms,
+            Alerts,
             Settings
         )
     }

@@ -15,7 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.iti.skypulse.R
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.SavedLocation
 import com.iti.skypulse.ui.components.PrimaryAppBar
 import com.iti.skypulse.ui.map.components.MapBottomPanel
 import com.iti.skypulse.ui.map.components.MapSearchBar

@@ -1,12 +1,11 @@
 package com.iti.skypulse.ui.location
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.core.error.AppException
 import com.iti.skypulse.data.local.location.LocationHelper
-import com.iti.skypulse.data.model.LocationProvider
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.LocationProvider
+import com.iti.skypulse.data.model.location.SavedLocation
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

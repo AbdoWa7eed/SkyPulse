@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
-import com.iti.skypulse.data.model.LocationProvider
+import com.iti.skypulse.data.model.location.LocationProvider
 import com.iti.skypulse.ui.location.LocationState
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.SavedLocation
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 

@@ -7,8 +7,8 @@ import com.iti.skypulse.core.utils.ThemeMode
 import com.iti.skypulse.core.utils.WindUnit
 import com.iti.skypulse.data.local.datasource.WeatherLocalDataSource
 import com.iti.skypulse.data.local.prefs.AppPreferences
-import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.data.model.buildCacheKey
+import com.iti.skypulse.data.model.location.SavedLocation
+import com.iti.skypulse.data.model.weather.buildCacheKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 

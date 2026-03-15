@@ -16,8 +16,8 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.iti.skypulse.core.error.AppException
 import com.iti.skypulse.data.local.prefs.AppPreferences
-import com.iti.skypulse.data.model.LocationProvider
-import com.iti.skypulse.data.model.SavedLocation
+import com.iti.skypulse.data.model.location.LocationProvider
+import com.iti.skypulse.data.model.location.SavedLocation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

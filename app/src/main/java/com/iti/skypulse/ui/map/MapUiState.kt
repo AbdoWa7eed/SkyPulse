@@ -1,10 +1,9 @@
 package com.iti.skypulse.ui.map
 
 import com.google.android.gms.maps.model.LatLng
-import com.iti.skypulse.core.error.AppException
 import com.iti.skypulse.core.utils.TempUnit
-import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.location.SavedLocation
+import com.iti.skypulse.data.model.weather.WeatherModel
 
 
 

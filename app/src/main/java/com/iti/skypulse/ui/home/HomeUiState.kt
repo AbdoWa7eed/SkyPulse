@@ -1,8 +1,8 @@
 package com.iti.skypulse.ui.home
 
 import androidx.annotation.StringRes
-import com.iti.skypulse.data.model.HourlyForecastModel
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.weather.HourlyForecastModel
+import com.iti.skypulse.data.model.weather.WeatherModel
 
 sealed class HomeUiState {
     object Loading : HomeUiState()

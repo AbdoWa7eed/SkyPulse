@@ -1,7 +1,7 @@
 package com.iti.skypulse.ui.favorites
 
-import com.iti.skypulse.data.model.ForecastModel
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.weather.ForecastModel
+import com.iti.skypulse.data.model.weather.WeatherModel
 import java.util.UUID
 
 data class FavoriteLocationItem(

@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.skypulse.R
 import com.iti.skypulse.core.error.toMessageRes
-import com.iti.skypulse.core.extensions.toStateFlow
-import com.iti.skypulse.core.utils.TempUnit
-import com.iti.skypulse.data.model.ForecastModel
-import com.iti.skypulse.data.repository.WeatherRepository
+import com.iti.skypulse.data.model.weather.ForecastModel
+import com.iti.skypulse.data.repository.weather.WeatherRepository
 import com.iti.skypulse.data.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

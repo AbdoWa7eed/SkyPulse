@@ -21,7 +21,7 @@ import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.PressureUnit
 import com.iti.skypulse.core.utils.UnitConverter
 import com.iti.skypulse.core.utils.WindUnit
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.weather.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme

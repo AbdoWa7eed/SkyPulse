@@ -2,7 +2,7 @@ package com.iti.skypulse.data.local.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.iti.skypulse.data.model.DailyForecastModel
+import com.iti.skypulse.data.model.weather.DailyForecastModel
 
 @Entity(tableName = "forecast")
 data class ForecastEntity(

@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.iti.skypulse.ui.alarms.AlarmsScreen
+import com.iti.skypulse.ui.alerts.AlertsScreen
 import com.iti.skypulse.ui.common.GpsStateObserver
 import com.iti.skypulse.ui.favorites.FavoriteLocationsScreen
 import com.iti.skypulse.ui.forecast.ForecastScreen
@@ -59,9 +59,9 @@ fun MainScreen(
                     BackHandler(enabled = true) {}
                     FavoriteLocationsScreen(onAddFavorite)
                 }
-                composable<NavRoutes.AlarmsRoute> {
+                composable<NavRoutes.AlertsRoute> {
                     BackHandler(enabled = true) {}
-                    AlarmsScreen()
+                    AlertsScreen()
                 }
                 composable<NavRoutes.SettingsRoute> {
                     SettingsScreen(onUpdateLocation = onUpdateLocation)

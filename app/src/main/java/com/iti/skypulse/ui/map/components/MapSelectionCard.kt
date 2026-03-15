@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.sp
 import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.UnitConverter
-import com.iti.skypulse.data.model.LocationProvider
-import com.iti.skypulse.data.model.SavedLocation
-import com.iti.skypulse.data.model.WeatherModel
+import com.iti.skypulse.data.model.location.LocationProvider
+import com.iti.skypulse.data.model.location.SavedLocation
+import com.iti.skypulse.data.model.weather.WeatherModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.map.MapLocationData
 import com.iti.skypulse.ui.map.MapSelectionState

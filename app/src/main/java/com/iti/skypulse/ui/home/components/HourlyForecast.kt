@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -35,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.iti.skypulse.R
 import com.iti.skypulse.core.utils.TempUnit
 import com.iti.skypulse.core.utils.UnitConverter
-import com.iti.skypulse.data.model.HourlyForecastModel
+import com.iti.skypulse.data.model.weather.HourlyForecastModel
 import com.iti.skypulse.ui.components.PrimaryCard
 import com.iti.skypulse.ui.components.WeatherIcon
 import com.iti.skypulse.ui.theme.AppTypography
