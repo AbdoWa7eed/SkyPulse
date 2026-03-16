@@ -145,7 +145,9 @@
     <string name="alert_notification_title_fog">🌫️ تنبيه انخفاض الرؤية</string>
     <string name="alert_notification_title_high_temp">🌡️ تنبيه حرارة مرتفعة</string>
     <string name="alert_notification_title_high_wind">💨 تنبيه رياح قوية</string>
-
+    <string name="alert_type_clear">سماء صافية</string>
+    <string name="alert_notification_title_clear_match">☀️ تنبيه: سماء صافية</string>
+    <string name="alert_notification_message_clear_match">الجو صافٍ في الوقت المحدد. فرصة رائعة للخروج!</string>
     <string name="alert_notification_message_rain">من المتوقع هطول أمطار في الوقت الذي حددته. يُفضل حمل مظلة.</string>
     <string name="alert_notification_message_snow">من المتوقع تساقط الثلوج في الوقت الذي حددته. قد تكون الطرق زلقة.</string>
     <string name="alert_notification_message_fog">من المتوقع انخفاض في مستوى الرؤية. يُرجى القيادة بحذر إذا كنت ستخرج.</string>
@@ -164,5 +166,6 @@
     <string name="error_end_before_start">يجب أن يكون وقت الانتهاء بعد وقت البدء</string>
     <string name="error_alert_start_passed">انتهى وقت البدء. يرجى تعديل التنبيه وتحديد وقت جديد.</string>
     <string name="error_alert_expired">انتهت صلاحية هذا التنبيه. يرجى تعديله أو حذفه.</string>
+
 
 </resources>

@@ -159,5 +159,8 @@
     <string name="error_end_before_start">End time must be after start time</string>
     <string name="error_alert_start_passed">Start time has passed. Please edit the alert and set a new time.</string>
     <string name="error_alert_expired">This alert has expired. Please edit or delete it.</string>
+    <string name="alert_type_clear">Clear Sky</string>
+    <string name="alert_notification_title_clear_match">☀️ Clear Sky Alert</string>
+    <string name="alert_notification_message_clear_match">Skies are clear at your scheduled time. Great time to head out!</string>
 
 </resources>

@@ -66,6 +66,10 @@ class WeatherNotificationManager(private val context: Context) {
             localizedContext.getString(R.string.alert_notification_title_high_wind),
             localizedContext.getString(R.string.alert_notification_message_high_wind)
         )
+        WeatherAlertType.CLEAR -> Pair(
+            localizedContext.getString(R.string.alert_notification_title_clear_match),
+            localizedContext.getString(R.string.alert_notification_message_clear_match)
+        )
     }
 
     private fun showNotification(id: String, title: String, message: String) {
