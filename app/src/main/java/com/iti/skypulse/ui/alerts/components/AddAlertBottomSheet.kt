@@ -79,7 +79,6 @@ fun AddAlertBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Start Time
             Text(
                 text = stringResource(R.string.alert_start_time),
                 style = AppTypography.regular12,
@@ -113,7 +112,6 @@ fun AddAlertBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // End Time
             Text(
                 text = stringResource(R.string.alert_end_time),
                 style = AppTypography.regular12,

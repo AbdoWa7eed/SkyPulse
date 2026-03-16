@@ -64,6 +64,7 @@ fun MainScreen(
                     AlertsScreen()
                 }
                 composable<NavRoutes.SettingsRoute> {
+                    BackHandler(enabled = true) {}
                     SettingsScreen(onUpdateLocation = onUpdateLocation)
                 }
             }

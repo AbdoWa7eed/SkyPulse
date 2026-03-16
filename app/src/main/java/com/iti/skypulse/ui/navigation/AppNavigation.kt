@@ -54,7 +54,9 @@ fun AppNavigation() {
                 exitTransition = { slideOutLeft() }
             ) {
                 OnboardingScreen(
-                    onFinished = { navController.navigate(NavRoutes.LocationPickerRoute) }
+                    onFinished = { navController.navigate(NavRoutes.LocationPickerRoute) {
+                        popUpTo(NavRoutes.LocationGraph) { inclusive = true }
+                    } }
                 )
             }
 
@@ -95,10 +97,10 @@ fun AppNavigation() {
         composable<NavRoutes.MainGraph> {
             MainScreen(
                 onUpdateLocation = {
-                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.UPDATE_LOCATION)) // ✅
+                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.UPDATE_LOCATION))
                 },
                 onAddFavorite = {
-                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.ADD_FAVORITE)) // ✅
+                    navigateSingleTop(NavRoutes.MapPickerRoute(MapSource.ADD_FAVORITE))
                 },
             )
         }
