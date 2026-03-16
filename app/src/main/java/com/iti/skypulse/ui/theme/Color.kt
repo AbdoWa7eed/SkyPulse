@@ -22,3 +22,4 @@ val WarningDark = Color(0xFFD97706)
 
 val WarningLight = Color(0xFFB45309)
 val Danger = Color(0xFFEF4444)
+val Sun = Color(0xFFFFC107)

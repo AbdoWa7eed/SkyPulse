@@ -54,6 +54,9 @@ val LightColorScheme = lightColorScheme(
     onSurfaceVariant = TextPrimaryLight,
 )
 
+val ColorScheme.sun: Color
+    get() = Sun
+
 @Composable
 private fun animateColorScheme(target: ColorScheme): ColorScheme {
     val anim = tween<Color>(durationMillis = 400)
