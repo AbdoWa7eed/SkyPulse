@@ -1,6 +1,0 @@
-<inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/logo_blur_effect"
-    android:insetTop="64dp"
-    android:insetBottom="64dp"
-    android:insetLeft="44dp"
-    android:insetRight="44dp"/>
