@@ -10,10 +10,13 @@ junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 kotlinxCoroutinesPlayServices = "1.10.2"
+kotlinxCoroutinesTest = "1.10.2"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 kotlin = "2.3.10"
 composeBom = "2026.03.00"
+mockk = "1.14.9"
+mockkAndroid = "1.14.9"
 navigationCompose = "2.9.7"
 animationGraphics = "1.10.5"
 kotlinxSerialization = "1.10.0"
@@ -22,10 +25,12 @@ retrofit = "3.0.0"
 room = "2.8.4"
 ksp = "2.3.5"
 okhttp = "5.3.2"
+roomTesting = "2.8.4"
 shimmerVersion = "1.3.3"
 maps-compose        = "8.2.0"
 play-services-maps  = "20.0.0"
 secrets-plugin      = "2.0.1"
+turbine = "1.2.1"
 workmanager = "2.11.1"
 
 [libraries]
@@ -36,6 +41,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomTesting" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -53,7 +59,10 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics", version.ref = "animationGraphics" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -64,6 +73,7 @@ shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version
 maps-compose           = { group = "com.google.maps.android", name = "maps-compose",          version.ref = "maps-compose" }
 play-services-maps     = { group = "com.google.android.gms",  name = "play-services-maps",    version.ref = "play-services-maps" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
