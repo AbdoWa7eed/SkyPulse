@@ -1,6 +1,7 @@
 package com.iti.skypulse.data.model.weather
 
 data class WeatherModel(
+    val conditionCode: Int,
     val temperature: Double,
     val feelsLikeTemperature: Double,
     val minimumTemperature: Double,

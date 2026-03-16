@@ -4,7 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.iti.skypulse.core.network.ConnectivityHelper
+import com.iti.skypulse.core.notification.WeatherNotificationManager
+import com.iti.skypulse.core.scheduler.WeatherAlertScheduler
 import com.iti.skypulse.data.local.datasource.WeatherLocalDataSourceImpl
+import com.iti.skypulse.data.local.datasource.alerts.WeatherAlertLocalDataSource
+import com.iti.skypulse.data.local.datasource.alerts.WeatherAlertLocalDataSourceImpl
 import com.iti.skypulse.data.local.location.LocationHelper
 import com.iti.skypulse.data.local.prefs.AppPreferences
 import com.iti.skypulse.data.local.prefs.LanguagePreference
@@ -12,6 +16,8 @@ import com.iti.skypulse.data.local.room.AppDatabase
 import com.iti.skypulse.data.remote.api.ApiClient
 import com.iti.skypulse.data.remote.api.WeatherApiService
 import com.iti.skypulse.data.remote.datasource.WeatherRemoteDataSourceImpl
+import com.iti.skypulse.data.repository.alerts.WeatherAlertRepository
+import com.iti.skypulse.data.repository.alerts.WeatherAlertRepositoryImpl
 import com.iti.skypulse.data.repository.weather.WeatherRepositoryImpl
 import com.iti.skypulse.data.repository.settings.SettingsRepositoryImpl
 
@@ -50,4 +56,23 @@ object ServiceLocator {
     private lateinit var _weatherRemoteDataSource: WeatherRemoteDataSourceImpl
     lateinit var weatherRepository: WeatherRepositoryImpl
         private set
+
+    val weatherAlertScheduler: WeatherAlertScheduler by lazy {
+        WeatherAlertScheduler(appContext)
+    }
+
+    val weatherNotificationManager: WeatherNotificationManager by lazy {
+        WeatherNotificationManager(appContext)
+    }
+
+    val weatherAlertLocalDataSource: WeatherAlertLocalDataSource by lazy {
+        WeatherAlertLocalDataSourceImpl(appDatabase.weatherAlertDao())
+    }
+
+    val weatherAlertRepository: WeatherAlertRepository by lazy {
+        WeatherAlertRepositoryImpl(
+            localDataSource = weatherAlertLocalDataSource,
+            scheduler = weatherAlertScheduler
+        )
+    }
 }

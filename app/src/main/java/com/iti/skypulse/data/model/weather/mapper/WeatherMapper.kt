@@ -15,6 +15,7 @@ import com.iti.skypulse.data.remote.dto.ForecastItemDto
 import com.iti.skypulse.data.remote.dto.ForecastResponseDto
 import com.iti.skypulse.data.remote.dto.WeatherResponseDto
 fun WeatherResponseDto.toWeatherModel() = WeatherModel(
+    conditionCode = weatherConditions.firstOrNull()?.conditionId ?: 0,
     temperature = mainMetrics.temperature,
     feelsLikeTemperature = mainMetrics.feelsLikeTemperature,
     minimumTemperature = mainMetrics.minimumTemperature,
@@ -63,6 +64,7 @@ fun ForecastResponseDto.toForecastModel(): ForecastModel {
 fun WeatherModel.toWeatherEntity(cacheKey: String, lang: String) = WeatherEntity(
     cacheKey = cacheKey,
     lang = lang,
+    conditionCode = conditionCode,
     cityName = cityName,
     countryCode = countryCode,
     temperature = temperature,
@@ -82,6 +84,7 @@ fun WeatherModel.toWeatherEntity(cacheKey: String, lang: String) = WeatherEntity
 )
 
 fun WeatherEntity.toWeatherModel() = WeatherModel(
+    conditionCode = conditionCode,
     cityName = cityName,
     countryCode = countryCode,
     temperature = temperature,

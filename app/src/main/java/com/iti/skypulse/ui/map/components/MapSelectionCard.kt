@@ -163,6 +163,7 @@ private fun WeatherLoadedPreview() {
                 data = MapLocationData(
                     location = SavedLocation(30.0444, 31.2357, LocationProvider.MAP, "Cairo, Egypt"),
                     weather = WeatherModel(
+                        conditionCode = 10,
                         temperature = 305.0, feelsLikeTemperature = 307.0,
                         minimumTemperature = 300.0, maximumTemperature = 308.0,
                         weatherDescription = "Clear Sky", weatherIconCode = "01d",

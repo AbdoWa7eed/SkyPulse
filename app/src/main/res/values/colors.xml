@@ -9,4 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="splash_background">#E2E8F0</color>
     <color name="launcher_background">#E2E8F0</color>
+
+    <color name="notif_background">#F8FAFC</color>
+    <color name="notif_title">#0F172A</color>
+    <color name="notif_message">#334155</color>
+    <color name="notif_divider">#E2E8F0</color>
+    <color name="notif_btn_bg">#3B82F6</color>
+    <color name="notif_btn_text">#FFFFFF</color>
 </resources>

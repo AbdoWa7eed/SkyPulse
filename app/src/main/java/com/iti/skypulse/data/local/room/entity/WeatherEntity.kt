@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class WeatherEntity(
     @PrimaryKey
     val cacheKey: String,
+    val conditionCode: Int,
     val lang: String,
     val cityName: String,
     val latitude: Double,

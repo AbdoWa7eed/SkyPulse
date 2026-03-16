@@ -135,7 +135,8 @@ fun CardPreview() {
                 cityName = "Cairo",
                 countryCode = "EG",
                 longitude = 30.1,
-                latitude = 40.5
+                latitude = 40.5,
+                conditionCode = 10
             )
         )
     }

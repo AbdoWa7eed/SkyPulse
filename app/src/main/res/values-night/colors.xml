@@ -2,4 +2,11 @@
 <resources>
     <color name="splash_background">#121C33</color>
     <color name="launcher_background">#121C33</color>
+
+    <color name="notif_background">#1E293B</color>
+    <color name="notif_title">#F1F5F9</color>
+    <color name="notif_message">#8E94A1</color>
+    <color name="notif_divider">#1E40AF</color>
+    <color name="notif_btn_bg">#3B82F6</color>
+    <color name="notif_btn_text">#FFFFFF</color>
 </resources>

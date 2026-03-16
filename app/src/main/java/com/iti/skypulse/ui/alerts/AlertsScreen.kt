@@ -14,19 +14,23 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iti.skypulse.R
-import com.iti.skypulse.data.model.alert.AlertNotificationType
-import com.iti.skypulse.data.model.alert.WeatherAlertType
 import com.iti.skypulse.ui.alerts.components.AddAlertBottomSheet
 import com.iti.skypulse.ui.alerts.components.EmptyAlertsState
 import com.iti.skypulse.ui.alerts.components.WeatherAlertCard
@@ -39,6 +43,34 @@ fun AlertsScreen(
 ) {
     val alerts by viewModel.alerts.collectAsState()
     val showAddSheet by viewModel.showAddSheet.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    var pendingForm by remember { mutableStateOf<AlertFormState?>(null) }
+
+    val fullScreenPermission = rememberFullScreenIntentPermissionState(
+        onResult = {
+            pendingForm?.let { viewModel.saveAlertAfterPermission(it) }
+            pendingForm = null
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is AlertsEvent.AlertTimeExpired -> {
+                    snackbarHostState.showSnackbar(context.getString(event.messageRes))
+                }
+                AlertsEvent.RequestAlarmPermission -> {
+                    if (fullScreenPermission.isGranted) {
+                        pendingForm?.let { viewModel.saveAlertAfterPermission(it) }
+                        pendingForm = null
+                    } else {
+                        fullScreenPermission.request()
+                    }
+                }
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -59,6 +91,10 @@ fun AlertsScreen(
                         val alert = alerts[index]
                         WeatherAlertCard(
                             alert = alert,
+                            onClick = {
+                                pendingForm = AlertFormState.fromWeatherAlert(it)
+                                viewModel.openAddSheet()
+                            },
                             onToggle = { viewModel.toggleAlert(alert.id, it) },
                             onDelete = { viewModel.deleteAlert(alert.id) },
                             modifier = Modifier.animateItem()
@@ -69,7 +105,10 @@ fun AlertsScreen(
         }
 
         FloatingActionButton(
-            onClick = viewModel::openAddSheet,
+            onClick = {
+                pendingForm = null
+                viewModel.openAddSheet()
+            },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(20.dp),
@@ -80,41 +119,32 @@ fun AlertsScreen(
         ) {
             Icon(imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.add_alert))
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 8.dp, vertical = 16.dp)
+        )
     }
+
 
     if (showAddSheet) {
         AddAlertBottomSheet(
+            initialForm = pendingForm,
             onDismiss = viewModel::closeAddSheet,
-            onConfirm = viewModel::addAlert
+            onConfirm  = { form ->
+                pendingForm = form
+                viewModel.addAlert(form)
+            }
         )
     }
+
+
 }
 
 @Preview(showBackground = true, name = "Empty")
 @Composable
 private fun AlertsEmptyPreview() {
     SkyPulseTheme { AlertsScreen() }
-}
-
-@Preview(showBackground = true, name = "With Alerts")
-@Composable
-private fun AlertsWithAlertsPreview() {
-
-    SkyPulseTheme {
-        val model = remember { AlertsViewModel().apply {
-            addAlert(AlertFormState(
-                type = WeatherAlertType.RAIN,
-                notificationType = AlertNotificationType.NOTIFICATION,
-                dateMillis = System.currentTimeMillis() + 86400000,
-                hour = 8, minute = 0
-            ))
-            addAlert(AlertFormState(
-                type = WeatherAlertType.HIGH_TEMP,
-                notificationType = AlertNotificationType.ALARM,
-                dateMillis = System.currentTimeMillis() + 172800000,
-                hour = 14, minute = 30
-            ))
-        }}
-        AlertsScreen(viewModel = model)
-    }
 }
