@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.StateFlow
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -46,8 +47,17 @@ fun String.toFormattedDate(): String {
 fun Long.toFormattedDateTime(): String =
     SimpleDateFormat("EEE, MMM d • hh:mm a", Locale.getDefault()).format(Date(this))
 
+fun Long.toEpoch(hour: Int, minute: Int = 0): Long =
+    Calendar.getInstance().apply {
+        timeInMillis = this@toEpoch
+        set(Calendar.HOUR_OF_DAY, hour)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.timeInMillis
+
 fun Context.withLocale(languageCode: String): Context {
-    val locale = Locale(languageCode)
+    val locale = Locale.forLanguageTag(languageCode)
     Locale.setDefault(locale)
     val config = Configuration(resources.configuration).apply {
         setLocale(locale)

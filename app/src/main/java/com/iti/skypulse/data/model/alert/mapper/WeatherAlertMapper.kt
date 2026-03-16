@@ -8,7 +8,8 @@ fun WeatherAlertEntity.toModel() = WeatherAlert(
     type = type,
     notificationType = notificationType,
     isEnabled = isEnabled,
-    scheduledTime = scheduledTime
+    scheduledTime = scheduledTime,
+    endTime = endTime,
 )
 
 fun WeatherAlert.toEntity() = WeatherAlertEntity(
@@ -16,5 +17,6 @@ fun WeatherAlert.toEntity() = WeatherAlertEntity(
     type = type,
     notificationType = notificationType,
     isEnabled = isEnabled,
-    scheduledTime = scheduledTime
+    scheduledTime = scheduledTime,
+    endTime = endTime,
 )

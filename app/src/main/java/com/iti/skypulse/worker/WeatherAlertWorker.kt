@@ -10,46 +10,51 @@ import com.iti.skypulse.data.model.alert.matches
 import com.iti.skypulse.di.ServiceLocator
 import kotlinx.coroutines.flow.first
 
+
 class WeatherAlertWorker(
     context: Context,
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
-
     override suspend fun doWork(): Result {
-        val alertId = inputData.getString(KEY_ALERT_ID)
-            ?: return Result.failure()
+        val alertId = inputData.getString(KEY_ALERT_ID) ?: return Result.failure()
+        val action = inputData.getString(KEY_ACTION) ?: ACTION_FIRE
 
+        return when (action) {
+            ACTION_FIRE -> handleFire(alertId)
+            ACTION_EXPIRE -> handleExpire(alertId)
+            else -> Result.failure()
+        }
+    }
+
+    private suspend fun handleFire(alertId: String): Result {
         val alertRepository = ServiceLocator.weatherAlertRepository
         val weatherRepository = ServiceLocator.weatherRepository
-        val appPreferences = ServiceLocator.settingsRepository
+        val settingsRepository = ServiceLocator.settingsRepository
         val notificationManager = ServiceLocator.weatherNotificationManager
-        val langCode = appPreferences.language.first().code
+        val langCode = settingsRepository.language.first().code
 
-
-        val alert = alertRepository.getAlertById(alertId)
-            ?: return Result.success()
-
+        val alert = alertRepository.getAlertById(alertId) ?: return Result.success()
         if (!alert.isEnabled) return Result.success()
 
-        val location = appPreferences.savedLocation.first()
-            ?: run {
-                notificationManager.fireError(alert, langCode)
-                alertRepository.toggleAlert(alertId, false)
-                return Result.failure()
-            }
+        val location = settingsRepository.savedLocation.first() ?: run {
+            notificationManager.fireError(alert, langCode)
+            alertRepository.toggleAlert(alertId, false)
+            return Result.failure()
+        }
 
         val weatherResult = weatherRepository.getCurrentWeather(location.lat, location.lng)
 
         weatherResult.fold(
             onSuccess = { weather ->
                 val tempCelsius = UnitConverter.formatTemp(weather.temperature, TempUnit.CELSIUS)
-                val windMs =  UnitConverter
-                    .formatWind(weather.temperature, WindUnit.METERS_PER_SECOND)
+                val windMs =
+                    UnitConverter.formatWind(weather.temperature, WindUnit.METERS_PER_SECOND)
                 val matched = alert.type.matches(
                     weather.conditionCode,
                     tempCelsius.numericValue,
-                    windMs.numericValue)
+                    windMs.numericValue
+                )
                 notificationManager.fireAlert(alert, matched, langCode)
                 alertRepository.toggleAlert(alertId, false)
             },
@@ -63,8 +68,16 @@ class WeatherAlertWorker(
         return Result.success()
     }
 
+    private suspend fun handleExpire(alertId: String): Result {
+        ServiceLocator.weatherAlertRepository.deleteAlert(alertId)
+        return Result.success()
+    }
+
     companion object {
         const val KEY_ALERT_ID = "alert_id"
+        const val KEY_ACTION = "action"
+        const val ACTION_FIRE = "fire"
+        const val ACTION_EXPIRE = "expire"
         private const val MAX_RETRIES = 3
     }
 }

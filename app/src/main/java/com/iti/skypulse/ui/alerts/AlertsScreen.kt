@@ -91,6 +91,10 @@ fun AlertsScreen(
                         val alert = alerts[index]
                         WeatherAlertCard(
                             alert = alert,
+                            onClick = {
+                                pendingForm = AlertFormState.fromWeatherAlert(it)
+                                viewModel.openAddSheet()
+                            },
                             onToggle = { viewModel.toggleAlert(alert.id, it) },
                             onDelete = { viewModel.deleteAlert(alert.id) },
                             modifier = Modifier.animateItem()
@@ -101,7 +105,10 @@ fun AlertsScreen(
         }
 
         FloatingActionButton(
-            onClick = viewModel::openAddSheet,
+            onClick = {
+                pendingForm = null
+                viewModel.openAddSheet()
+            },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(20.dp),
@@ -124,6 +131,7 @@ fun AlertsScreen(
 
     if (showAddSheet) {
         AddAlertBottomSheet(
+            initialForm = pendingForm,
             onDismiss = viewModel::closeAddSheet,
             onConfirm  = { form ->
                 pendingForm = form

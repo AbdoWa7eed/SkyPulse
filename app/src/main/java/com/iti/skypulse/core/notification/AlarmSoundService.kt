@@ -17,18 +17,39 @@ import com.iti.skypulse.R
 
 class AlarmSoundService : Service() {
 
+    companion object {
+        const val ACTION_START = "com.iti.skypulse.ALARM_SOUND_START"
+        const val ACTION_STOP = "com.iti.skypulse.ALARM_SOUND_STOP"
+        const val EXTRA_TITLE = "extra_title"
+        const val EXTRA_MESSAGE = "extra_message"
+        const val FOREGROUND_ID = 9999
+        const val CHANNEL_ALARM = "weather_alarms_v2"
+
+        fun startIntent(
+            context: Context,
+            title: String,
+            message: String,
+        ) = Intent(context, AlarmSoundService::class.java).apply {
+            action = ACTION_START
+            putExtra(EXTRA_TITLE, title)
+            putExtra(EXTRA_MESSAGE, message)
+        }
+
+        fun stopIntent(context: Context) =
+            Intent(context, AlarmSoundService::class.java).apply { action = ACTION_STOP }
+    }
+
+
     private var ringtone: Ringtone? = null
-    private var isAlarmRunning = false
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                if (isAlarmRunning) return START_STICKY
-                val title          = intent.getStringExtra(EXTRA_TITLE) ?: ""
-                val message        = intent.getStringExtra(EXTRA_MESSAGE) ?: ""
-                isAlarmRunning = true
+                val title = intent.getStringExtra(EXTRA_TITLE) ?: ""
+                val message = intent.getStringExtra(EXTRA_MESSAGE) ?: ""
                 startAlarm(title, message)
             }
+
             ACTION_STOP -> stopAlarm()
         }
         return START_STICKY
@@ -90,7 +111,6 @@ class AlarmSoundService : Service() {
     }
 
     private fun stopAlarm() {
-        isAlarmRunning = false
         ringtone?.stop()
         ringtone = null
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -99,7 +119,6 @@ class AlarmSoundService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        isAlarmRunning = false
         ringtone?.stop()
         ringtone = null
     }
@@ -120,28 +139,4 @@ class AlarmSoundService : Service() {
             .createNotificationChannel(channel)
     }
 
-    companion object {
-        const val ACTION_START          = "com.iti.skypulse.ALARM_SOUND_START"
-        const val ACTION_STOP           = "com.iti.skypulse.ALARM_SOUND_STOP"
-        const val EXTRA_TITLE           = "extra_title"
-        const val EXTRA_MESSAGE         = "extra_message"
-        const val EXTRA_NOTIFICATION_ID = "extra_notification_id"
-        const val FOREGROUND_ID         = 9999
-        const val CHANNEL_ALARM         = "weather_alarms_v2"
-
-        fun startIntent(
-            context: Context,
-            title: String,
-            message: String,
-            notificationId: Int
-        ) = Intent(context, AlarmSoundService::class.java).apply {
-            action = ACTION_START
-            putExtra(EXTRA_TITLE, title)
-            putExtra(EXTRA_MESSAGE, message)
-            putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-        }
-
-        fun stopIntent(context: Context) =
-            Intent(context, AlarmSoundService::class.java).apply { action = ACTION_STOP }
-    }
 }

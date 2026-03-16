@@ -22,25 +22,15 @@ class WeatherNotificationManager(private val context: Context) {
         createNotificationChannel()
     }
 
-    fun fireAlert(
-        alert: WeatherAlert,
-        matched: Boolean,
-        lang: String
-    ) {
-        val localizedContext = context.withLocale(lang)
+    fun fireAlert(alert: WeatherAlert, matched: Boolean, lang: String) {
+        if (!matched) return
 
-        val (title, message) = if (matched) {
-            getAlertTitleAndMessage(alert.type, localizedContext)
-        } else {
-            Pair(
-                localizedContext.getString(R.string.alert_notification_title_clear),
-                localizedContext.getString(R.string.alert_notification_message_clear)
-            )
-        }
+        val localizedContext = context.withLocale(lang)
+        val (title, message) = getAlertTitleAndMessage(alert.type, localizedContext)
 
         when (alert.notificationType) {
-            AlertNotificationType.NOTIFICATION -> showNotification(alert.id, title, message)
             AlertNotificationType.ALARM        -> showAlarm(alert.id, title, message)
+            AlertNotificationType.NOTIFICATION -> showNotification(alert.id, title, message)
         }
     }
     fun fireError(alert: WeatherAlert, lang: String) {
@@ -83,6 +73,7 @@ class WeatherNotificationManager(private val context: Context) {
             .setSmallIcon(R.drawable.app_logo)
             .setContentTitle(title)
             .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(openAppIntent())
@@ -92,7 +83,7 @@ class WeatherNotificationManager(private val context: Context) {
     }
 
     private fun showAlarm(id: String, title: String, message: String) {
-        val intent = AlarmSoundService.startIntent(context, title, message, id.hashCode())
+        val intent = AlarmSoundService.startIntent(context, title, message)
         context.startForegroundService(intent)
     }
     private fun openAppIntent(): PendingIntent {

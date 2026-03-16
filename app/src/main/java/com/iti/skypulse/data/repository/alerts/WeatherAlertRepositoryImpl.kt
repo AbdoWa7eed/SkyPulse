@@ -34,11 +34,18 @@ class WeatherAlertRepositoryImpl(
                 scheduler.cancel(id)
             } else {
                 val alert = localDataSource.getById(id)?.toModel() ?: return@runCatching
-                if (alert.scheduledTime <= System.currentTimeMillis()) {
-                    localDataSource.setEnabled(id, false)
-                    throw AppException.AlertExpiredException()
+                val now = System.currentTimeMillis()
+                when {
+                    alert.endTime <= now -> {
+                        localDataSource.setEnabled(id, false)
+                        throw AppException.AlertExpiredException()
+                    }
+                    alert.scheduledTime <= now -> {
+                        localDataSource.setEnabled(id, false)
+                        throw AppException.AlertExpiredException()
+                    }
+                    else -> scheduler.schedule(alert)
                 }
-                scheduler.schedule(alert)
             }
         }
     }

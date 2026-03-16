@@ -159,5 +159,10 @@
     <string name="alert_notification_error_message">تعذر جلب بيانات الطقس. يرجى التحقق يدويًا.</string>
 
     <string name="dismiss">إغلاق</string>
+    <string name="alert_start_time">وقت البدء</string>
+    <string name="alert_end_time">وقت الانتهاء</string>
+    <string name="error_end_before_start">يجب أن يكون وقت الانتهاء بعد وقت البدء</string>
+    <string name="error_alert_start_passed">انتهى وقت البدء. يرجى تعديل التنبيه وتحديد وقت جديد.</string>
+    <string name="error_alert_expired">انتهت صلاحية هذا التنبيه. يرجى تعديله أو حذفه.</string>
 
 </resources>

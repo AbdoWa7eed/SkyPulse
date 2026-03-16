@@ -12,5 +12,7 @@ data class WeatherAlertEntity(
     val type: WeatherAlertType,
     val notificationType: AlertNotificationType,
     val isEnabled: Boolean,
-    val scheduledTime: Long
+    val scheduledTime: Long,
+    val endTime: Long
+
 )

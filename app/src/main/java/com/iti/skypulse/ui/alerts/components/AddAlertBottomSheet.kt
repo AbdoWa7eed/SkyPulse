@@ -37,16 +37,17 @@ import com.iti.skypulse.ui.alerts.components.form.DateTimePicker
 import com.iti.skypulse.ui.components.ElevatedPrimaryButton
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAlertBottomSheet(
+    initialForm: AlertFormState? = null,
     onDismiss: () -> Unit,
     onConfirm: (AlertFormState) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var form by remember { mutableStateOf(AlertFormState()) }
+    var form by remember { mutableStateOf(initialForm ?: AlertFormState()) }
     var showPastError by remember { mutableStateOf(false) }
+    var showEndBeforeStartError by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -78,6 +79,13 @@ fun AddAlertBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Start Time
+            Text(
+                text = stringResource(R.string.alert_start_time),
+                style = AppTypography.regular12,
+                color = MaterialTheme.colorScheme.onSecondary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             DateTimePicker(
                 dateMillis = form.dateMillis,
                 hour = form.hour,
@@ -85,24 +93,55 @@ fun AddAlertBottomSheet(
                 onDateSelected = {
                     form = form.copy(dateMillis = it)
                     showPastError = false
+                    showEndBeforeStartError = false
                 },
                 onTimeSelected = { hour, minute ->
                     form = form.copy(hour = hour, minute = minute)
                     showPastError = false
+                    showEndBeforeStartError = false
                 }
             )
 
-            AnimatedVisibility(
-                visible = showPastError
-            ) {
+            AnimatedVisibility(visible = showPastError) {
                 Text(
-                    modifier = Modifier.padding(top= 6.dp),
+                    modifier = Modifier.padding(top = 6.dp),
                     text = stringResource(R.string.error_past_time),
                     style = AppTypography.regular12,
                     color = MaterialTheme.colorScheme.error
                 )
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // End Time
+            Text(
+                text = stringResource(R.string.alert_end_time),
+                style = AppTypography.regular12,
+                color = MaterialTheme.colorScheme.onSecondary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            DateTimePicker(
+                dateMillis = form.endDateMillis,
+                hour = form.endHour,
+                minute = form.endMinute,
+                onDateSelected = {
+                    form = form.copy(endDateMillis = it)
+                    showEndBeforeStartError = false
+                },
+                onTimeSelected = { hour, minute ->
+                    form = form.copy(endHour = hour, endMinute = minute)
+                    showEndBeforeStartError = false
+                }
+            )
+
+            AnimatedVisibility(visible = showEndBeforeStartError) {
+                Text(
+                    modifier = Modifier.padding(top = 6.dp),
+                    text = stringResource(R.string.error_end_before_start),
+                    style = AppTypography.regular12,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -134,12 +173,19 @@ fun AddAlertBottomSheet(
                 text = stringResource(R.string.add_alert),
                 enabled = form.isValid,
                 onClick = {
-                    if (!form.isInFuture) {
-                        showPastError = true
-                        return@ElevatedPrimaryButton
+                    when {
+                        !form.isInFuture -> {
+                            showPastError = true
+                        }
+                        !form.isEndAfterStart -> {
+                            showEndBeforeStartError = true
+                        }
+                        else -> {
+                            showPastError = false
+                            showEndBeforeStartError = false
+                            onConfirm(form)
+                        }
                     }
-                    showPastError = false
-                    onConfirm(form)
                 },
                 modifier = Modifier.fillMaxWidth()
             )
