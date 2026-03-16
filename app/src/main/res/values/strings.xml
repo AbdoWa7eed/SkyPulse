@@ -1,3 +1,166 @@
 <resources>
     <string name="app_name">SkyPulse</string>
+    <string name="app_title">SkyPulse</string>
+
+    <!-- Screen 1 — Welcome -->
+    <string name="onboarding_title_1">Welcome to SkyPulse</string>
+    <string name="onboarding_subtitle_1">Get weather updates anytime and stay prepared wherever you are.</string>
+
+    <!-- Screen 2 — Location Access -->
+    <string name="onboarding_title_2">Choose Your Location</string>
+    <string name="onboarding_subtitle_2">Use GPS or select a city to get accurate forecasts instantly.</string>
+
+    <!-- Screen 3 — Weather Alerts -->
+    <string name="onboarding_title_3">Never Miss Changes</string>
+    <string name="onboarding_subtitle_3">Get alerts for rain, wind, and extreme temperatures to stay informed.</string>
+
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+
+    <string name="home">Home</string>
+
+    <string name="forecast">Forecast</string>
+
+    <string name="favorite_locations">Favorites</string>
+
+    <string name="alerts">Alerts</string>
+
+    <string name="settings">Settings</string>
+    <string name="location_icon">Location icon</string>
+    <string name="hourly_forecast">Hourly Forecast</string>
+    <string name="weather_details">Weather Details</string>
+    <string name="upcoming_forecast">Upcoming Forecast</string>
+    <string name="location_picker_title">Choose Your Location</string>
+    <string name="location_picker_subtitle">SkyPulse needs your location to show accurate weather for your area</string>
+    <string name="location_picker_gps">Use GPS</string>
+    <string name="location_picker_map">Pick from Map</string>
+    <string name="error_location_fetch">Unable to determine location</string>
+    <string name="permission_required_title">Location Permission Required</string>
+    <string name="permission_required_message">Location permission was denied. Please enable it from app settings to use GPS.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="use_map_instead">Use Map Instead</string>
+    <string name="location_fetching">Fetching location…</string>
+    <string name="location_found">Location Found</string>
+    <string name="location_coordinates">%.4f°, %.4f°</string>
+    <string name="location_provider_gps">Updating via GPS</string>
+    <string name="location_provider_map">Set via Map</string>
+    <string name="location_fetching_subtitle">Getting your current position…</string>
+    <string name="location_confirm">Use This Location</string>
+    <string name="location_refresh">Refresh GPS</string>
+    <string name="location_cancel">Cancel</string>
+    <string name="location_disabled_title">Location Is Disabled</string>
+    <string name="location_disabled_message">Please enable location services in your device settings to use GPS.</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_no_cache">No cached data available</string>
+    <string name="error_no_location">Unable to determine location</string>
+    <string name="error_generic">Something went wrong, please try again</string>
+    <string name="error_message_title">Something went wrong</string>
+    <string name="error_message_description">We couldn\'t retrieve the latest weather data. Please check your connection and try again.</string>
+    <string name="try_again">Try Again</string>
+    <string name="feels_like">Feels like %1$s</string>
+    <string name="wind">Wind</string>
+    <string name="wind_direction">Direction: %1$d°</string>
+    <string name="humidity">Humidity</string>
+    <string name="atmospheric_moisture">Atmospheric moisture</string>
+    <string name="visibility">Visibility</string>
+    <string name="visibility_value">%1$d km</string>
+    <string name="clear_sky">Clear sky</string>
+    <string name="limited_visibility">Limited visibility</string>
+    <string name="pressure">Pressure</string>
+    <string name="atmospheric_pressure">Atmospheric pressure</string>
+    <string name="humidity_value">%1$d%%</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="unit_kelvin">K</string>
+    <string name="unit_ms">m/s</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_hpa">hPa</string>
+    <string name="unit_mbar">mbar</string>
+    <string name="unit_mmhg">mmHg</string>
+ 
+    <string name="measurement_units">Measurement Units</string>
+    <string name="temperature">Temperature</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="appearance">Appearance</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+    <string name="version_text">Version %1$s</string>
+    <string name="back">Back</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="general">General</string>
+    <string name="location">Location</string>
+    <string name="location_provider">Location Provider</string>
+    <string name="update_location">Current Location</string>
+    <string name="update">Update</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="current_selection">Current Selection</string>
+    <string name="details">Details</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="search_city_hint">Search city or coordinates</string>
+    <string name="add_favorite">Add Favorite</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="set_as_home">Set as Home</string>
+    <string name="search_hint">Search city or coordinates</string>
+    <string name="gps_unavailable_warning">GPS or location permission is unavailable. The last saved location will be used as a fallback.</string>
+    <string name="favorites">Favorite Locations</string>
+    <string name="no_favorites_title">No favorites yet</string>
+    <string name="no_favorites_subtitle">Tap the + button to add your first favorite location</string>
+    <string name="location_removed">Location removed</string>
+    <string name="undo">Undo</string>
+    <string name="five_day_forecast">5-Days Forecast</string>
+    <string name="add_alert">Add Alert</string>
+    <string name="alert_condition">Weather Condition</string>
+    <string name="alert_notification_type">Alert Type</string>
+    <string name="alert_rain">Rain</string>
+    <string name="alert_snow">Snow</string>
+    <string name="alert_fog">Fog</string>
+    <string name="alert_high_temp">High Temp</string>
+    <string name="alert_low_temp">Low Temp</string>
+    <string name="alert_high_wind">High Wind</string>
+    <string name="alert_type_notification">Notification</string>
+    <string name="alert_type_alarm">Alarm Sound</string>
+    <string name="no_alerts_title">No Alerts Yet</string>
+    <string name="no_alerts_subtitle">Tap + to add a weather condition alert</string>
+    <string name="delete">Delete</string>
+    <string name="alert_date">Date</string>
+    <string name="alert_time">Time</string>
+    <string name="pick_date">Select a date</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="pick_time">Select a time</string>
+    <string name="error_past_time">The selected date and time must be in the future.</string>
+    <string name="alert_notification_title_rain">🌧️ Rain Alert</string>
+    <string name="alert_notification_title_snow">❄️ Snow Alert</string>
+    <string name="alert_notification_title_fog">🌫️ Low Visibility Alert</string>
+    <string name="alert_notification_title_high_temp">🌡️ Extreme Heat Alert</string>
+    <string name="alert_notification_title_high_wind">💨 High Wind Alert</string>
+
+    <string name="alert_notification_message_rain">Rain is expected during your scheduled time. Consider carrying an umbrella.</string>
+    <string name="alert_notification_message_snow">Snow is expected during your scheduled time. Roads may be slippery.</string>
+    <string name="alert_notification_message_fog">Low visibility conditions ahead. Drive carefully if you\'re heading out.</string>
+    <string name="alert_notification_message_high_temp">Temperatures above 40°C expected. Stay hydrated and avoid direct sun.</string>
+    <string name="alert_notification_message_high_wind">Strong winds expected during your scheduled time. Secure loose objects.</string>
+
+    <string name="alert_notification_title_clear">✅ All Clear</string>
+    <string name="alert_notification_message_clear">No weather concerns for your scheduled time. Enjoy your day!</string>
+
+    <string name="alert_notification_error_title">⚠️ Weather Check Failed</string>
+    <string name="alert_notification_error_message">Couldn\'t fetch weather data. Please check manually.</string>
+
+    <string name="dismiss">Dismiss</string>
+    <string name="alert_start_time">Start Time</string>
+    <string name="alert_end_time">End Time</string>
+    <string name="error_end_before_start">End time must be after start time</string>
+    <string name="error_alert_start_passed">Start time has passed. Please edit the alert and set a new time.</string>
+    <string name="error_alert_expired">This alert has expired. Please edit or delete it.</string>
+    <string name="alert_type_clear">Clear Sky</string>
+    <string name="alert_notification_title_clear_match">☀️ Clear Sky Alert</string>
+    <string name="alert_notification_message_clear_match">Skies are clear at your scheduled time. Great time to head out!</string>
+
 </resources>

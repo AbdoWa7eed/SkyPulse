@@ -1,0 +1,22 @@
+package com.iti.skypulse.data.model.weather
+
+data class WeatherModel(
+    val conditionCode: Int,
+    val temperature: Double,
+    val feelsLikeTemperature: Double,
+    val minimumTemperature: Double,
+    val maximumTemperature: Double,
+    val weatherDescription: String,
+    val weatherIconCode: String,
+
+    val windSpeed: Double,
+    val windDirectionDegrees: Int,
+    val humidityPercentage: Int,
+    val visibilityInMeters: Int,
+    val atmosphericPressure: Int,
+
+    val cityName: String,
+    val latitude:Double,
+    val longitude: Double,
+    val countryCode: String,
+)
