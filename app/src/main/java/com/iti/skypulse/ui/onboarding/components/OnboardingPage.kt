@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.iti.skypulse.ui.onboarding.OnboardingModel
+import com.iti.skypulse.ui.onboarding.OnboardingPageData
 import com.iti.skypulse.ui.theme.AppTypography
 import com.iti.skypulse.ui.theme.SkyPulseTheme
 
@@ -25,7 +25,7 @@ import com.iti.skypulse.ui.theme.SkyPulseTheme
 fun OnboardingPage(
     modifier: Modifier = Modifier,
 
-    onboardingModel: OnboardingModel
+    onboardingModel: OnboardingPageData
 ) {
 
     Column(
@@ -69,7 +69,7 @@ fun OnboardingPagePreview() {
             innerPadding ->
             OnboardingPage(
                 modifier = Modifier.padding(innerPadding),
-                OnboardingModel.FirstPage
+                OnboardingPageData.FirstPage
             )
 
         }

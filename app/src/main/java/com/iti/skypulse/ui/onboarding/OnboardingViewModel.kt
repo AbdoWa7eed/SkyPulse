@@ -16,9 +16,9 @@ class OnboardingViewModel(
 ) : ViewModel() {
 
     val pages = listOf(
-        OnboardingModel.FirstPage,
-        OnboardingModel.SecondPage,
-        OnboardingModel.ThirdPage
+        OnboardingPageData.FirstPage,
+        OnboardingPageData.SecondPage,
+        OnboardingPageData.ThirdPage
     )
 
     private val _currentPage = MutableStateFlow(0)
@@ -38,6 +38,7 @@ class OnboardingViewModel(
     fun onNext() {
         if (_currentPage.value < pages.lastIndex) {
             _currentPage.value += 1
+            if (_currentPage.value == pages.lastIndex) _showSkip.value = false
         } else {
             finishOnboarding()
         }
